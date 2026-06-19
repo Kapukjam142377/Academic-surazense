@@ -18,14 +18,29 @@ export const MOCK_PRODUCTS = [
       dimensions: "120 x 80 x 40 mm",
       weight: "0.3 kg",
       minOrder: { en: "1 device", th: "1 เครื่อง" },
-      principle: { en: "Piezoelectric Effect", th: "ปรากฏการณ์เพียโซอิเล็กทริก" },
-      sensorType: { en: "Piezoelectric Quartz Crystal Microbalance (QCM)", th: "เครื่องตรวจวัดมวลแบบควอตซ์คริสตัล (QCM)" },
+      principle: {
+        en: "Piezoelectric Effect",
+        th: "ปรากฏการณ์เพียโซอิเล็กทริก",
+      },
+      sensorType: {
+        en: "Piezoelectric Quartz Crystal Microbalance (QCM)",
+        th: "เครื่องตรวจวัดมวลแบบควอตซ์คริสตัล (QCM)",
+      },
       frequencyRange: "1 MHz - 100 MHz",
-      signalMeasurement: { en: "Real-time frequency & amplitude monitoring", th: "การตรวจวัดแอมพลิจูดและความถี่แบบเรียลไทม์" },
-      holderDesign: { en: "Detachable liquid flow-cell ready holder", th: "แท่นยึดแบบถอดได้เพื่อความสะดวกในการหยดสารละลาย" },
-      connectionInterface: { en: "Pogo-pin interface", th: "ขั้วต่อแบบสปริง (Pogo-pin)" },
-      powerSupply: { en: "USB-powered (5V)", th: "จ่ายไฟผ่านพอร์ต USB (5V)" }
-    }
+      signalMeasurement: {
+        en: "Real-time frequency & amplitude monitoring",
+        th: "การตรวจวัดแอมพลิจูดและความถี่แบบเรียลไทม์",
+      },
+      holderDesign: {
+        en: "Detachable liquid flow-cell ready holder",
+        th: "แท่นยึดแบบถอดได้เพื่อความสะดวกในการหยดสารละลาย",
+      },
+      connectionInterface: {
+        en: "Pogo-pin interface",
+        th: "ขั้วต่อแบบสปริง (Pogo-pin)",
+      },
+      powerSupply: { en: "USB-powered (5V)", th: "จ่ายไฟผ่านพอร์ต USB (5V)" },
+    },
   },
   {
     id: 2,
@@ -46,14 +61,32 @@ export const MOCK_PRODUCTS = [
       dimensions: "14 mm diameter",
       weight: "0.01 kg",
       minOrder: { en: "1 pack (5 pcs)", th: "1 แพ็ก (5 ชิ้น)" },
-      principle: { en: "Acoustic Mass Loading", th: "การวัดการโหลดมวลคลื่นเสียง" },
-      sensorType: { en: "AT-cut Quartz Crystal", th: "ควอตซ์คริสตัลชนิดตัดแบบ AT" },
+      principle: {
+        en: "Acoustic Mass Loading",
+        th: "การวัดการโหลดมวลคลื่นเสียง",
+      },
+      sensorType: {
+        en: "AT-cut Quartz Crystal",
+        th: "ควอตซ์คริสตัลชนิดตัดแบบ AT",
+      },
       frequencyRange: "5.000 MHz nominal",
-      signalMeasurement: { en: "Resonant Frequency Sweep", th: "การกวาดความถี่เรโซแนนซ์" },
-      holderDesign: { en: "Dual electrode configuration", th: "โครงสร้างขั้วไฟฟ้าคู่หน้า-หลัง" },
-      connectionInterface: { en: "Gold-plated spring contact pads", th: "แผ่นสัมผัสเคลือบทอง" },
-      powerSupply: { en: "Excitation via QCM analyzer", th: "กระตุ้นสัญญาณผ่านเครื่องวิเคราะห์ QCM" }
-    }
+      signalMeasurement: {
+        en: "Resonant Frequency Sweep",
+        th: "การกวาดความถี่เรโซแนนซ์",
+      },
+      holderDesign: {
+        en: "Dual electrode configuration",
+        th: "โครงสร้างขั้วไฟฟ้าคู่หน้า-หลัง",
+      },
+      connectionInterface: {
+        en: "Gold-plated spring contact pads",
+        th: "แผ่นสัมผัสเคลือบทอง",
+      },
+      powerSupply: {
+        en: "Excitation via QCM analyzer",
+        th: "กระตุ้นสัญญาณผ่านเครื่องวิเคราะห์ QCM",
+      },
+    },
   },
   {
     id: 3,
@@ -74,14 +107,26 @@ export const MOCK_PRODUCTS = [
       dimensions: "45 x 45 x 25 mm",
       weight: "0.15 kg",
       minOrder: { en: "1 unit", th: "1 ชิ้น" },
-      principle: { en: "Laminar Flow Channeling", th: "การนำทิศการไหลแบบลามินาร์" },
+      principle: {
+        en: "Laminar Flow Channeling",
+        th: "การนำทิศการไหลแบบลามินาร์",
+      },
       sensorType: { en: "Flow Cell Module", th: "โมดูลช่องไหลผ่าน" },
       frequencyRange: "N/A",
-      signalMeasurement: { en: "Microfluidic flow control", th: "การควบคุมการไหลระดับไมโครฟลูอิดิก" },
-      holderDesign: { en: "Quick-clamp acrylic seal", th: "ฝาครอบอะคริลิกแบบหนีบเร็ว" },
-      connectionInterface: { en: "1/4-28 Flat-bottom fittings", th: "ข้อต่อท่อแบบเกลียว 1/4-28" },
-      powerSupply: { en: "Passive", th: "ไม่ต้องใช้แหล่งจ่ายไฟ" }
-    }
+      signalMeasurement: {
+        en: "Microfluidic flow control",
+        th: "การควบคุมการไหลระดับไมโครฟลูอิดิก",
+      },
+      holderDesign: {
+        en: "Quick-clamp acrylic seal",
+        th: "ฝาครอบอะคริลิกแบบหนีบเร็ว",
+      },
+      connectionInterface: {
+        en: "1/4-28 Flat-bottom fittings",
+        th: "ข้อต่อท่อแบบเกลียว 1/4-28",
+      },
+      powerSupply: { en: "Passive", th: "ไม่ต้องใช้แหล่งจ่ายไฟ" },
+    },
   },
   {
     id: 4,
@@ -102,14 +147,32 @@ export const MOCK_PRODUCTS = [
       dimensions: "180 x 120 x 50 mm",
       weight: "0.85 kg",
       minOrder: { en: "1 unit", th: "1 เครื่อง" },
-      principle: { en: "Impedance/Resonance tracking", th: "การติดตามอิมพีแดนซ์และความถี่สั่นพ้อง" },
-      sensorType: { en: "Frequency Analysis Hub", th: "ฮับประมวลผลความถี่ความละเอียดสูง" },
+      principle: {
+        en: "Impedance/Resonance tracking",
+        th: "การติดตามอิมพีแดนซ์และความถี่สั่นพ้อง",
+      },
+      sensorType: {
+        en: "Frequency Analysis Hub",
+        th: "ฮับประมวลผลความถี่ความละเอียดสูง",
+      },
       frequencyRange: "1 MHz - 150 MHz tracking",
-      signalMeasurement: { en: "Resonance, Dissipation & Phase", th: "ค่าความถี่สั่นพ้อง, การสลายพลังงาน และเฟส" },
-      holderDesign: { en: "Shielded desktop housing", th: "กล่องโลหะป้องกันสัญญาณรบกวนภายนอก" },
-      connectionInterface: { en: "BNC to Sensor, USB to Host PC", th: "สายต่อแบบ BNC ไปยังเซนเซอร์, USB ไปยังคอมพิวเตอร์" },
-      powerSupply: { en: "External 12V DC (Included)", th: "อะแดปเตอร์แปลงไฟ 12V DC (มีให้ในชุด)" }
-    }
+      signalMeasurement: {
+        en: "Resonance, Dissipation & Phase",
+        th: "ค่าความถี่สั่นพ้อง, การสลายพลังงาน และเฟส",
+      },
+      holderDesign: {
+        en: "Shielded desktop housing",
+        th: "กล่องโลหะป้องกันสัญญาณรบกวนภายนอก",
+      },
+      connectionInterface: {
+        en: "BNC to Sensor, USB to Host PC",
+        th: "สายต่อแบบ BNC ไปยังเซนเซอร์, USB ไปยังคอมพิวเตอร์",
+      },
+      powerSupply: {
+        en: "External 12V DC (Included)",
+        th: "อะแดปเตอร์แปลงไฟ 12V DC (มีให้ในชุด)",
+      },
+    },
   },
   {
     id: 5,
@@ -159,10 +222,19 @@ export const MOCK_PRODUCTS = [
       formula: "MUA + NHS + EDC Reactant Set",
       purity: "≥98% (Analytical Reagent Grade)",
       mw: "Mixed component kit",
-      appearance: { en: "Crystalline solids & anhydrous buffers", th: "ของแข็งคริสตัลไลต์และบัฟเฟอร์แบบปราศจากน้ำ" },
-      storage: { en: "4°C, keep desiccated & dark", th: "เก็บที่อุณหภูมิ 4 องศาเซลเซียส ในที่แห้งและพ้นแสง" },
-      volumeWeight: { en: "Contains reagents for 25 runs", th: "ประกอบด้วยสารเคมีสำหรับการทดลอง 25 ครั้ง" }
-    }
+      appearance: {
+        en: "Crystalline solids & anhydrous buffers",
+        th: "ของแข็งคริสตัลไลต์และบัฟเฟอร์แบบปราศจากน้ำ",
+      },
+      storage: {
+        en: "4°C, keep desiccated & dark",
+        th: "เก็บที่อุณหภูมิ 4 องศาเซลเซียส ในที่แห้งและพ้นแสง",
+      },
+      volumeWeight: {
+        en: "Contains reagents for 25 runs",
+        th: "ประกอบด้วยสารเคมีสำหรับการทดลอง 25 ครั้ง",
+      },
+    },
   },
   {
     id: 8,
@@ -182,10 +254,16 @@ export const MOCK_PRODUCTS = [
       formula: "Monoclonal Anti-EGFR IgG (Rabbit)",
       purity: "≥95% by SDS-PAGE",
       mw: "~150 kDa",
-      appearance: { en: "Clear colorless liquid solution", th: "สารละลายใสไม่มีสี" },
-      storage: { en: "-20°C, avoid repeated freeze-thaw cycles", th: "เก็บที่อุณหภูมิ -20 องศาเซลเซียส หลีกเลี่ยงการแช่แข็งและละลายซ้ำ" },
-      volumeWeight: "1.5 mL (1.0 mg/mL concentration)"
-    }
+      appearance: {
+        en: "Clear colorless liquid solution",
+        th: "สารละลายใสไม่มีสี",
+      },
+      storage: {
+        en: "-20°C, avoid repeated freeze-thaw cycles",
+        th: "เก็บที่อุณหภูมิ -20 องศาเซลเซียส หลีกเลี่ยงการแช่แข็งและละลายซ้ำ",
+      },
+      volumeWeight: "1.5 mL (1.0 mg/mL concentration)",
+    },
   },
   {
     id: 9,
@@ -205,10 +283,16 @@ export const MOCK_PRODUCTS = [
       formula: "HS(CH2)10CO2H",
       purity: "≥98.0% (HPLC)",
       mw: "218.36 g/mol",
-      appearance: { en: "White to off-white crystalline powder", th: "ผงคริสตัลสีขาวหรือขาวนวล" },
-      storage: { en: "2-8°C, seal tightly under inert nitrogen", th: "เก็บที่อุณหภูมิ 2-8 องศาเซลเซียส ปิดผนึกภายใต้แก๊สไนโตรเจน" },
-      volumeWeight: "500 mg"
-    }
+      appearance: {
+        en: "White to off-white crystalline powder",
+        th: "ผงคริสตัลสีขาวหรือขาวนวล",
+      },
+      storage: {
+        en: "2-8°C, seal tightly under inert nitrogen",
+        th: "เก็บที่อุณหภูมิ 2-8 องศาเซลเซียส ปิดผนึกภายใต้แก๊สไนโตรเจน",
+      },
+      volumeWeight: "500 mg",
+    },
   },
   {
     id: 10,
@@ -217,7 +301,7 @@ export const MOCK_PRODUCTS = [
       th: "ผงเกลือบัฟเฟอร์ PBS (pH 7.4)",
     },
     category: "Chemicals",
-    price: 18.50,
+    price: 18.5,
     description: {
       en: "DNase, RNase, and Protease-free standard buffer pouches. Maintains pH 7.4 at room temperature, providing stable ionic conditions for microfluidic biosensor measurement channels.",
       th: "ผงเตรียมบัฟเฟอร์มาตรฐานปราศจากสารทำลายดีเอ็นเอและอาร์เอ็นเอ รักษาค่าความเป็นกรดด่างที่ pH 7.4 ให้สภาวะไอออนที่เสถียรสำหรับการวัดสัญญาณในไมโครฟลูอิดิกเซนเซอร์",
@@ -228,10 +312,19 @@ export const MOCK_PRODUCTS = [
       formula: "Phosphate/Saline Buffer Salt Mix",
       purity: "Molecular Biology Grade",
       mw: "N/A",
-      appearance: { en: "White granular powder mix", th: "ผงเกลือละเอียดสีขาว" },
-      storage: { en: "Room Temperature (15-30°C), keep dry", th: "เก็บที่อุณหภูมิห้อง (15-30 องศาเซลเซียส) ในที่แห้ง" },
-      volumeWeight: { en: "Pack of 10 pouches (yields 10L total buffer)", th: "แพ็ก 10 ซอง (ผสมได้สารละลายรวม 10 ลิตร)" }
-    }
+      appearance: {
+        en: "White granular powder mix",
+        th: "ผงเกลือละเอียดสีขาว",
+      },
+      storage: {
+        en: "Room Temperature (15-30°C), keep dry",
+        th: "เก็บที่อุณหภูมิห้อง (15-30 องศาเซลเซียส) ในที่แห้ง",
+      },
+      volumeWeight: {
+        en: "Pack of 10 pouches (yields 10L total buffer)",
+        th: "แพ็ก 10 ซอง (ผสมได้สารละลายรวม 10 ลิตร)",
+      },
+    },
   },
   {
     id: 11,
@@ -251,10 +344,19 @@ export const MOCK_PRODUCTS = [
       formula: "Magnetic Beads + Lysis Buffer + Wash Buffer Set",
       purity: "High Yield Diagnostic Grade",
       mw: "N/A",
-      appearance: { en: "Liquid buffers and magnetic bead suspensions", th: "สารละลายบัฟเฟอร์และสารแขวนลอยบีดแม่เหล็ก" },
-      storage: { en: "4°C (buffers) / -20°C (enzymes, keep frozen)", th: "เก็บที่อุณหภูมิ 4 องศาเซลเซียส (น้ำยา) / -20 องศาเซลเซียส (เอนไซม์)" },
-      volumeWeight: { en: "50 diagnostic prep runs", th: "สำหรับสกัดและตรวจวัดจำนวน 50 ตัวอย่าง" }
-    }
+      appearance: {
+        en: "Liquid buffers and magnetic bead suspensions",
+        th: "สารละลายบัฟเฟอร์และสารแขวนลอยบีดแม่เหล็ก",
+      },
+      storage: {
+        en: "4°C (buffers) / -20°C (enzymes, keep frozen)",
+        th: "เก็บที่อุณหภูมิ 4 องศาเซลเซียส (น้ำยา) / -20 องศาเซลเซียส (เอนไซม์)",
+      },
+      volumeWeight: {
+        en: "50 diagnostic prep runs",
+        th: "สำหรับสกัดและตรวจวัดจำนวน 50 ตัวอย่าง",
+      },
+    },
   },
   {
     id: 12,
@@ -273,13 +375,27 @@ export const MOCK_PRODUCTS = [
     courseSpecs: {
       duration: { en: "3 hours (Half day)", th: "3 ชั่วโมง (ครึ่งวัน)" },
       level: { en: "Beginner / Intermediate", th: "ระดับเริ่มต้น / ปานกลาง" },
-      location: { en: "SuraZense Tech Lab, SUT Campus", th: "ห้องปฏิบัติการ SuraZense ในพื้นที่ มทส." },
-      deliveryMode: { en: "In-Person Hands-on Training", th: "ฝึกอบรมออนไซต์พร้อมบอร์ดและชิปทดลองจริง" },
+      location: {
+        en: "SuraZense Tech Lab, SUT Campus",
+        th: "ห้องปฏิบัติการ SuraZense ในพื้นที่ มทส.",
+      },
+      deliveryMode: {
+        en: "In-Person Hands-on Training",
+        th: "ฝึกอบรมออนไซต์พร้อมบอร์ดและชิปทดลองจริง",
+      },
       curriculum: {
-        en: ["Introduction to QCM resonance", "ESP32 serial connection and calibration", "Signal noise isolation and diagnostics"],
-        th: ["พื้นฐานฟิสิกส์การสั่นพ้องของ QCM", "การรับส่งข้อมูลผ่านพอร์ต Serial และสอบเทียบ ESP32", "การวิเคราะห์และกรองสัญญาณรบกวนฮาร์ดแวร์"]
-      }
-    }
+        en: [
+          "Introduction to QCM resonance",
+          "ESP32 serial connection and calibration",
+          "Signal noise isolation and diagnostics",
+        ],
+        th: [
+          "พื้นฐานฟิสิกส์การสั่นพ้องของ QCM",
+          "การรับส่งข้อมูลผ่านพอร์ต Serial และสอบเทียบ ESP32",
+          "การวิเคราะห์และกรองสัญญาณรบกวนฮาร์ดแวร์",
+        ],
+      },
+    },
   },
   {
     id: 13,
@@ -298,13 +414,27 @@ export const MOCK_PRODUCTS = [
     courseSpecs: {
       duration: { en: "4 hours (Half day)", th: "4 ชั่วโมง (ครึ่งวัน)" },
       level: { en: "Intermediate / Advanced", th: "ระดับปานกลาง / ขั้นสูง" },
-      location: { en: "Biotech Laboratory, SUT Campus", th: "ห้องปฏิบัติการเทคโนโลยีชีวภาพ อาคารวิจัย มทส." },
-      deliveryMode: { en: "In-Person Laboratory Practice", th: "ปฏิบัติการออนไซต์ด้วยน้ำยาจริงและการใช้เครื่องวัด" },
+      location: {
+        en: "Biotech Laboratory, SUT Campus",
+        th: "ห้องปฏิบัติการเทคโนโลยีชีวภาพ อาคารวิจัย มทส.",
+      },
+      deliveryMode: {
+        en: "In-Person Laboratory Practice",
+        th: "ปฏิบัติการออนไซต์ด้วยน้ำยาจริงและการใช้เครื่องวัด",
+      },
       curriculum: {
-        en: ["Gold surface chemistry and SAM preparation", "EDC/NHS ligand activation protocols", "Real-time antibody-antigen kinetic recording"],
-        th: ["การล้างแผ่นทองคำและการเตรียมนํ้ายา SAM", "การกระตุ้นปฏิกิริยา EDC/NHS เพื่อเตรียมตรึงแอนติเจน", "การวิเคราะห์อัตราการจับตัวของแอนติบอดีแบบเรียลไทม์"]
-      }
-    }
+        en: [
+          "Gold surface chemistry and SAM preparation",
+          "EDC/NHS ligand activation protocols",
+          "Real-time antibody-antigen kinetic recording",
+        ],
+        th: [
+          "การล้างแผ่นทองคำและการเตรียมนํ้ายา SAM",
+          "การกระตุ้นปฏิกิริยา EDC/NHS เพื่อเตรียมตรึงแอนติเจน",
+          "การวิเคราะห์อัตราการจับตัวของแอนติบอดีแบบเรียลไทม์",
+        ],
+      },
+    },
   },
   {
     id: 14,
@@ -321,14 +451,34 @@ export const MOCK_PRODUCTS = [
     image: "/biotech-course.png",
     status: "In Stock",
     courseSpecs: {
-      duration: { en: "5 weeks (10 hours total)", th: "5 สัปดาห์ (รวม 10 ชั่วโมงเรียน)" },
-      level: { en: "Advanced (Requires Basic Python/JS)", th: "ระดับขั้นสูง (จำเป็นต้องมีความรู้การเขียนโปรแกรมเบื้องต้น)" },
-      location: { en: "SuraZense Online Learning Portal", th: "แพลตฟอร์มการเรียนรู้ออนไลน์ SuraZense" },
-      deliveryMode: { en: "On-demand Video Lectures + Coding Exercises", th: "วิดีโอบรรยายออนไลน์และแบบฝึกหัดโค้ดดิ้งประมวลสัญญาณ" },
+      duration: {
+        en: "5 weeks (10 hours total)",
+        th: "5 สัปดาห์ (รวม 10 ชั่วโมงเรียน)",
+      },
+      level: {
+        en: "Advanced (Requires Basic Python/JS)",
+        th: "ระดับขั้นสูง (จำเป็นต้องมีความรู้การเขียนโปรแกรมเบื้องต้น)",
+      },
+      location: {
+        en: "SuraZense Online Learning Portal",
+        th: "แพลตฟอร์มการเรียนรู้ออนไลน์ SuraZense",
+      },
+      deliveryMode: {
+        en: "On-demand Video Lectures + Coding Exercises",
+        th: "วิดีโอบรรยายออนไลน์และแบบฝึกหัดโค้ดดิ้งประมวลสัญญาณ",
+      },
       curriculum: {
-        en: ["Digital filters (Savitzky-Golay & moving average)", "Baseline correction mathematical models", "Spline peak interpolation algorithms"],
-        th: ["ตัวกรองดิจิทัล (Savitzky-Golay และค่าเฉลี่ยเคลื่อนที่)", "แบบจำลองคณิตศาสตร์ในการปรับค่าความเพี้ยนของ baseline", "อัลกอริทึม interpolation ของ spline สำหรับความถี่สั่นพ้อง"]
-      }
-    }
-  }
+        en: [
+          "Digital filters (Savitzky-Golay & moving average)",
+          "Baseline correction mathematical models",
+          "Spline peak interpolation algorithms",
+        ],
+        th: [
+          "ตัวกรองดิจิทัล (Savitzky-Golay และค่าเฉลี่ยเคลื่อนที่)",
+          "แบบจำลองคณิตศาสตร์ในการปรับค่าความเพี้ยนของ baseline",
+          "อัลกอริทึม interpolation ของ spline สำหรับความถี่สั่นพ้อง",
+        ],
+      },
+    },
+  },
 ];

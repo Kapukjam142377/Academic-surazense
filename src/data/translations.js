@@ -442,15 +442,20 @@ export const translations = {
       categoryGrids: {
         title: "Push boundaries with unmatched biosensing solutions",
         biosensorsTitle: "Biosensors",
-        biosensorsDesc: "High-precision piezoelectric QCM devices and AT-cut gold quartz sensor chips for advanced mass monitoring.",
+        biosensorsDesc:
+          "High-precision piezoelectric QCM devices and AT-cut gold quartz sensor chips for advanced mass monitoring.",
         modulesTitle: "Modules",
-        modulesDesc: "Laminar microfluidic flow cells and high-speed data acquisition hubs to expand measurement capabilities.",
+        modulesDesc:
+          "Laminar microfluidic flow cells and high-speed data acquisition hubs to expand measurement capabilities.",
         chemicalsTitle: "Chemicals & Reagents",
-        chemicalsDesc: "Self-assembled monolayer (SAM) kit reagents, thiol linkers, target antibody conjugates, and running buffers.",
+        chemicalsDesc:
+          "Self-assembled monolayer (SAM) kit reagents, thiol linkers, target antibody conjugates, and running buffers.",
         coursesTitle: "Academic & Lab Training",
-        coursesDesc: "Professional syllabus training and hands-on experimental laboratories for biosensor calibration and kinetics.",
+        coursesDesc:
+          "Professional syllabus training and hands-on experimental laboratories for biosensor calibration and kinetics.",
         accessoriesTitle: "Accessories",
-        accessoriesDesc: "Viton sealing O-rings, teflon tubing, and spare parts designed specifically for fluidics integration.",
+        accessoriesDesc:
+          "Viton sealing O-rings, teflon tubing, and spare parts designed specifically for fluidics integration.",
         exploreMore: "Explore More",
       },
       statuses: {
@@ -460,50 +465,69 @@ export const translations = {
     },
     services: {
       title: "Analytical & Laboratory Services",
-      subtitle: "Professional target detection modules and analytical support for biosensor research.",
+      subtitle:
+        "Professional target detection modules and analytical support for biosensor research.",
       consultingTitle: "Consulting Services",
-      consultingDesc: "Custom biomarker assay development and tailored assay protocol design.",
+      consultingDesc:
+        "Custom biomarker assay development and tailored assay protocol design.",
       sensingTitle: "Sensing Assays",
-      sensingDesc: "Advanced immunoassay sensing arrays on piezoelectric quartz crystals.",
+      sensingDesc:
+        "Advanced immunoassay sensing arrays on piezoelectric quartz crystals.",
       functionalTitle: "Sensor Functionalization",
-      functionalDesc: "Specialized chemical linkers (SAMs) applied to QCM crystal surfaces.",
+      functionalDesc:
+        "Specialized chemical linkers (SAMs) applied to QCM crystal surfaces.",
       maintenanceTitle: "Instrument Maintenance",
-      maintenanceDesc: "Comprehensive diagnostics and calibration services for QCM equipment."
+      maintenanceDesc:
+        "Comprehensive diagnostics and calibration services for QCM equipment.",
     },
     technology: {
       title: "Quartz Crystal Microbalance (QCM)",
-      subtitle: "Precision physical measurement of molecular binding kinetics down to nanogram scale changes.",
+      subtitle:
+        "Precision physical measurement of molecular binding kinetics down to nanogram scale changes.",
       piezoTitle: "Piezoelectric Effect",
-      piezoDesc: "Detecting changes in surface resonance frequency corresponding to nanogram mass deposits.",
+      piezoDesc:
+        "Detecting changes in surface resonance frequency corresponding to nanogram mass deposits.",
       dspTitle: "Digital Signal Processing",
-      dspDesc: "Integrated baseline correction, Savitzky-Golay filters, and spline curve fitting.",
+      dspDesc:
+        "Integrated baseline correction, Savitzky-Golay filters, and spline curve fitting.",
       splineTitle: "Spline Interpolation",
-      splineDesc: "Advanced curve-fitting mathematical algorithms upsampling data to 10,001 data points for peak detection.",
+      splineDesc:
+        "Advanced curve-fitting mathematical algorithms upsampling data to 10,001 data points for peak detection.",
       sensitivityTitle: "High Mass Sensitivity",
-      sensitivityDesc: "Ultra-high precision monitoring suitable for early-stage cell-free DNA cancer biomarkers."
+      sensitivityDesc:
+        "Ultra-high precision monitoring suitable for early-stage cell-free DNA cancer biomarkers.",
     },
     collaboration: {
       title: "Strategic Collaborations",
-      subtitle: "Bridging academic research with hardware medical technology alongside clinical institutions.",
+      subtitle:
+        "Bridging academic research with hardware medical technology alongside clinical institutions.",
       sutTitle: "Suranaree University of Technology",
-      sutDesc: "Direct advising and laboratory testing in partnership with SUT's Engineering and Translational Medicine Departments.",
+      sutDesc:
+        "Direct advising and laboratory testing in partnership with SUT's Engineering and Translational Medicine Departments.",
       hospitalTitle: "Udonthani Cancer Hospital",
-      hospitalDesc: "Clinical trials and bio-specimen correlation research to ensure assay validity.",
+      hospitalDesc:
+        "Clinical trials and bio-specimen correlation research to ensure assay validity.",
       suratecTitle: "Suratec Co., Ltd.",
-      suratecDesc: "Partnership in industrial manufacturing and instrumentation assembly for Xzense units.",
+      suratecDesc:
+        "Partnership in industrial manufacturing and instrumentation assembly for Xzense units.",
       cta: "Collaborate with SuraZense",
-      ctaDesc: "Join us in revolutionizing early cancer detection. Get in touch for research opportunities."
+      ctaDesc:
+        "Join us in revolutionizing early cancer detection. Get in touch for research opportunities.",
     },
     news: {
       title: "News & Publications",
-      subtitle: "Discover our latest achievements, research articles, and upcoming events.",
+      subtitle:
+        "Discover our latest achievements, research articles, and upcoming events.",
       awardTitle: "National Innovation Award Winner",
-      awardDesc: "SuraZense won the prestigious incubator presentation for biosensor tech.",
+      awardDesc:
+        "SuraZense won the prestigious incubator presentation for biosensor tech.",
       journalTitle: "QCM Biosensor Journal Publication",
-      journalDesc: "Our peer-reviewed clinical validation report on cell-free DNA sensing is published.",
+      journalDesc:
+        "Our peer-reviewed clinical validation report on cell-free DNA sensing is published.",
       expoTitle: "Global Health & MedTech Expo",
-      expoDesc: "Live demonstrations of the Xzense-101 real-time cancer detection platform."
-    }
+      expoDesc:
+        "Live demonstrations of the Xzense-101 real-time cancer detection platform.",
+    },
   },
   th: {
     nav: {
@@ -950,15 +974,20 @@ export const translations = {
       categoryGrids: {
         title: "ยกระดับการวิจัยระดับโมเลกุลด้วยเทคโนโลยีตรวจวัดระดับสูงสุด",
         biosensorsTitle: "อุปกรณ์ไบโอเซนเซอร์",
-        biosensorsDesc: "เครื่องวิเคราะห์ QCM ความไวสูงระดับนาโนกรัม และแผ่นชิปเซนเซอร์ทองคำสั่นพ้องสำหรับวัดโมเลกุล",
+        biosensorsDesc:
+          "เครื่องวิเคราะห์ QCM ความไวสูงระดับนาโนกรัม และแผ่นชิปเซนเซอร์ทองคำสั่นพ้องสำหรับวัดโมเลกุล",
         modulesTitle: "โมดูลการวิเคราะห์",
-        modulesDesc: "โฟลว์เซลล์ควบคุมทิศการไหลระดับไมโครฟลูอิดิก และฮับเก็บข้อมูลประมวลสัญญาณเชื่อมต่อคอมพิวเตอร์",
+        modulesDesc:
+          "โฟลว์เซลล์ควบคุมทิศการไหลระดับไมโครฟลูอิดิก และฮับเก็บข้อมูลประมวลสัญญาณเชื่อมต่อคอมพิวเตอร์",
         chemicalsTitle: "สารเคมีและน้ำยาแล็บ",
-        chemicalsDesc: "ชุดสารเคมี SAM functionalization สำหรับการเตรียมผิวชิปเซนเซอร์, สารเชื่อม MUA และสารควบคุมแอนติบอดี",
+        chemicalsDesc:
+          "ชุดสารเคมี SAM functionalization สำหรับการเตรียมผิวชิปเซนเซอร์, สารเชื่อม MUA และสารควบคุมแอนติบอดี",
         coursesTitle: "หลักสูตรฝึกอบรมวิชาการ",
-        coursesDesc: "การสัมมนาเชิงปฏิบัติการและการทดลองจริงเกี่ยวกับการใช้บอร์ด ESP32, เคมีผิวทองคำ และการวิเคราะห์สัญญาณสปไลน์",
+        coursesDesc:
+          "การสัมมนาเชิงปฏิบัติการและการทดลองจริงเกี่ยวกับการใช้บอร์ด ESP32, เคมีผิวทองคำ และการวิเคราะห์สัญญาณสปไลน์",
         accessoriesTitle: "อุปกรณ์เสริมและชิ้นส่วนอะไหล่",
-        accessoriesDesc: "ชุดแหวนยางไวตันซีลโมดูลโฟลว์เซลล์, ท่อเทฟลอนเชื่อมสายทนสารเคมี และข้อต่อมาตรฐาน",
+        accessoriesDesc:
+          "ชุดแหวนยางไวตันซีลโมดูลโฟลว์เซลล์, ท่อเทฟลอนเชื่อมสายทนสารเคมี และข้อต่อมาตรฐาน",
         exploreMore: "สำรวจเพิ่มเติม",
       },
       statuses: {
@@ -968,49 +997,68 @@ export const translations = {
     },
     services: {
       title: "บริการตรวจวัดและวิเคราะห์",
-      subtitle: "บริการพัฒนาการทดสอบเป้าหมายและการสนับสนุนด้านการตรวจวัดสำหรับงานวิจัยไบโอเซนเซอร์",
+      subtitle:
+        "บริการพัฒนาการทดสอบเป้าหมายและการสนับสนุนด้านการตรวจวัดสำหรับงานวิจัยไบโอเซนเซอร์",
       consultingTitle: "บริการให้คำปรึกษา",
-      consultingDesc: "พัฒนาการตรวจหาตัวบ่งชี้มะเร็งและออกแบบระเบียบวิธีการวิจัยเฉพาะบุคคล",
+      consultingDesc:
+        "พัฒนาการตรวจหาตัวบ่งชี้มะเร็งและออกแบบระเบียบวิธีการวิจัยเฉพาะบุคคล",
       sensingTitle: "บริการเซนเซอร์รับสัญญาณ",
-      sensingDesc: "ระบบตรวจวัดไบโอเซนเซอร์ขั้นสูงบนผลึกคริสตัลควอตซ์แบบเพียโซอิเล็กทริก",
+      sensingDesc:
+        "ระบบตรวจวัดไบโอเซนเซอร์ขั้นสูงบนผลึกคริสตัลควอตซ์แบบเพียโซอิเล็กทริก",
       functionalTitle: "การปรับแต่งพื้นผิวเซนเซอร์",
-      functionalDesc: "เตรียมพื้นผิวเคมีรับสัญญาณ (SAMs) บนแผ่นคริสตัลควอตซ์เพื่อความจำเพาะเจาะจง",
+      functionalDesc:
+        "เตรียมพื้นผิวเคมีรับสัญญาณ (SAMs) บนแผ่นคริสตัลควอตซ์เพื่อความจำเพาะเจาะจง",
       maintenanceTitle: "บำรุงรักษาเครื่องมือ",
-      maintenanceDesc: "บริการสอบเทียบเครื่องมือ บำรุงรักษา และแก้ปัญหาระบบอุปกรณ์ QCM ทั้งหมด"
+      maintenanceDesc:
+        "บริการสอบเทียบเครื่องมือ บำรุงรักษา และแก้ปัญหาระบบอุปกรณ์ QCM ทั้งหมด",
     },
     technology: {
       title: "คริสตัลไมโครบาลานซ์ (QCM)",
-      subtitle: "การตรวจวัดมวลสารทางฟิสิกส์ที่มีความแม่นยำสูงในระดับนาโนกรัมสำหรับการจับกันของสารชีวโมเลกุล",
+      subtitle:
+        "การตรวจวัดมวลสารทางฟิสิกส์ที่มีความแม่นยำสูงในระดับนาโนกรัมสำหรับการจับกันของสารชีวโมเลกุล",
       piezoTitle: "ผลกระทบเพียโซอิเล็กทริก",
-      piezoDesc: "วัดการเปลี่ยนแปลงความถี่รีโซแนนซ์ของพื้นผิวเซนเซอร์ที่สอดคล้องกับการเกาะของมวลสาร",
+      piezoDesc:
+        "วัดการเปลี่ยนแปลงความถี่รีโซแนนซ์ของพื้นผิวเซนเซอร์ที่สอดคล้องกับการเกาะของมวลสาร",
       dspTitle: "การประมวลผลสัญญาณดิจิทัล",
-      dspDesc: "การตัดสัญญาณรบกวนพื้นหลัง (Baseline), ตัวกรอง Savitzky-Golay และอัลกอริทึมชดเชยค่า",
+      dspDesc:
+        "การตัดสัญญาณรบกวนพื้นหลัง (Baseline), ตัวกรอง Savitzky-Golay และอัลกอริทึมชดเชยค่า",
       splineTitle: "การประมาณค่าในช่วงแบบสปไลน์",
-      splineDesc: "อัลกอริทึมคณิตศาสตร์ขั้นสูงเพื่อเพิ่มความละเอียดจุดข้อมูลเป็น 10,001 จุดในการหาค่าพีคสูงสุด",
+      splineDesc:
+        "อัลกอริทึมคณิตศาสตร์ขั้นสูงเพื่อเพิ่มความละเอียดจุดข้อมูลเป็น 10,001 จุดในการหาค่าพีคสูงสุด",
       sensitivityTitle: "ความไวต่อการวัดมวลสารสูง",
-      sensitivityDesc: "การตรวจวัดที่มีความไวสูงสุด เหมาะสำหรับตัวบ่งชี้ดีเอ็นเอของเซลล์มะเร็งระยะเริ่มต้น"
+      sensitivityDesc:
+        "การตรวจวัดที่มีความไวสูงสุด เหมาะสำหรับตัวบ่งชี้ดีเอ็นเอของเซลล์มะเร็งระยะเริ่มต้น",
     },
     collaboration: {
       title: "ความร่วมมือเชิงกลยุทธ์",
-      subtitle: "เชื่อมโยงงานวิจัยทางวิชาการเข้ากับเทคโนโลยีเครื่องมือแพทย์ร่วมกับสถาบันวิจัยและคลินิก",
+      subtitle:
+        "เชื่อมโยงงานวิจัยทางวิชาการเข้ากับเทคโนโลยีเครื่องมือแพทย์ร่วมกับสถาบันวิจัยและคลินิก",
       sutTitle: "มหาวิทยาลัยเทคโนโลยีสุรนารี",
-      sutDesc: "ที่ปรึกษาและร่วมวิจัยทางห้องปฏิบัติการร่วมกับสำนักวิชาวิศวกรรมศาสตร์และแพทยศาสตร์ มทส.",
+      sutDesc:
+        "ที่ปรึกษาและร่วมวิจัยทางห้องปฏิบัติการร่วมกับสำนักวิชาวิศวกรรมศาสตร์และแพทยศาสตร์ มทส.",
       hospitalTitle: "โรงพยาบาลมะเร็งอุดรธานี",
-      hospitalDesc: "ร่วมมือทำการทดสอบทางคลินิกและการศึกษาความเชื่อมโยงของสิ่งส่งตรวจทางชีวภาพเพื่อความแม่นยำสูงสุด",
+      hospitalDesc:
+        "ร่วมมือทำการทดสอบทางคลินิกและการศึกษาความเชื่อมโยงของสิ่งส่งตรวจทางชีวภาพเพื่อความแม่นยำสูงสุด",
       suratecTitle: "บริษัท สุรเทค จำกัด",
-      suratecDesc: "พันธมิตรผู้ผลิตระดับอุตสาหกรรมและการประกอบแผงวงจรเครื่องมือวิเคราะห์ Xzense-101",
+      suratecDesc:
+        "พันธมิตรผู้ผลิตระดับอุตสาหกรรมและการประกอบแผงวงจรเครื่องมือวิเคราะห์ Xzense-101",
       cta: "ร่วมมือกับ SuraZense",
-      ctaDesc: "เข้าร่วมกับเราในการปฏิวัติการตรวจหามะเร็งระยะเริ่มต้น ติดต่อพวกเราเพื่อความร่วมมือวิจัยใหม่ๆ"
+      ctaDesc:
+        "เข้าร่วมกับเราในการปฏิวัติการตรวจหามะเร็งระยะเริ่มต้น ติดต่อพวกเราเพื่อความร่วมมือวิจัยใหม่ๆ",
     },
     news: {
       title: "ข่าวสารและผลงานตีพิมพ์",
-      subtitle: "ค้นพบความสำเร็จล่าสุด บทความวิจัย และกิจกรรมสัมมนาวิชาการที่กำลังจะเกิดขึ้น",
+      subtitle:
+        "ค้นพบความสำเร็จล่าสุด บทความวิจัย และกิจกรรมสัมมนาวิชาการที่กำลังจะเกิดขึ้น",
       awardTitle: "ผู้ชนะรางวัลนวัตกรรมแห่งชาติ",
-      awardDesc: "SuraZense ได้รับรางวัลชนะเลิศในโครงการบ่มเพาะวิสาหกิจเริ่มต้นด้านเทคโนโลยีชีวภาพ",
+      awardDesc:
+        "SuraZense ได้รับรางวัลชนะเลิศในโครงการบ่มเพาะวิสาหกิจเริ่มต้นด้านเทคโนโลยีชีวภาพ",
       journalTitle: "ผลงานตีพิมพ์วารสารวิชาการ QCM",
-      journalDesc: "รายงานการศึกษาประสิทธิผลทางคลินิกของการตรวจหาดีเอ็นเอหลุดลอยได้รับการตีพิมพ์ในวารสารวิชาการชั้นนำ",
+      journalDesc:
+        "รายงานการศึกษาประสิทธิผลทางคลินิกของการตรวจหาดีเอ็นเอหลุดลอยได้รับการตีพิมพ์ในวารสารวิชาการชั้นนำ",
       expoTitle: "นิทรรศการเครื่องมือแพทย์ระดับโลก",
-      expoDesc: "การสาธิตเครื่องมือวิเคราะห์ตรวจหามะเร็ง Xzense-101 แบบเรียลไทม์ในงานแสดงระดับนานาชาติ"
-    }
+      expoDesc:
+        "การสาธิตเครื่องมือวิเคราะห์ตรวจหามะเร็ง Xzense-101 แบบเรียลไทม์ในงานแสดงระดับนานาชาติ",
+    },
   },
 };

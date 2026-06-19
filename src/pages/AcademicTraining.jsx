@@ -121,11 +121,6 @@ const teamMembers = [
     hoverScaleClass: "group-hover:scale-[1.15]",
   },
   {
-    name: "Pimpaya",
-    role: "Marketing manager\nBMgt. (Hons) Concentration: Entrepreneurship",
-    image: "/member1.png",
-  },
-  {
     name: "Dr. Soodkhet",
     role: "Advisor\nPhD - MaterialScience & Engineering,\nM. Eng. Nuclear Technology,\nB. Eng. Industrial Engineering",
     image: "/member11.png",
@@ -1098,34 +1093,44 @@ export default function AcademicTraining() {
           </motion.div>
 
           <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12"
+            className="flex flex-wrap justify-center gap-x-12 gap-y-16 max-w-5xl mx-auto"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
             variants={containerVariants}
           >
-            {teamMembers.map((member, index) => (
-              <motion.div
-                key={index}
-                variants={itemVariants}
-                className="group flex flex-col items-center text-center"
-              >
-                <div className="relative w-44 h-44 md:w-48 md:h-48 mb-6 overflow-hidden rounded-full border-4 border-white shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1">
-                  <div className="absolute inset-0 bg-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity z-10 rounded-full"></div>
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className={`w-full h-full object-cover transition-transform duration-500 ${member.scaleClass || "scale-100"} ${member.hoverScaleClass || "group-hover:scale-105"} ${member.position || "object-top"}`}
-                  />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
-                  {member.name}
-                </h3>
-                <p className="text-blue-600 text-xs font-semibold mt-1 whitespace-pre-line leading-normal">
-                  {member.role}
-                </p>
-              </motion.div>
-            ))}
+            {teamMembers.map((member, index) => {
+              const roleLines = member.role.split("\n");
+              const mainRole = roleLines[0];
+              const subRoles = roleLines.slice(1);
+              return (
+                <motion.div
+                  key={index}
+                  variants={itemVariants}
+                  className="group flex flex-col items-center text-center w-full sm:w-[260px]"
+                >
+                  <div className="relative w-44 h-44 md:w-48 md:h-48 mb-6 overflow-hidden rounded-full border-4 border-white shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1">
+                    <div className="absolute inset-0 bg-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity z-10 rounded-full"></div>
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className={`w-full h-full object-cover transition-transform duration-500 ${member.scaleClass || "scale-100"} ${member.hoverScaleClass || "group-hover:scale-105"} ${member.position || "object-top"}`}
+                    />
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                    {member.name}
+                  </h3>
+                  <h4 className="text-blue-600 text-xs font-bold mt-1.5 uppercase tracking-wider">
+                    {mainRole}
+                  </h4>
+                  {subRoles.length > 0 && (
+                    <p className="text-slate-500 text-[11px] font-medium mt-2 whitespace-pre-line leading-relaxed max-w-[220px]">
+                      {subRoles.join("\n")}
+                    </p>
+                  )}
+                </motion.div>
+              );
+            })}
           </motion.div>
         </div>
       </section>

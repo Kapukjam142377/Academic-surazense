@@ -20,7 +20,8 @@ import { useCart } from "../context/CartContext";
 import { useLanguage } from "../context/LanguageContext";
 import { useUser } from "../context/UserContext";
 
-const COMPANY_WEB_URL = import.meta.env.VITE_COMPANY_WEB_URL || "http://localhost:5173";
+const COMPANY_WEB_URL =
+  import.meta.env.VITE_COMPANY_WEB_URL || "http://localhost:5173";
 
 export default function Layout({ children }) {
   const location = useLocation();
@@ -126,12 +127,9 @@ export default function Layout({ children }) {
         </Link>
 
         <div className="hidden lg:flex items-center gap-6 xl:gap-8">
-          <a
-            href={`${COMPANY_WEB_URL}/`}
-            className={`${linkBaseClass} text-slate-500 hover:text-accent font-medium`}
-          >
+          <Link to="/" className={`${linkBaseClass} ${isActive("/")}`}>
             {t("nav.home")}
-          </a>
+          </Link>
           {/* Products Dropdown */}
           <div className="relative group flex items-center">
             <Link
@@ -150,7 +148,6 @@ export default function Layout({ children }) {
                 >
                   {t("nav.exploringProducts")}
                 </Link>
-
               </div>
             </div>
           </div>
@@ -161,10 +158,7 @@ export default function Layout({ children }) {
             {t("nav.services")}
           </Link>
 
-          <Link
-            to="/news"
-            className={`${linkBaseClass} ${isActive("/news")}`}
-          >
+          <Link to="/news" className={`${linkBaseClass} ${isActive("/news")}`}>
             {t("nav.news")}
           </Link>
           <Link
@@ -239,7 +233,11 @@ export default function Layout({ children }) {
                           {item.image ? (
                             <img
                               src={item.image}
-                              alt={typeof item.name === "object" ? (item.name[language] || item.name.en || "") : item.name}
+                              alt={
+                                typeof item.name === "object"
+                                  ? item.name[language] || item.name.en || ""
+                                  : item.name
+                              }
                               className="w-full h-full object-cover"
                             />
                           ) : (
@@ -249,9 +247,15 @@ export default function Layout({ children }) {
                         <div className="flex-1 min-w-0">
                           <p
                             className="text-sm font-bold text-slate-800 truncate"
-                            title={typeof item.name === "object" ? (item.name[language] || item.name.en || "") : item.name}
+                            title={
+                              typeof item.name === "object"
+                                ? item.name[language] || item.name.en || ""
+                                : item.name
+                            }
                           >
-                            {typeof item.name === "object" ? (item.name[language] || item.name.en || "") : item.name}
+                            {typeof item.name === "object"
+                              ? item.name[language] || item.name.en || ""
+                              : item.name}
                           </p>
                           <p className="text-xs text-slate-500">
                             {item.quantity} x ${item.price.toFixed(2)}
@@ -404,15 +408,17 @@ export default function Layout({ children }) {
 
         {/* Drawer Navigation Links */}
         <div className="flex-1 overflow-y-auto py-6 px-4 space-y-1.5">
-          <a
-            href={`${COMPANY_WEB_URL}/`}
-            className="flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] font-bold no-underline transition-all text-slate-600 hover:bg-slate-50 hover:text-blue-600"
+          <Link
+            to="/"
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] font-bold no-underline transition-all ${
+              location.pathname === "/"
+                ? "bg-blue-50 text-blue-600 shadow-sm shadow-blue-500/5"
+                : "text-slate-600 hover:bg-slate-50 hover:text-blue-600"
+            }`}
           >
             <Home className="w-5 h-5 stroke-[2.2px]" />
             <span className="uppercase tracking-wider">{t("nav.home")}</span>
-          </a>
-
-
+          </Link>
 
           {/* Products Group */}
           <div className="py-1">
@@ -431,7 +437,6 @@ export default function Layout({ children }) {
               >
                 {t("nav.exploringProducts")}
               </Link>
-
             </div>
           </div>
 
@@ -448,8 +453,6 @@ export default function Layout({ children }) {
               {t("nav.services")}
             </span>
           </Link>
-
-
 
           <Link
             to="/news"

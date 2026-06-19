@@ -1,12 +1,29 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingCart, Search, Filter, Image as ImageIcon, Cpu, Layers, FlaskConical, GraduationCap, Wrench } from "lucide-react";
+import {
+  ShoppingCart,
+  Search,
+  Filter,
+  Image as ImageIcon,
+  Cpu,
+  Layers,
+  FlaskConical,
+  GraduationCap,
+  Wrench,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { MOCK_PRODUCTS } from "../data/mockProducts";
 import { useLanguage } from "../context/LanguageContext";
 
-const CATEGORIES = ["All", "Biosensors", "Modules", "Chemicals", "Courses", "Accessories"];
+const CATEGORIES = [
+  "All",
+  "Biosensors",
+  "Modules",
+  "Chemicals",
+  "Courses",
+  "Accessories",
+];
 
 export default function Products() {
   const [activeCategory, setActiveCategory] = useState("All");
@@ -192,7 +209,11 @@ export default function Products() {
               {categoryGridItems.map((item) => (
                 <motion.div
                   key={item.id}
-                  whileHover={{ y: -6, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+                  whileHover={{
+                    y: -6,
+                    boxShadow:
+                      "0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                  }}
                   onClick={() => handleCategoryClick(item.id)}
                   className="bg-white rounded-[2rem] p-8 border border-slate-100 flex flex-col justify-between items-center text-center cursor-pointer transition-all duration-300 group hover:border-blue-200/50 hover:shadow-xl hover:shadow-blue-950/5 relative overflow-hidden"
                 >
@@ -201,7 +222,9 @@ export default function Products() {
 
                   <div className="flex flex-col items-center">
                     {/* Circle Icon Box */}
-                    <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 ${item.bgIcon}`}>
+                    <div
+                      className={`w-16 h-16 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 ${item.bgIcon}`}
+                    >
                       {item.icon}
                     </div>
 
@@ -216,7 +239,9 @@ export default function Products() {
 
                   <button className="mt-6 text-xs font-bold text-blue-600 bg-transparent border-none cursor-pointer flex items-center gap-1 group-hover:text-blue-700 select-none uppercase tracking-widest">
                     {t("products.categoryGrids.exploreMore")}
-                    <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+                    <span className="group-hover:translate-x-0.5 transition-transform">
+                      →
+                    </span>
                   </button>
                 </motion.div>
               ))}
@@ -239,13 +264,22 @@ export default function Products() {
               onClick={() => setActiveCategory("All")}
               className="inline-flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors bg-transparent border-none cursor-pointer p-0 outline-none group"
             >
-              <span className="group-hover:-translate-x-1 transition-transform">←</span>
-              <span>{language === "th" ? "กลับไปหน้าหมวดหมู่หลัก" : "Back to Main Categories"}</span>
+              <span className="group-hover:-translate-x-1 transition-transform">
+                ←
+              </span>
+              <span>
+                {language === "th"
+                  ? "กลับไปหน้าหมวดหมู่หลัก"
+                  : "Back to Main Categories"}
+              </span>
             </button>
           </div>
 
           {/* Controls Section (Filters & Search) */}
-          <div id="product-catalog-section" className="max-w-7xl mx-auto px-6 mb-10 sticky top-[80px] z-30">
+          <div
+            id="product-catalog-section"
+            className="max-w-7xl mx-auto px-6 mb-10 sticky top-[80px] z-30"
+          >
             <div className="bg-white/80 backdrop-blur-xl p-4 rounded-3xl shadow-sm shadow-blue-900/5 border border-slate-200/60 flex flex-col md:flex-row justify-between items-center gap-4">
               {/* Categories */}
               <div className="flex overflow-x-auto w-full md:w-auto pb-2 md:pb-0 hide-scrollbar gap-2">
@@ -355,16 +389,19 @@ export default function Products() {
                           <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">
                             {getCategoryTranslation(product.category)}
                           </span>
-                          {product.category === "Chemicals" && product.chemicalSpecs?.purity && (
-                            <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
-                              {product.chemicalSpecs.purity}
-                            </span>
-                          )}
-                          {product.category === "Courses" && product.courseSpecs?.level && (
-                            <span className="text-[10px] font-semibold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-100">
-                              {product.courseSpecs.level[language] || product.courseSpecs.level.en}
-                            </span>
-                          )}
+                          {product.category === "Chemicals" &&
+                            product.chemicalSpecs?.purity && (
+                              <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                                {product.chemicalSpecs.purity}
+                              </span>
+                            )}
+                          {product.category === "Courses" &&
+                            product.courseSpecs?.level && (
+                              <span className="text-[10px] font-semibold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-100">
+                                {product.courseSpecs.level[language] ||
+                                  product.courseSpecs.level.en}
+                              </span>
+                            )}
                         </div>
                         <Link
                           to={`/products/${product.id}`}
@@ -376,21 +413,32 @@ export default function Products() {
                         </Link>
 
                         {/* Specialized visual metadata */}
-                        {product.category === "Chemicals" && product.chemicalSpecs?.formula && (
-                          <div className="mb-3 font-mono text-[11px] bg-slate-50 text-slate-600 px-2.5 py-1 rounded-md border border-slate-200/60 inline-block w-fit">
-                            {product.chemicalSpecs.formula}
-                          </div>
-                        )}
-                        {product.category === "Courses" && product.courseSpecs?.duration && (
-                          <div className="mb-3 text-[11px] font-semibold text-slate-500 flex items-center gap-1.5 flex-wrap">
-                            <span>⏱️ {product.courseSpecs.duration[language] || product.courseSpecs.duration.en}</span>
-                            <span className="text-slate-300">•</span>
-                            <span>📍 {product.courseSpecs.location[language] || product.courseSpecs.location.en}</span>
-                          </div>
-                        )}
+                        {product.category === "Chemicals" &&
+                          product.chemicalSpecs?.formula && (
+                            <div className="mb-3 font-mono text-[11px] bg-slate-50 text-slate-600 px-2.5 py-1 rounded-md border border-slate-200/60 inline-block w-fit">
+                              {product.chemicalSpecs.formula}
+                            </div>
+                          )}
+                        {product.category === "Courses" &&
+                          product.courseSpecs?.duration && (
+                            <div className="mb-3 text-[11px] font-semibold text-slate-500 flex items-center gap-1.5 flex-wrap">
+                              <span>
+                                ⏱️{" "}
+                                {product.courseSpecs.duration[language] ||
+                                  product.courseSpecs.duration.en}
+                              </span>
+                              <span className="text-slate-300">•</span>
+                              <span>
+                                📍{" "}
+                                {product.courseSpecs.location[language] ||
+                                  product.courseSpecs.location.en}
+                              </span>
+                            </div>
+                          )}
 
                         <p className="text-sm text-slate-500 mb-8 line-clamp-2 flex-1 leading-relaxed">
-                          {product.description[language] || product.description.en}
+                          {product.description[language] ||
+                            product.description.en}
                         </p>
 
                         {/* Price & Action */}

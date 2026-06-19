@@ -1,5 +1,12 @@
 import React, { useEffect } from "react";
-import { BrowserRouter, Routes, Route, useLocation, useParams, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  useParams,
+  Navigate,
+} from "react-router-dom";
 import Layout from "./components/Layout";
 import Products from "./pages/Products";
 import ProductDetail from "./pages/ProductDetail";
@@ -14,7 +21,8 @@ import { CartProvider } from "./context/CartContext";
 import { LanguageProvider } from "./context/LanguageContext";
 import { UserProvider } from "./context/UserContext";
 
-const COMPANY_WEB_URL = import.meta.env.VITE_COMPANY_WEB_URL || "http://localhost:5173";
+const COMPANY_WEB_URL =
+  import.meta.env.VITE_COMPANY_WEB_URL || "http://localhost:5173";
 
 // Scroll to top on every route change
 function ScrollToTop() {
@@ -52,12 +60,15 @@ function App() {
             <ScrollToTop />
             <Layout>
               <Routes>
-                {/* Make root path route to Dashboard directly */}
+                {/* Make root path route to AcademicTraining */}
                 <Route path="/" element={<AcademicTraining />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/products/:id" element={<ProductDetail />} />
-                <Route path="/academic-training" element={<AcademicTraining />} />
+                <Route
+                  path="/academic-training"
+                  element={<AcademicTraining />}
+                />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/services" element={<Services />} />

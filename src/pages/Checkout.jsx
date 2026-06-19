@@ -79,7 +79,10 @@ export default function Checkout() {
         payment_method: form.paymentMethod,
         items: cartItems.map((item) => ({
           product_id: item.id,
-          product_name: typeof item.name === "object" ? (item.name[language] || item.name.en || "") : item.name,
+          product_name:
+            typeof item.name === "object"
+              ? item.name[language] || item.name.en || ""
+              : item.name,
           price: item.price,
           quantity: item.quantity,
         })),
@@ -363,9 +366,15 @@ export default function Checkout() {
                   <div className="min-w-0">
                     <p
                       className="text-sm font-bold text-slate-800 truncate"
-                      title={typeof item.name === "object" ? (item.name[language] || item.name.en || "") : item.name}
+                      title={
+                        typeof item.name === "object"
+                          ? item.name[language] || item.name.en || ""
+                          : item.name
+                      }
                     >
-                      {typeof item.name === "object" ? (item.name[language] || item.name.en || "") : item.name}
+                      {typeof item.name === "object"
+                        ? item.name[language] || item.name.en || ""
+                        : item.name}
                     </p>
                     <p className="text-xs text-slate-400 font-medium">
                       Qty: {item.quantity} x ${item.price.toFixed(2)}
