@@ -130,27 +130,12 @@ export default function Layout({ children }) {
           <Link to="/" className={`${linkBaseClass} ${isActive("/")}`}>
             {t("nav.home")}
           </Link>
-          {/* Products Dropdown */}
-          <div className="relative group flex items-center">
-            <Link
-              to="/products"
-              className={`${linkBaseClass} ${isActive("/products")} py-2`}
-            >
-              {t("nav.products")}
-            </Link>
-
-            {/* Dropdown Menu */}
-            <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4 w-[190px] invisible opacity-0 translate-y-2 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 z-50">
-              <div className="bg-white rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] border border-slate-100 py-2 flex flex-col relative before:absolute before:content-[''] before:-top-2 before:left-1/2 before:-translate-x-1/2 before:border-8 before:border-transparent before:border-b-white">
-                <Link
-                  to="/products"
-                  className="px-5 py-2.5 text-[14px] font-medium text-slate-600 hover:text-blue-600 hover:bg-blue-50/50 transition-colors"
-                >
-                  {t("nav.exploringProducts")}
-                </Link>
-              </div>
-            </div>
-          </div>
+          <Link
+            to="/products"
+            className={`${linkBaseClass} ${isActive("/products")}`}
+          >
+            {t("nav.products")}
+          </Link>
           <Link
             to="/dashboard"
             className={`${linkBaseClass} ${isActive("/dashboard")}`}
@@ -420,25 +405,19 @@ export default function Layout({ children }) {
             <span className="uppercase tracking-wider">{t("nav.home")}</span>
           </Link>
 
-          {/* Products Group */}
-          <div className="py-1">
-            <div className="flex items-center gap-3 px-4 py-2 text-[12px] font-bold text-slate-400 uppercase tracking-wider">
-              <ShoppingBag className="w-4 h-4 text-slate-400 stroke-[2.2px]" />
-              <span>{t("nav.products")}</span>
-            </div>
-            <div className="pl-6 border-l border-slate-100 ml-6 mt-1 space-y-1">
-              <Link
-                to="/products"
-                className={`flex items-center px-4 py-2 rounded-xl text-[14px] font-semibold no-underline transition-all ${
-                  location.pathname === "/products"
-                    ? "text-blue-600 bg-blue-50/50"
-                    : "text-slate-600 hover:text-blue-600"
-                }`}
-              >
-                {t("nav.exploringProducts")}
-              </Link>
-            </div>
-          </div>
+          <Link
+            to="/products"
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] font-bold no-underline transition-all ${
+              location.pathname === "/products"
+                ? "bg-blue-50 text-blue-600 shadow-sm shadow-blue-500/5"
+                : "text-slate-600 hover:bg-slate-50 hover:text-blue-600"
+            }`}
+          >
+            <ShoppingBag className="w-5 h-5 stroke-[2.2px]" />
+            <span className="uppercase tracking-wider">
+              {t("nav.products")}
+            </span>
+          </Link>
 
           <Link
             to="/dashboard"

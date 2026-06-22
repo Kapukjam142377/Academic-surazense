@@ -48,10 +48,14 @@ export default function ProductDetail() {
   // Find the product
   const product = MOCK_PRODUCTS.find((p) => p.id === parseInt(id));
 
-  // Scroll to top on mount
+  // Scroll to top on mount/id change
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+    const timer = setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [id]);
 
   if (!product) {
     return (
