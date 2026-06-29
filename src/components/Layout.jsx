@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   ShoppingCart,
   X,
@@ -25,9 +25,17 @@ const COMPANY_WEB_URL =
 
 export default function Layout({ children }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const { cartItems, removeFromCart, itemCount, cartTotal } = useCart();
   const { language, toggleLanguage, t } = useLanguage();
   const { user, login, register, logout } = useUser();
+
+  // Redirect guard: non-admin logged-in users are restricted to /dashboard only
+  useEffect(() => {
+    if (user && user.role !== "admin" && location.pathname !== "/dashboard") {
+      navigate("/dashboard");
+    }
+  }, [user, location.pathname, navigate]);
 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLoginSidebarOpen, setIsLoginSidebarOpen] = useState(false);
@@ -111,6 +119,14 @@ export default function Layout({ children }) {
   const linkBaseClass =
     "text-[13px] tracking-wider uppercase transition-colors duration-200";
 
+  if (location.pathname === "/admin") {
+    return (
+      <div className="flex flex-col min-h-screen bg-slate-50">
+        <main className="flex-1 flex flex-col w-full">{children}</main>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-transparent">
       <nav className="sticky top-0 z-50 bg-white/85 backdrop-blur-lg border-b border-sky-100 shadow-[0_4px_20px_-1px_rgba(0,0,0,0.03)] flex justify-between items-center px-6 py-3 lg:px-12 w-full">
@@ -152,7 +168,6 @@ export default function Layout({ children }) {
           >
             {t("nav.contacts")}
           </Link>
-
           <div className="w-[1px] h-5 bg-slate-200 mx-2"></div>
 
           <button

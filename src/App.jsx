@@ -17,6 +17,7 @@ import Checkout from "./pages/Checkout";
 import Services from "./pages/Services";
 import News from "./pages/News";
 import Contacts from "./pages/Contacts";
+import Admin from "./pages/Admin";
 import { CartProvider } from "./context/CartContext";
 import { LanguageProvider } from "./context/LanguageContext";
 import { UserProvider } from "./context/UserContext";
@@ -85,6 +86,7 @@ function App() {
                 <Route path="/services" element={<Services />} />
                 <Route path="/news" element={<News />} />
                 <Route path="/contacts" element={<Contacts />} />
+                <Route path="/admin" element={<Admin />} />
 
                 {/* Redirect main corporate website pages externally */}
                 <Route

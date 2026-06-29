@@ -534,28 +534,8 @@ export default function AcademicTraining() {
         )}
       </AnimatePresence>
 
-      {/* Ambient Mesh Glows */}
-      <motion.div
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{ repeat: Infinity, duration: 12, ease: "easeInOut" }}
-        className="absolute top-0 right-[-10%] w-[50vw] h-[50vw] max-w-[700px] max-h-[700px] bg-sky-200/40 rounded-full blur-[130px] pointer-events-none z-0"
-      ></motion.div>
-      <motion.div
-        animate={{
-          scale: [1, 1.15, 1],
-          opacity: [0.2, 0.4, 0.2],
-        }}
-        transition={{
-          repeat: Infinity,
-          duration: 15,
-          ease: "easeInOut",
-          delay: 2,
-        }}
-        className="absolute bottom-[20%] left-[-10%] w-[45vw] h-[45vw] max-w-[600px] max-h-[600px] bg-indigo-200/30 rounded-full blur-[130px] pointer-events-none z-0"
-      ></motion.div>
+      {/* Fallback Ambient Gradient Background */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-slate-50 via-sky-50/20 to-indigo-50/30 z-0 pointer-events-none" />
 
       {/* Hero Section */}
       <div className="relative pt-24 pb-20 md:pb-28 z-10">

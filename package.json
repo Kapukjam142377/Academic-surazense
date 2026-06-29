@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@splinetool/runtime": "^1.12.97",
     "@tailwindcss/vite": "^4.2.2",
     "@types/node": "^25.5.2",
     "echarts": "^6.0.0",
