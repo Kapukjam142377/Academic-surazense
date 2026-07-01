@@ -329,6 +329,14 @@ export default function Layout({ children }) {
                       {user.email}
                     </p>
                   </div>
+                  <Link
+                    to="/orders"
+                    onClick={() => setIsUserDropdownOpen(false)}
+                    className="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 transition-colors flex items-center gap-2 no-underline"
+                  >
+                    <Clock className="w-4 h-4" />
+                    <span>{language === "th" ? "ประวัติคำสั่งซื้อ" : "Order History"}</span>
+                  </Link>
                   <button
                     onClick={() => {
                       logout();

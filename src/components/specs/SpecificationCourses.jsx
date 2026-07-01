@@ -15,7 +15,6 @@ export default function SpecificationCourses({ product, language, t }) {
     >
       <div className="bg-slate-50 rounded-[2rem] border border-slate-100 p-8 space-y-8 shadow-sm">
         <h3 className="text-xl font-black text-slate-900 border-b border-slate-200 pb-3 flex items-center gap-2.5">
-          <span className="text-purple-500">🎓</span>{" "}
           {t("products.specification")}
         </h3>
 

@@ -24,6 +24,10 @@ import {
   KeyRound,
   Menu,
   Clock,
+  ClipboardList,
+  Package,
+  FlaskConical,
+  GraduationCap,
 } from "lucide-react";
 
 export default function Admin() {
@@ -48,6 +52,7 @@ export default function Admin() {
   const [userRoleFilter, setUserRoleFilter] = useState("all");
   const [enrollmentSearch, setEnrollmentSearch] = useState("");
   const [enrollmentFilter, setEnrollmentFilter] = useState("all");
+  const [orderTypeFilter, setOrderTypeFilter] = useState("all"); // all | shipping | chemicals | courses
   const [qcmSearch, setQcmSearch] = useState("");
 
   // Settings passcode change state
@@ -219,6 +224,8 @@ export default function Admin() {
     setUsersList(initialUsers);
 
     // 2. Load/Mock Orders & Payments
+    // Reset to reload mock data with new shipping_address fields
+    localStorage.removeItem("surazense_mock_registrations");
     const localRegs = localStorage.getItem("surazense_mock_registrations");
     let initialRegs = [];
     if (localRegs) {
@@ -230,6 +237,7 @@ export default function Admin() {
           user_id: "mock-user-4",
           user_email: "somchai.k@gmail.com",
           user_name: "Somchai Korn",
+          customer_phone: "085-555-6666",
           item_type: "course",
           item_id: "lab-qcm",
           item_title: "Lab 1: QCM Sensor Calibration",
@@ -249,6 +257,7 @@ export default function Admin() {
           user_id: "mock-user-5",
           user_email: "natthaporn.s@gmail.com",
           user_name: "Natthaporn Suk",
+          customer_phone: "086-777-8888",
           item_type: "course",
           item_id: "lab-biomarker",
           item_title: "Lab 2: Biomarker Binding Kinetics",
@@ -266,6 +275,7 @@ export default function Admin() {
           user_id: "mock-user-6",
           user_email: "jane.doe@example.com",
           user_name: "Jane Smith",
+          customer_phone: "084-999-0000",
           item_type: "course",
           item_id: "course-intro",
           item_title: "Introduction to Biosensors & Surface Science",
@@ -283,6 +293,8 @@ export default function Admin() {
           user_id: "mock-user-4",
           user_email: "somchai.k@gmail.com",
           user_name: "Somchai Korn",
+          customer_phone: "085-555-6666",
+          shipping_address: "123 ถ.พหลโยธิน แขวงจตุจักร เขตจตุจักร กรุงเทพมหานคร 10900",
           item_type: "product",
           item_id: "prod-qcm-chip",
           item_title: "QCM Gold Sensor Chip (10 pcs)",
@@ -302,6 +314,8 @@ export default function Admin() {
           user_id: "mock-user-5",
           user_email: "natthaporn.s@gmail.com",
           user_name: "Natthaporn Suk",
+          customer_phone: "086-777-8888",
+          shipping_address: "456 ถ.สุขุมวิท แขวงคลองเตย เขตคลองเตย กรุงเทพมหานคร 10110",
           item_type: "product",
           item_id: "prod-buffer-kit",
           item_title: "PBS Buffer Solution Kit (500 mL)",
@@ -319,6 +333,8 @@ export default function Admin() {
           user_id: "mock-user-6",
           user_email: "jane.doe@example.com",
           user_name: "Jane Smith",
+          customer_phone: "084-999-0000",
+          shipping_address: "789 ถ.รัชดาภิเษก แขวงลาดยาว เขตจตุจักร กรุงเทพมหานคร 10900",
           item_type: "product",
           item_id: "prod-cleaning-kit",
           item_title: "Electrode Cleaning & Polishing Kit",
@@ -466,6 +482,17 @@ export default function Admin() {
     );
   };
 
+  const handleUpdateOrderStatus = (orderId, newStatus) => {
+    const updated = registrationsList.map((r) =>
+      r.id === orderId ? { ...r, payment_status: newStatus } : r,
+    );
+    setRegistrationsList(updated);
+    localStorage.setItem(
+      "surazense_mock_registrations",
+      JSON.stringify(updated),
+    );
+  };
+
   // QCM run actions
   const handleDeleteRun = (runId) => {
     const check = window.confirm(
@@ -542,6 +569,13 @@ export default function Admin() {
     return matchSearch && matchRole;
   });
 
+  // Category → type map for admin order filter
+  const ORDER_TYPE_ITEMS = {
+    shipping: ["product", "biosensor", "module", "accessory"],
+    chemicals: ["chemical"],
+    courses: ["course"],
+  };
+
   // Filtered Orders List
   const filteredEnrollments = registrationsList.filter((r) => {
     const term = enrollmentSearch.toLowerCase();
@@ -549,11 +583,15 @@ export default function Admin() {
       r.user_email.toLowerCase().includes(term) ||
       r.user_name.toLowerCase().includes(term) ||
       (r.item_title || "").toLowerCase().includes(term);
-    const matchFilter =
+    const matchPayStatus =
       enrollmentFilter === "all" ||
-      r.item_type === enrollmentFilter ||
       r.payment_status === enrollmentFilter;
-    return matchSearch && matchFilter;
+    const matchType = (() => {
+      if (orderTypeFilter === "all") return true;
+      const t = (r.item_type || "").toLowerCase();
+      return ORDER_TYPE_ITEMS[orderTypeFilter]?.includes(t) ?? false;
+    })();
+    return matchSearch && matchPayStatus && matchType;
   });
 
   // Filtered QCM Scans
@@ -1528,7 +1566,34 @@ export default function Admin() {
                 );
               })()}
 
-              {/* Filter controls */}
+              {/* Category Type Tabs (matching customer Order History) */}
+              <div className="flex flex-wrap items-center gap-1 border-b border-slate-200 pb-0">
+                {[
+                  { key: "all",       Icon: ClipboardList, label: { th: "ทั้งหมด",   en: "All Orders" } },
+                  { key: "shipping",  Icon: Package,       label: { th: "จัดส่ง",    en: "Shipping" } },
+                  { key: "chemicals", Icon: FlaskConical,  label: { th: "สารเคมี",   en: "Chemicals" } },
+                  { key: "courses",   Icon: GraduationCap, label: { th: "คอร์สอบรม", en: "Courses" } },
+                ].map((tab, idx, arr) => (
+                  <React.Fragment key={tab.key}>
+                    <button
+                      onClick={() => setOrderTypeFilter(tab.key)}
+                      className={`flex items-center gap-2 px-4 py-3 text-sm font-semibold transition-all border-b-2 -mb-px bg-transparent border-x-0 border-t-0 cursor-pointer outline-none ${
+                        orderTypeFilter === tab.key
+                          ? "border-b-accent text-slate-900"
+                          : "border-b-transparent text-slate-400 hover:text-slate-600"
+                      }`}
+                    >
+                      <tab.Icon className="w-4 h-4" />
+                      {tab.label[language]}
+                    </button>
+                    {idx < arr.length - 1 && (
+                      <div className="w-[1.5px] h-5 bg-blue-700 mx-1 mb-px" />
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+
+              {/* Search + Status Filter */}
               <div className="bg-white border border-slate-200/60 rounded-2xl p-4 flex flex-col lg:flex-row gap-4 items-center justify-between shadow-sm">
                 <div className="relative w-full lg:max-w-md">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
@@ -1549,40 +1614,24 @@ export default function Admin() {
 
                 <div className="flex items-center gap-2 w-full lg:w-auto shrink-0 justify-end flex-wrap">
                   <span className="text-xs font-bold text-slate-400 uppercase mr-1">
-                    {language === "th" ? "กรอง:" : "Filter:"}
+                    {language === "th" ? "สถานะ:" : "Status:"}
                   </span>
                   {[
-                    {
-                      key: "all",
-                      label: language === "th" ? "ทั้งหมด" : "All",
-                    },
-                    {
-                      key: "course",
-                      label: language === "th" ? "คอร์สเรียน" : "Course",
-                    },
-                    {
-                      key: "product",
-                      label: language === "th" ? "สินค้า" : "Product",
-                    },
-                    {
-                      key: "paid",
-                      label: language === "th" ? "ชำระแล้ว" : "Paid",
-                    },
-                    {
-                      key: "refunded",
-                      label: language === "th" ? "คืนเงิน" : "Refunded",
-                    },
-                  ].map((tab) => (
+                    { key: "all",      label: { th: "ทั้งหมด",   en: "All" } },
+                    { key: "pending",  label: { th: "รอดำเนิน",  en: "Pending" } },
+                    { key: "paid",     label: { th: "ชำระแล้ว",  en: "Paid" } },
+                    { key: "refunded", label: { th: "คืนเงิน",   en: "Refunded" } },
+                  ].map((f) => (
                     <button
-                      key={tab.key}
-                      onClick={() => setEnrollmentFilter(tab.key)}
+                      key={f.key}
+                      onClick={() => setEnrollmentFilter(f.key)}
                       className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all cursor-pointer ${
-                        enrollmentFilter === tab.key
+                        enrollmentFilter === f.key
                           ? "bg-accent text-white border-accent shadow-sm"
                           : "bg-white text-slate-500 border-slate-200 hover:bg-slate-50"
                       }`}
                     >
-                      {tab.label}
+                      {f.label[language]}
                     </button>
                   ))}
                 </div>
@@ -1606,6 +1655,9 @@ export default function Admin() {
                             : "Item Purchased"}
                         </th>
                         <th className="py-4 px-6">
+                          {language === "th" ? "ที่อยู่จัดส่ง / โทร" : "Ship Address / Phone"}
+                        </th>
+                        <th className="py-4 px-6">
                           {language === "th" ? "ยอดชำระ" : "Amount"}
                         </th>
                         <th className="py-4 px-6">
@@ -1626,7 +1678,7 @@ export default function Admin() {
                       {filteredEnrollments.length === 0 ? (
                         <tr>
                           <td
-                            colSpan="8"
+                            colSpan="9"
                             className="text-center py-10 text-slate-400 font-semibold"
                           >
                             {language === "th"
@@ -1659,6 +1711,11 @@ export default function Admin() {
                                 <span className="text-xs text-slate-400">
                                   {ord.user_email}
                                 </span>
+                                {ord.customer_phone && (
+                                  <div className="text-[11px] text-slate-500 mt-0.5 font-mono">
+                                    {ord.customer_phone}
+                                  </div>
+                                )}
                               </td>
                               <td className="py-4 px-6">
                                 <span
@@ -1689,6 +1746,20 @@ export default function Admin() {
                                 <span className="font-black text-slate-800">
                                   ฿{(ord.amount || 0).toLocaleString()}
                                 </span>
+                              </td>
+                              {/* Shipping Address column */}
+                              <td className="py-4 px-6">
+                                {ord.shipping_address ? (
+                                  <div className="max-w-[200px]">
+                                    <p className="text-xs text-slate-700 leading-snug">
+                                      {ord.shipping_address}
+                                    </p>
+                                  </div>
+                                ) : (
+                                  <span className="text-xs text-slate-300 italic">
+                                    {language === "th" ? "ไม่มีที่อยู่" : "—"}
+                                  </span>
+                                )}
                               </td>
                               <td className="py-4 px-6 text-slate-500 text-xs font-medium">
                                 {payMethodLabel}
@@ -1723,7 +1794,21 @@ export default function Admin() {
                                 </span>
                               </td>
                               <td className="py-4 px-6">
-                                <div className="flex items-center justify-center">
+                                <div className="flex items-center justify-center gap-2">
+                                  <select
+                                    value={ord.payment_status || "pending"}
+                                    onChange={(e) =>
+                                      handleUpdateOrderStatus(ord.id, e.target.value)
+                                    }
+                                    className="text-xs bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-sky-100 cursor-pointer"
+                                  >
+                                    <option value="pending">{language === "th" ? "รอดำเนิน" : "Pending"}</option>
+                                    <option value="confirmed">{language === "th" ? "ยืนยัน" : "Confirmed"}</option>
+                                    <option value="shipped">{language === "th" ? "จัดส่ง" : "Shipped"}</option>
+                                    <option value="paid">{language === "th" ? "ชำระแล้ว" : "Paid"}</option>
+                                    <option value="delivered">{language === "th" ? "ส่งแล้ว" : "Delivered"}</option>
+                                    <option value="refunded">{language === "th" ? "คืนเงิน" : "Refunded"}</option>
+                                  </select>
                                   <button
                                     onClick={() =>
                                       handleDeleteEnrollment(ord.id)
