@@ -15,6 +15,7 @@ import {
   Phone,
   User,
   LogOut,
+  Clock,
 } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useLanguage } from "../context/LanguageContext";
@@ -29,6 +30,19 @@ export default function Layout({ children }) {
   const { cartItems, removeFromCart, itemCount, cartTotal } = useCart();
   const { language, toggleLanguage, t } = useLanguage();
   const { user, login, register, logout } = useUser();
+
+  const [showTimeoutModal, setShowTimeoutModal] = useState(false);
+
+  // Monitor for session expiration
+  useEffect(() => {
+    if (
+      !user &&
+      sessionStorage.getItem("surazense_session_expired") === "true"
+    ) {
+      setShowTimeoutModal(true);
+      sessionStorage.removeItem("surazense_session_expired");
+    }
+  }, [user]);
 
   // Redirect guard: non-admin logged-in users are restricted to /dashboard only
   useEffect(() => {
@@ -950,6 +964,34 @@ export default function Layout({ children }) {
           </p>
         </div>
       </div>
+
+      {/* Session Timeout Warning Modal */}
+      {showTimeoutModal && (
+        <div className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-white rounded-[2rem] border border-slate-200/80 shadow-2xl p-8 w-full max-w-md text-center transform scale-in transition-all">
+            <div className="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-500 mx-auto mb-6">
+              <Clock className="w-8 h-8 stroke-[2.2]" />
+            </div>
+            <h2 className="text-xl font-black text-slate-800 tracking-tight mb-3">
+              {language === "th" ? "เซสชันหมดอายุ" : "Session Expired"}
+            </h2>
+            <p className="text-slate-500 text-sm leading-relaxed mb-8">
+              {language === "th"
+                ? "คุณถูกออกจากระบบเนื่องจากไม่มีการใช้งานเป็นเวลานาน เพื่อความปลอดภัยของบัญชี กรุณาเข้าสู่ระบบอีกครั้งเพื่อดำเนินการต่อ"
+                : "You have been logged out due to inactivity to protect your account. Please log in again to continue."}
+            </p>
+            <button
+              onClick={() => {
+                setShowTimeoutModal(false);
+                setIsLoginSidebarOpen(true);
+              }}
+              className="w-full bg-accent hover:bg-accent-hover text-white font-bold py-3.5 rounded-xl transition-all shadow-md shadow-sky-200 cursor-pointer text-sm border-none"
+            >
+              {language === "th" ? "เข้าสู่ระบบอีกครั้ง" : "Log In Again"}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

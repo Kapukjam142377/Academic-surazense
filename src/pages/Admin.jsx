@@ -56,6 +56,15 @@ export default function Admin() {
   const [passcodeSuccess, setPasscodeSuccess] = useState("");
   const [passcodeUpdateError, setPasscodeUpdateError] = useState("");
 
+  // Settings session timeout state
+  const [timeoutEnabled, setTimeoutEnabled] = useState(
+    localStorage.getItem("surazense_timeout_enabled") !== "false",
+  );
+  const [timeoutDuration, setTimeoutDuration] = useState(
+    localStorage.getItem("surazense_timeout_duration") || "15",
+  );
+  const [settingsSuccess, setSettingsSuccess] = useState("");
+
   // Login Modal states for user sessions
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [loginEmail, setLoginEmail] = useState("");
@@ -499,6 +508,27 @@ export default function Admin() {
     );
     setNewPasscode("");
     setConfirmNewPasscode("");
+  };
+
+  // Change Session Timeout Settings
+  const handleSaveTimeoutSettings = (e) => {
+    e.preventDefault();
+    setSettingsSuccess("");
+    localStorage.setItem(
+      "surazense_timeout_enabled",
+      timeoutEnabled ? "true" : "false",
+    );
+    localStorage.setItem(
+      "surazense_timeout_duration",
+      timeoutDuration.toString(),
+    );
+    setSettingsSuccess(
+      language === "th"
+        ? "บันทึกการตั้งค่าเซสชันเรียบร้อยแล้ว!"
+        : "Session timeout settings saved successfully!",
+    );
+    // Clear success message after 3 seconds
+    setTimeout(() => setSettingsSuccess(""), 3000);
   };
 
   // Filtered Users List
@@ -1937,6 +1967,97 @@ export default function Admin() {
                     className="bg-accent hover:bg-accent-hover text-white font-bold px-5 py-3 rounded-xl transition-all cursor-pointer border-none shadow-sm text-xs"
                   >
                     {language === "th" ? "อัพเดทรหัสผ่าน" : "Update Passcode"}
+                  </button>
+                </form>
+              </div>
+
+              {/* Session Inactivity Timeout Card */}
+              <div className="bg-white border border-slate-200/60 rounded-3xl p-6 shadow-sm">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center text-amber-500">
+                    <Clock className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-slate-800">
+                      {language === "th"
+                        ? "ระบบหมดเวลาเซสชันเมื่อไม่มีการใช้งาน (Website Inactivity Timeout)"
+                        : "Website Session Inactivity Timeout"}
+                    </h3>
+                    <p className="text-xs text-slate-400">
+                      {language === "th"
+                        ? "ออกจากระบบอัตโนมัติบนหน้าเว็บหลักเมื่อผู้ใช้ไม่มีการเคลื่อนไหว (ไม่มีผลกับหน้าควบคุม Admin นี้)"
+                        : "Automatically log out inactive users on the main website (does not apply to this Admin console)."}
+                    </p>
+                  </div>
+                </div>
+
+                <form
+                  onSubmit={handleSaveTimeoutSettings}
+                  className="space-y-4"
+                >
+                  {settingsSuccess && (
+                    <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-3 text-emerald-600 text-xs font-semibold">
+                      {settingsSuccess}
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between py-2 border-b border-slate-100 pb-4">
+                    <span className="text-xs font-bold text-slate-500">
+                      {language === "th"
+                        ? "เปิดใช้งานระบบตัดเซสชัน"
+                        : "Enable Inactivity Timeout"}
+                    </span>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={timeoutEnabled}
+                        onChange={(e) => setTimeoutEnabled(e.target.checked)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+                    </label>
+                  </div>
+
+                  {timeoutEnabled && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">
+                          {language === "th"
+                            ? "ระยะเวลาหมดเวลา (นาที)"
+                            : "Timeout Duration (Minutes)"}
+                        </label>
+                        <select
+                          value={timeoutDuration}
+                          onChange={(e) => setTimeoutDuration(e.target.value)}
+                          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-sky-100 focus:border-accent text-sm text-slate-850 bg-white font-semibold"
+                        >
+                          <option value="5">
+                            5 {language === "th" ? "นาที" : "minutes"}
+                          </option>
+                          <option value="10">
+                            10 {language === "th" ? "นาที" : "minutes"}
+                          </option>
+                          <option value="15">
+                            15 {language === "th" ? "นาที" : "minutes"}
+                          </option>
+                          <option value="30">
+                            30 {language === "th" ? "นาที" : "minutes"}
+                          </option>
+                          <option value="60">
+                            60 {language === "th" ? "นาที" : "minutes"}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    className="bg-accent hover:bg-accent-hover text-white font-bold px-5 py-3 rounded-xl transition-all cursor-pointer border-none shadow-sm text-xs"
+                  >
+                    {language === "th"
+                      ? "บันทึกการตั้งค่าเซสชัน"
+                      : "Save Session Settings"}
                   </button>
                 </form>
               </div>

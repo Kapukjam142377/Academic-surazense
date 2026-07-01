@@ -157,6 +157,81 @@ export function UserProvider({ children }) {
     localStorage.removeItem("surazense_user");
   };
 
+  // Background Session Inactivity Timeout (Main website only, disabled on /admin)
+  useEffect(() => {
+    if (!user) return;
+
+    // Do not run timeout logic on /admin page
+    if (window.location.pathname === "/admin") {
+      return;
+    }
+
+    const timeoutEnabled =
+      localStorage.getItem("surazense_timeout_enabled") !== "false";
+    if (!timeoutEnabled) return;
+
+    const durationMin = parseInt(
+      localStorage.getItem("surazense_timeout_duration") || "15",
+      10,
+    );
+    const durationMs = durationMin * 60 * 1000;
+
+    let timeoutId = null;
+
+    const resetTimer = () => {
+      // Re-check path in case user navigates to /admin without a page reload
+      if (window.location.pathname === "/admin") {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+          timeoutId = null;
+        }
+        return;
+      }
+
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        logout();
+        sessionStorage.setItem("surazense_session_expired", "true");
+        sessionStorage.removeItem("admin_authorized");
+      }, durationMs);
+    };
+
+    // Events to monitor user activity
+    const events = [
+      "mousedown",
+      "mousemove",
+      "keypress",
+      "scroll",
+      "touchstart",
+    ];
+
+    // Initialize timer
+    resetTimer();
+
+    // Listen to events
+    events.forEach((event) => {
+      window.addEventListener(event, resetTimer);
+    });
+
+    // Periodically re-check path in case SPA routing changed path without event firing
+    const pathCheckInterval = setInterval(() => {
+      if (window.location.pathname === "/admin") {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+          timeoutId = null;
+        }
+      }
+    }, 1000);
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      clearInterval(pathCheckInterval);
+      events.forEach((event) => {
+        window.removeEventListener(event, resetTimer);
+      });
+    };
+  }, [user]);
+
   return (
     <UserContext.Provider value={{ user, loading, login, register, logout }}>
       {children}
