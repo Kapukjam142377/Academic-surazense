@@ -52,7 +52,7 @@ function loadOrdersFromStorage(userId) {
     const raw = localStorage.getItem("surazense_orders");
     const all = raw ? JSON.parse(raw) : [];
     return all.filter(
-      (o) => String(o.user_id) === String(userId) || o.user_id === userId
+      (o) => String(o.user_id) === String(userId) || o.user_id === userId,
     );
   } catch {
     return [];
@@ -84,7 +84,7 @@ export default function OrderHistory() {
 
     fetchOrdersFromAPI(user.id)
       .then((data) => {
-        setOrders(Array.isArray(data) ? data : data.orders ?? []);
+        setOrders(Array.isArray(data) ? data : (data.orders ?? []));
         setFetchState("done");
       })
       .catch(() => {

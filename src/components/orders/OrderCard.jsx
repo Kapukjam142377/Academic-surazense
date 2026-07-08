@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, Package, FlaskConical, GraduationCap } from "lucide-react";
+import {
+  ChevronDown,
+  Package,
+  FlaskConical,
+  GraduationCap,
+} from "lucide-react";
 import OrderStatusBadge from "./OrderStatusBadge";
 
 /** Map product category → tab key */
@@ -48,8 +53,7 @@ export function getOrderTab(order) {
 export default function OrderCard({ order, language }) {
   const [expanded, setExpanded] = useState(false);
 
-  const primaryCategory =
-    order.items?.[0]?.product_category ?? "Biosensors";
+  const primaryCategory = order.items?.[0]?.product_category ?? "Biosensors";
 
   return (
     <motion.div
@@ -85,17 +89,27 @@ export default function OrderCard({ order, language }) {
           <span className="text-base font-black text-slate-900">
             ${Number(order.total_amount ?? 0).toFixed(2)}
           </span>
-          <OrderStatusBadge status={order.status ?? "pending"} language={language} />
+          <OrderStatusBadge
+            status={order.status ?? "pending"}
+            language={language}
+          />
           <button
             onClick={() => setExpanded((v) => !v)}
             className="flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-blue-600 transition-colors bg-transparent border-none cursor-pointer p-1 outline-none"
           >
-            <motion.div animate={{ rotate: expanded ? 180 : 0 }} transition={{ duration: 0.2 }}>
+            <motion.div
+              animate={{ rotate: expanded ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+            >
               <ChevronDown className="w-4 h-4" />
             </motion.div>
             {language === "th"
-              ? expanded ? "ซ่อน" : "ดูรายละเอียด"
-              : expanded ? "Hide" : "Details"}
+              ? expanded
+                ? "ซ่อน"
+                : "ดูรายละเอียด"
+              : expanded
+                ? "Hide"
+                : "Details"}
           </button>
         </div>
       </div>
@@ -122,7 +136,8 @@ export default function OrderCard({ order, language }) {
                   </p>
                   {order.customer_phone && (
                     <p className="text-xs text-slate-500 font-mono">
-                      {language === "th" ? "โทร" : "Tel"}: {order.customer_phone}
+                      {language === "th" ? "โทร" : "Tel"}:{" "}
+                      {order.customer_phone}
                     </p>
                   )}
                 </div>

@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/fiber": "^9.6.1",
     "@splinetool/runtime": "^1.12.97",
     "@tailwindcss/vite": "^4.2.2",
     "@types/node": "^25.5.2",
@@ -24,6 +25,7 @@
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.14.0",
     "tailwindcss": "^4.2.2",
+    "three": "^0.185.0",
     "tslib": "^2.8.1"
   },
   "devDependencies": {

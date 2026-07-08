@@ -19,6 +19,7 @@ import News from "./pages/News";
 import Contacts from "./pages/Contacts";
 import Admin from "./pages/Admin";
 import OrderHistory from "./pages/OrderHistory";
+import Profile from "./pages/Profile";
 import { CartProvider } from "./context/CartContext";
 import { LanguageProvider } from "./context/LanguageContext";
 import { UserProvider } from "./context/UserContext";
@@ -89,6 +90,7 @@ function App() {
                 <Route path="/contacts" element={<Contacts />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/orders" element={<OrderHistory />} />
+                <Route path="/profile" element={<Profile />} />
 
                 {/* Redirect main corporate website pages externally */}
                 <Route

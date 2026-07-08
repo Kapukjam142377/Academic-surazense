@@ -44,9 +44,9 @@ export default function Layout({ children }) {
     }
   }, [user]);
 
-  // Redirect guard: non-admin logged-in users are restricted to /dashboard only
+  // Redirect guard: protect admin routes from non-admin logged-in users
   useEffect(() => {
-    if (user && user.role !== "admin" && location.pathname !== "/dashboard") {
+    if (user && user.role !== "admin" && location.pathname === "/admin") {
       navigate("/dashboard");
     }
   }, [user, location.pathname, navigate]);
@@ -330,12 +330,26 @@ export default function Layout({ children }) {
                     </p>
                   </div>
                   <Link
+                    to="/profile"
+                    onClick={() => setIsUserDropdownOpen(false)}
+                    className="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 transition-colors flex items-center gap-2 no-underline"
+                  >
+                    <User className="w-4 h-4" />
+                    <span>
+                      {language === "th" ? "โปรไฟล์ส่วนตัว" : "My Profile"}
+                    </span>
+                  </Link>
+                  <Link
                     to="/orders"
                     onClick={() => setIsUserDropdownOpen(false)}
                     className="w-full text-left px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 transition-colors flex items-center gap-2 no-underline"
                   >
                     <Clock className="w-4 h-4" />
-                    <span>{language === "th" ? "ประวัติคำสั่งซื้อ" : "Order History"}</span>
+                    <span>
+                      {language === "th"
+                        ? "ประวัติคำสั่งซื้อ"
+                        : "Order History"}
+                    </span>
                   </Link>
                   <button
                     onClick={() => {
@@ -541,6 +555,20 @@ export default function Layout({ children }) {
                   </p>
                 </div>
               </div>
+              <Link
+                to="/profile"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="w-full text-center py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-colors no-underline text-[14px]"
+              >
+                {language === "th" ? "โปรไฟล์ส่วนตัว" : "My Profile"}
+              </Link>
+              <Link
+                to="/orders"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="w-full text-center py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-colors no-underline text-[14px]"
+              >
+                {language === "th" ? "ประวัติคำสั่งซื้อ" : "Order History"}
+              </Link>
               <button
                 onClick={() => {
                   logout();

@@ -157,6 +157,62 @@ export function UserProvider({ children }) {
     localStorage.removeItem("surazense_user");
   };
 
+  const updateProfile = async (userId, profileData) => {
+    try {
+      const res = await fetch(`${API_URL}/api/users/${userId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(profileData),
+      });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.detail || "Failed to update profile");
+      }
+
+      const userData = await res.json();
+      setUser(userData);
+      localStorage.setItem("surazense_user", JSON.stringify(userData));
+      return { success: true };
+    } catch (err) {
+      console.warn("API profile update failed, saving locally:", err);
+      // Fallback: update local mock storage
+      const mockUsersStr = localStorage.getItem("surazense_mock_users");
+      const mockUsers = mockUsersStr ? JSON.parse(mockUsersStr) : [];
+
+      const userIdx = mockUsers.findIndex(
+        (u) => u.id === userId || u.email === profileData.email,
+      );
+      if (userIdx !== -1) {
+        const updatedUser = {
+          ...mockUsers[userIdx],
+          ...profileData,
+          updated_at: new Date().toISOString(),
+        };
+        // If password is changed, update it too
+        if (profileData.password) {
+          updatedUser.password = profileData.password;
+        }
+        mockUsers[userIdx] = updatedUser;
+        localStorage.setItem("surazense_mock_users", JSON.stringify(mockUsers));
+        setUser(updatedUser);
+        localStorage.setItem("surazense_user", JSON.stringify(updatedUser));
+        return { success: true };
+      } else {
+        // If user is logged in, but not found in mock users (e.g. they logged in with API and then server went down, or they were a pre-seeded admin)
+        // Let's update the current user session in local storage anyway
+        const updatedUser = {
+          ...user,
+          ...profileData,
+          updated_at: new Date().toISOString(),
+        };
+        setUser(updatedUser);
+        localStorage.setItem("surazense_user", JSON.stringify(updatedUser));
+        return { success: true };
+      }
+    }
+  };
+
   // Background Session Inactivity Timeout (Main website only, disabled on /admin)
   useEffect(() => {
     if (!user) return;
@@ -233,7 +289,9 @@ export function UserProvider({ children }) {
   }, [user]);
 
   return (
-    <UserContext.Provider value={{ user, loading, login, register, logout }}>
+    <UserContext.Provider
+      value={{ user, loading, login, register, logout, updateProfile }}
+    >
       {children}
     </UserContext.Provider>
   );

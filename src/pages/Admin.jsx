@@ -294,7 +294,8 @@ export default function Admin() {
           user_email: "somchai.k@gmail.com",
           user_name: "Somchai Korn",
           customer_phone: "085-555-6666",
-          shipping_address: "123 ถ.พหลโยธิน แขวงจตุจักร เขตจตุจักร กรุงเทพมหานคร 10900",
+          shipping_address:
+            "123 ถ.พหลโยธิน แขวงจตุจักร เขตจตุจักร กรุงเทพมหานคร 10900",
           item_type: "product",
           item_id: "prod-qcm-chip",
           item_title: "QCM Gold Sensor Chip (10 pcs)",
@@ -315,7 +316,8 @@ export default function Admin() {
           user_email: "natthaporn.s@gmail.com",
           user_name: "Natthaporn Suk",
           customer_phone: "086-777-8888",
-          shipping_address: "456 ถ.สุขุมวิท แขวงคลองเตย เขตคลองเตย กรุงเทพมหานคร 10110",
+          shipping_address:
+            "456 ถ.สุขุมวิท แขวงคลองเตย เขตคลองเตย กรุงเทพมหานคร 10110",
           item_type: "product",
           item_id: "prod-buffer-kit",
           item_title: "PBS Buffer Solution Kit (500 mL)",
@@ -334,7 +336,8 @@ export default function Admin() {
           user_email: "jane.doe@example.com",
           user_name: "Jane Smith",
           customer_phone: "084-999-0000",
-          shipping_address: "789 ถ.รัชดาภิเษก แขวงลาดยาว เขตจตุจักร กรุงเทพมหานคร 10900",
+          shipping_address:
+            "789 ถ.รัชดาภิเษก แขวงลาดยาว เขตจตุจักร กรุงเทพมหานคร 10900",
           item_type: "product",
           item_id: "prod-cleaning-kit",
           item_title: "Electrode Cleaning & Polishing Kit",
@@ -584,8 +587,7 @@ export default function Admin() {
       r.user_name.toLowerCase().includes(term) ||
       (r.item_title || "").toLowerCase().includes(term);
     const matchPayStatus =
-      enrollmentFilter === "all" ||
-      r.payment_status === enrollmentFilter;
+      enrollmentFilter === "all" || r.payment_status === enrollmentFilter;
     const matchType = (() => {
       if (orderTypeFilter === "all") return true;
       const t = (r.item_type || "").toLowerCase();
@@ -1569,10 +1571,26 @@ export default function Admin() {
               {/* Category Type Tabs (matching customer Order History) */}
               <div className="flex flex-wrap items-center gap-1 border-b border-slate-200 pb-0">
                 {[
-                  { key: "all",       Icon: ClipboardList, label: { th: "ทั้งหมด",   en: "All Orders" } },
-                  { key: "shipping",  Icon: Package,       label: { th: "จัดส่ง",    en: "Shipping" } },
-                  { key: "chemicals", Icon: FlaskConical,  label: { th: "สารเคมี",   en: "Chemicals" } },
-                  { key: "courses",   Icon: GraduationCap, label: { th: "คอร์สอบรม", en: "Courses" } },
+                  {
+                    key: "all",
+                    Icon: ClipboardList,
+                    label: { th: "ทั้งหมด", en: "All Orders" },
+                  },
+                  {
+                    key: "shipping",
+                    Icon: Package,
+                    label: { th: "จัดส่ง", en: "Shipping" },
+                  },
+                  {
+                    key: "chemicals",
+                    Icon: FlaskConical,
+                    label: { th: "สารเคมี", en: "Chemicals" },
+                  },
+                  {
+                    key: "courses",
+                    Icon: GraduationCap,
+                    label: { th: "คอร์สอบรม", en: "Courses" },
+                  },
                 ].map((tab, idx, arr) => (
                   <React.Fragment key={tab.key}>
                     <button
@@ -1617,10 +1635,16 @@ export default function Admin() {
                     {language === "th" ? "สถานะ:" : "Status:"}
                   </span>
                   {[
-                    { key: "all",      label: { th: "ทั้งหมด",   en: "All" } },
-                    { key: "pending",  label: { th: "รอดำเนิน",  en: "Pending" } },
-                    { key: "paid",     label: { th: "ชำระแล้ว",  en: "Paid" } },
-                    { key: "refunded", label: { th: "คืนเงิน",   en: "Refunded" } },
+                    { key: "all", label: { th: "ทั้งหมด", en: "All" } },
+                    {
+                      key: "pending",
+                      label: { th: "รอดำเนิน", en: "Pending" },
+                    },
+                    { key: "paid", label: { th: "ชำระแล้ว", en: "Paid" } },
+                    {
+                      key: "refunded",
+                      label: { th: "คืนเงิน", en: "Refunded" },
+                    },
                   ].map((f) => (
                     <button
                       key={f.key}
@@ -1655,7 +1679,9 @@ export default function Admin() {
                             : "Item Purchased"}
                         </th>
                         <th className="py-4 px-6">
-                          {language === "th" ? "ที่อยู่จัดส่ง / โทร" : "Ship Address / Phone"}
+                          {language === "th"
+                            ? "ที่อยู่จัดส่ง / โทร"
+                            : "Ship Address / Phone"}
                         </th>
                         <th className="py-4 px-6">
                           {language === "th" ? "ยอดชำระ" : "Amount"}
@@ -1798,16 +1824,39 @@ export default function Admin() {
                                   <select
                                     value={ord.payment_status || "pending"}
                                     onChange={(e) =>
-                                      handleUpdateOrderStatus(ord.id, e.target.value)
+                                      handleUpdateOrderStatus(
+                                        ord.id,
+                                        e.target.value,
+                                      )
                                     }
                                     className="text-xs bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-sky-100 cursor-pointer"
                                   >
-                                    <option value="pending">{language === "th" ? "รอดำเนิน" : "Pending"}</option>
-                                    <option value="confirmed">{language === "th" ? "ยืนยัน" : "Confirmed"}</option>
-                                    <option value="shipped">{language === "th" ? "จัดส่ง" : "Shipped"}</option>
-                                    <option value="paid">{language === "th" ? "ชำระแล้ว" : "Paid"}</option>
-                                    <option value="delivered">{language === "th" ? "ส่งแล้ว" : "Delivered"}</option>
-                                    <option value="refunded">{language === "th" ? "คืนเงิน" : "Refunded"}</option>
+                                    <option value="pending">
+                                      {language === "th"
+                                        ? "รอดำเนิน"
+                                        : "Pending"}
+                                    </option>
+                                    <option value="confirmed">
+                                      {language === "th"
+                                        ? "ยืนยัน"
+                                        : "Confirmed"}
+                                    </option>
+                                    <option value="shipped">
+                                      {language === "th" ? "จัดส่ง" : "Shipped"}
+                                    </option>
+                                    <option value="paid">
+                                      {language === "th" ? "ชำระแล้ว" : "Paid"}
+                                    </option>
+                                    <option value="delivered">
+                                      {language === "th"
+                                        ? "ส่งแล้ว"
+                                        : "Delivered"}
+                                    </option>
+                                    <option value="refunded">
+                                      {language === "th"
+                                        ? "คืนเงิน"
+                                        : "Refunded"}
+                                    </option>
                                   </select>
                                   <button
                                     onClick={() =>
