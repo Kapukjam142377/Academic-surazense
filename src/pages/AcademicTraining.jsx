@@ -659,7 +659,7 @@ export default function AcademicTraining() {
   const [toast, setToast] = useState({ message: "", type: null });
   const [flyingItem, setFlyingItem] = useState(null);
 
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+  const API_URL = import.meta.env.VITE_API_URL || "http://34.87.78.35:8000";
 
   useEffect(() => {
     if (user) {
