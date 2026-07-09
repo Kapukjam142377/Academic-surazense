@@ -124,7 +124,7 @@ export const translations = {
       medicalScience: "Medical Science",
       engineering: "Engineering",
       introDesc:
-        "Workshop and Training powered by our Surazense Team, in collaboration with advisors from the Engineering Department and the Translational Medicine Department at Suranaree University, for an interactive lab demonstration tailored to participants and enthusiasts passionate about biology and biosensor technology. Discover how cutting-edge biosensor technology is revolutionizing cancer detection through real-world applications of biosensor for cancer biomarker detection.",
+        "Workshop and Training powered by our Surazense Team, in collaboration with advisors from the Engineering Department and the Translational Medicine Department, for an interactive lab demonstration tailored to participants and enthusiasts passionate about biology and biosensor technology. Discover how cutting-edge biosensor technology is revolutionizing biosensor cancer.",
       exploreLabs: "Explore Labs",
       viewCourses: "View Courses",
       trainingAtmosphere: "Medical / Engineer Training",
@@ -246,6 +246,104 @@ export const translations = {
       gallery2Category: "Lab Practice",
       gallery3Category: "Development",
       gallery4Category: "Research & Data",
+
+      gallery5Title: "HIGH SCHOOL BIOTECH",
+      gallery5Desc:
+        "Inspiring the next generation of researchers with hands-on biosensing laboratory practices.",
+      gallery5Category: "Workshop",
+      gallery6Title: "HARDWARE PROGRAMMING",
+      gallery6Desc:
+        "Students assembling microchip modules, programming firmware, and debugging UART connections.",
+      gallery6Category: "Engineering",
+      gallery7Title: "X-ZENSE HARDWARE",
+      gallery7Desc:
+        "Deploying our flagship biosensor analyzer in clean-room diagnostic research environments.",
+      gallery7Category: "Device",
+      gallery8Title: "MULTIDISCIPLINARY LABS",
+      gallery8Desc:
+        "Integrating electrical circuit design with biochemical kinetics and assay functionalization.",
+      gallery8Category: "Research",
+      gallery9Title: "SOFTWARE INTERACTION",
+      gallery9Desc:
+        "Calibrating frequency sweeps, polynomial baselines, and spline estimations on interactive graphs.",
+      gallery9Category: "Software",
+      gallery10Title: "BIOSENSOR WORKSHOP",
+      gallery10Desc:
+        "Demonstrating quartz crystal microbalance biosensors to collaborative engineering and medical teams.",
+      gallery10Category: "Lab Seminar",
+
+      awardsTitle: "Awards & Recognition",
+      awardsDesc:
+        "Celebrating our team's scientific excellence, design innovations, and contributions to translational medicine.",
+      award1Title: "Outstanding HealthTech Innovation",
+      award1Desc:
+        "First prize award for EGFR cell-free DNA biosensor cancer diagnostic kit development.",
+      award2Title: "Young Scientist Design Award",
+      award2Desc:
+        "Recognition of outstanding electronic engineering in portable QCM hardware module design.",
+      award3Title: "National Medical Research Medal",
+      award3Desc:
+        "Awarded by leading medical institutes for significant contribution to early-stage biomarker detection.",
+
+      contestsTitle: "Contest Submissions",
+      contestsDesc:
+        "Innovations and research projects designed by our students and submitted to national and international tech challenges.",
+      contest1Title: "EGFR Lung Cancer Detector Kit",
+      contest1Desc:
+        "An integrated biosensing diagnostic cartridge submitted to the National Science & Medical Innovation Awards.",
+      contest2Title: "QCM Portable Sweep Module",
+      contest2Desc:
+        "A low-noise microcontroller-driven frequency sweeping device submitted to the ASEAN HealthTech Innovation Challenge.",
+      contest3Title: "Automated Microfluidics Profiler",
+      contest3Desc:
+        "An automated fluid delivery sensor calibration system entered in the Suranaree Research Excellence Exhibition.",
+
+      eventsTitle: "Upcoming Events in 2026",
+      eventsDesc:
+        "Check out the scientific conferences, industry exhibitions, and university workshops we will be participating in this year.",
+      event1Title: "Thailand Innovation & Tech Show 2026",
+      event1Desc:
+        "Exhibiting our flagship diagnostic biosensors to healthcare leaders and clinical distributors.",
+      event1Date: "October 12-14, 2026",
+      event2Title: "ASEAN Bio-Sensing & Health Summit",
+      event2Desc:
+        "Presenting our recent data on EGFR binding kinetics to regional molecular diagnostics delegates.",
+      event2Date: "November 4-6, 2026",
+      event3Title: "SUT Engineering Expo & Seminar",
+      event3Desc:
+        "Conducting live laboratory demonstrations on frequency sweeps and digital spline smoothing algorithms.",
+      event3Date: "December 18, 2026",
+
+      schoolsTitle: "Cooperating Schools & Partners",
+      schoolsDesc:
+        "We proudly collaborate with leading science academies, high schools, and academic departments to foster biosensor innovations.",
+      school1: "Kamnoetvidya Science Academy (KVIS)",
+      school2: "Mahidol Wittayanusorn School (MWIT)",
+      school3: "Suranaree University of Technology (SUT)",
+      school4: "Chulalongkorn University Demonstration School",
+      school5: "Kasetsart University Demonstration School",
+      school6: "Patumwan Demonstration School",
+      school7: "Triam Udom Suksa School",
+      school8: "Princess Chulabhorn Science High School Pathum Thani",
+      school9: "Princess Chulabhorn Science High School Nakhon Si Thammarat",
+      school10: "Princess Chulabhorn Science High School Loei",
+      school11: "Princess Chulabhorn Science High School Buriram",
+      school12: "Princess Chulabhorn Science High School Trang",
+      school13: "Princess Chulabhorn Science High School Phitsanulok",
+      school14: "Princess Chulabhorn Science High School Mukdahan",
+      school15: "Princess Chulabhorn Science High School Satun",
+      contest4Title: "Resonance Analyzer Desktop App",
+      contest4Desc: "A cross-platform React/Electron desktop application displaying real-time frequency sweeps and spline peak curves.",
+      contest5Title: "Biosensor Gold-Surface Functionalizer",
+      contest5Desc: "A chemical functionalization setup optimized for coating gold sensor substrates with capture antibodies.",
+      contest6Title: "Multi-Channel QCM Interfacing Board",
+      contest6Desc: "An ESP32-powered micro-controller shield supporting parallel frequency readings from multiple quartz crystals.",
+      contest7Title: "Baseline Polynomial Subtractor",
+      contest7Desc: "A math-driven baseline correction module utilizing custom regression algorithms to filter thermal drift.",
+      contest8Title: "Handheld Point-of-Care Diagnostics Device",
+      contest8Desc: "A portable diagnostics unit combining QCM sweep logic with microfluidic test-strips for clinical biomarker screening.",
+      contest9Title: "Clinical Reagent Micro-Dispenser",
+      contest9Desc: "An automated precision droplet dispenser developed to simplify antigen coating workflows in diagnostic assays.",
     },
     contacts: {
       contactUs: "Contact Us",
@@ -653,7 +751,7 @@ export const translations = {
       medicalScience: "วิทยาศาสตร์การแพทย์",
       engineering: "วิศวกรรมศาสตร์",
       introDesc:
-        "การสัมมนาเชิงปฏิบัติการและการฝึกอบรมขับเคลื่อนโดยทีมงาน SuraZense ภายใต้ความร่วมมือกับอาจารย์ที่ปรึกษาจากภาควิชาวิศวกรรมศาสตร์ และภาควิชาอายุรศาสตร์ปริวรรต มหาวิทยาลัยเทคโนโลยีสุรนารี สำหรับการสาธิตการปฏิบัติงานในห้องแล็บที่เหมาะสมกับผู้เข้าร่วมและผู้ที่สนใจด้านชีววิทยาและเทคโนโลยีไบโอเซนเซอร์ เรียนรู้ว่าเทคโนโลยีเซนเซอร์ที่ล้ำสมัยนี้จะช่วยปฏิวัติการตรวจหามะเร็งผ่านการประยุกต์ใช้งานในการตรวจวัดสารบ่งชี้มะเร็งอย่างไร",
+        "การสัมมนาเชิงปฏิบัติการและการฝึกอบรมขับเคลื่อนโดยทีมงาน SuraZense ภายใต้ความร่วมมือกับอาจารย์ที่ปรึกษาจากภาควิชาวิศวกรรมศาสตร์ และภาควิชาอายุรศาสตร์ปริวรรต สำหรับการสาธิตการปฏิบัติงานในห้องแล็บที่เหมาะสมกับผู้เข้าร่วมและผู้ที่สนใจด้านชีววิทยาและเทคโนโลยีไบโอเซนเซอร์ เรียนรู้ว่าเทคโนโลยีเซนเซอร์ที่ล้ำสมัยนี้จะช่วยปฏิวัติไบโอเซนเซอร์มะเร็งอย่างไร",
       exploreLabs: "สำรวจห้องแล็บ",
       viewCourses: "ดูรายวิชา",
       trainingAtmosphere: "การฝึกอบรมแพทย์/วิศวกร",
@@ -776,6 +874,104 @@ export const translations = {
       gallery2Category: "การฝึกปฏิบัติในห้องแล็บ",
       gallery3Category: "การพัฒนาโครงการ",
       gallery4Category: "การวิจัย & ข้อมูล",
+
+      gallery5Title: "เวิร์กชอปมัธยมปลาย",
+      gallery5Desc:
+        "สร้างแรงบันดาลใจให้นักวิจัยรุ่นเยาว์ผ่านการฝึกอบรมและทดลองไบโอเซนเซอร์ในห้องปฏิบัติการจริง",
+      gallery5Category: "การอบรม",
+      gallery6Title: "การโปรแกรมฮาร์ดแวร์",
+      gallery6Desc:
+        "นักเรียนทดลองต่อวงจรไมโครคอนโทรลเลอร์ เขียนเฟิร์มแวร์ และตรวจสอบการเชื่อมต่ออนุกรม UART",
+      gallery6Category: "วิศวกรรม",
+      gallery7Title: "ระบบเครื่องวัด X-ZENSE",
+      gallery7Desc:
+        "การทดสอบและใช้งานเครื่องวิเคราะห์ตัวบ่งชี้มะเร็งในห้องวิจัยปลอดเชื้อที่ได้มาตรฐาน",
+      gallery7Category: "อุปกรณ์",
+      gallery8Title: "ห้องปฏิบัติการสหวิทยาการ",
+      gallery8Desc:
+        "บูรณาการการออกแบบวงจรอิเล็กทรอนิกส์เข้ากับวิทยาศาสตร์การแพทย์และจลนศาสตร์เคมี",
+      gallery8Category: "การวิจัย",
+      gallery9Title: "การใช้งานซอฟต์แวร์วิเคราะห์",
+      gallery9Desc:
+        "การตั้งค่าตรวจสอบการกวาดความถี่ ประมวลผลเส้นฐานโพลิโนเมียล และหาจุดยอดด้วยสมการสปลายน์",
+      gallery9Category: "ซอฟต์แวร์",
+      gallery10Title: "สัมมนาเทคโนโลยีเซนเซอร์",
+      gallery10Desc:
+        "สาธิตการทำงานของเครื่องวัดผลึกแก้วควอตซ์ QCM แก่ทีมแพทย์และนักวิจัยเพื่อต่อยอดงานรักษา",
+      gallery10Category: "การสัมมนา",
+
+      awardsTitle: "รางวัลและความภาคภูมิใจ",
+      awardsDesc:
+        "เฉลิมฉลองความสำเร็จทางวิชาการ การออกแบบนวัตกรรม และการมีส่วนร่วมในวิทยาศาสตร์การแพทย์ปริวรรต",
+      award1Title: "รางวัลนวัตกรรม HealthTech ดีเด่น",
+      award1Desc:
+        "รางวัลชนะเลิศอันดับหนึ่งจากการพัฒนาชุดตรวจหาตัวบ่งชี้มะเร็งปอด EGFR ไบโอเซนเซอร์",
+      award2Title: "รางวัลการออกแบบนักวิทยาศาสตร์รุ่นเยาว์",
+      award2Desc:
+        "เกียรติบัตรการออกแบบวงจรอิเล็กทรอนิกส์ยอดเยี่ยมสำหรับอุปกรณ์ตรวจวัด QCM ขนาดพกพา",
+      award3Title: "เหรียญเกียรติยศงานวิจัยการแพทย์แห่งชาติ",
+      award3Desc:
+        "รางวัลยกย่องผลงานวิจัยการตรวจวัดสารบ่งชี้ทางชีวภาพในระยะเริ่มต้นจากสถาบันการแพทย์ชั้นนำ",
+
+      contestsTitle: "ผลงานส่งประกวดที่ผ่านมา",
+      contestsDesc:
+        "โครงการวิจัยและนวัตกรรมสร้างสรรค์โดยนักเรียนและนักศึกษาของเราที่ส่งเข้าร่วมแข่งขันในระดับประเทศและระดับสากล",
+      contest1Title: "ชุดตรวจคัดกรองมะเร็งปอด EGFR",
+      contest1Desc:
+        "ตลับทดสอบการจับพันธะระดับโมเลกุล ส่งเข้าประกวดในโครงการรางวัลนวัตกรรมวิทยาศาสตร์และการแพทย์แห่งชาติ",
+      contest2Title: "โมดูลวัดการกวาดความถี่ QCM แบบพกพา",
+      contest2Desc:
+        "อุปกรณ์กวาดความถี่สัญญาณรบกวนต่ำควบคุมด้วยไมโครชิป ส่งเข้าแข่งขันในเวที ASEAN HealthTech Challenge",
+      contest3Title: "เครื่องกวาดสัญญาณของเหลวอัตโนมัติ",
+      contest3Desc:
+        "ระบบส่งสารเคมีและวิเคราะห์เซนเซอร์อัตโนมัติ ส่งเข้าร่วมจัดแสดงในนิทรรศการความเป็นเลิศทางวิจัย มทส.",
+
+      eventsTitle: "กิจกรรมที่จะเข้าร่วมในปี 2569",
+      eventsDesc:
+        "ติดตามกำหนดการงานประชุมวิชาการ งานจัดแสดงเทคโนโลยี และการอบรมร่วมกับมหาวิทยาลัยที่ทีมงานเราจะเข้าร่วมในปีนี้",
+      event1Title: "มหกรรมนวัตกรรมและเทคโนโลยีไทย 2569",
+      event1Desc:
+        "จัดแสดงนวัตกรรมไบโอเซนเซอร์วินิจฉัยทางการแพทย์แก่กลุ่มผู้นำด้านสุขภาพและผู้แทนจำหน่ายอุปกรณ์แพทย์",
+      event1Date: "12-14 ตุลาคม 2569",
+      event2Title: "งานประชุมชีวเซนเซอร์และสุขภาพอาเซียน",
+      event2Desc:
+        "นำเสนอผลการวิจัยล่าสุดเกี่ยวกับการวิเคราะห์จลนศาสตร์การจับโมเลกุลของ EGFR ต่อผู้เข้าร่วมงานระดับภูมิภาค",
+      event2Date: "4-6 พฤศจิกายน 2569",
+      event3Title: "นิทรรศการวิศวกรรมและการสัมมนา มทส.",
+      event3Desc:
+        "จัดการสาธิตวิธีทำแล็บกวาดความถี่และคณิตศาสตร์กรองสัญญาณรบกวนโดยใช้โปรแกรมสมการสปลายน์",
+      event3Date: "18 ธันวาคม 2569",
+
+      schoolsTitle: "โรงเรียนและสถาบันเครือข่ายความร่วมมือ",
+      schoolsDesc:
+        "เรามีความภูมิใจเป็นอย่างยิ่งที่ได้ร่วมมือกับสถาบันวิทยาศาสตร์ โรงเรียนมัธยมชั้นนำ และภาควิชาการต่าง ๆ เพื่อขับเคลื่อนนวัตกรรมร่วมกัน",
+      school1: "โรงเรียนกำเนิดวิทย์ (KVIS)",
+      school2: "โรงเรียนมหิดลวิทยานุสรณ์ (MWIT)",
+      school3: "มหาวิทยาลัยเทคโนโลยีสุรนารี (มทส.)",
+      school4: "โรงเรียนสาธิตจุฬาลงกรณ์มหาวิทยาลัย",
+      school5: "โรงเรียนสาธิตแห่งมหาวิทยาลัยเกษตรศาสตร์",
+      school6: "โรงเรียนสาธิตมหาวิทยาลัยศรีนครินทรวิโรฒ ปทุมวัน",
+      school7: "โรงเรียนเตรียมอุดมศึกษา",
+      school8: "โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย ปทุมธานี",
+      school9: "โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย นครศรีธรรมราช",
+      school10: "โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย เลย",
+      school11: "โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย บุรีรัมย์",
+      school12: "โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย ตรัง",
+      school13: "โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก",
+      school14: "โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย มุกดาหาร",
+      school15: "โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย สตูล",
+      contest4Title: "แอปพลิเคชันเดสก์ท็อปสำหรับวิเคราะห์เรโซแนนซ์",
+      contest4Desc: "โปรแกรมคอมพิวเตอร์แบบข้ามแพลตฟอร์ม แสดงผลการกวาดความถี่และเส้นโค้งจุดยอดสปลายน์แบบเรียลไทม์",
+      contest5Title: "เครื่องเคลือบพื้นผิวทองไบโอเซนเซอร์",
+      contest5Desc: "ชุดอุปกรณ์ทางเคมีสำหรับเตรียมพื้นผิวแผ่นทองเซนเซอร์เพื่อจับพันธะกับแอนติบอดีดักจับอย่างแม่นยำ",
+      contest6Title: "บอร์ดเชื่อมต่อเซนเซอร์ QCM หลายช่องสัญญาณ",
+      contest6Desc: "แผงวงจรควบคุมด้วยชิป ESP32 รองรับการวัดและอ่านค่าความถี่จากแผ่นแก้วควอตซ์หลายแผ่นขนานกัน",
+      contest7Title: "โมดูลหักล้างเส้นฐานโพลิโนเมียล",
+      contest7Desc: "ระบบซอฟต์แวร์ช่วยปรับปรุงกราฟและหักล้างค่าเบี่ยงเบนอุณหภูมิโดยใช้สมการถดถอยคณิตศาสตร์ขั้นสูง",
+      contest8Title: "เครื่องวินิจฉัยโรคพกพา ณ จุดดูแลผู้ป่วย",
+      contest8Desc: "โมดูลตรวจคัดกรองโรคขนาดพกพาที่รวมส่วนวัดสัญญาณ QCM และตลับตรวจหาตัวบ่งชี้เข้าด้วยกัน",
+      contest9Title: "เครื่องหยดสารเคมีวินิจฉัยอัตโนมัติ",
+      contest9Desc: "อุปกรณ์หยดสารชีวเคมีปริมาณน้อยมากโดยอัตโนมัติ ช่วยลดความยุ่งยากในขั้นตอนเตรียมผิวสัมผัสเซนเซอร์",
     },
     contacts: {
       contactUs: "ติดต่อเรา",

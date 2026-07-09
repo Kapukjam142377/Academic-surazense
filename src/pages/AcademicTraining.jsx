@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import {
   BookOpen,
@@ -7,12 +8,15 @@ import {
   FileText,
   Award,
   ChevronRight,
+  ChevronLeft,
   GraduationCap,
   Beaker,
   Users,
   CheckCircle,
   AlertCircle,
   ShoppingCart,
+  Calendar,
+  Handshake,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
@@ -169,6 +173,60 @@ const LAB_GALLERY_IMAGES = [
     categoryKey: "academic.gallery4Category",
     image: "/lab-gallery-4.jpg",
     fallbackColor: "from-violet-600/20 to-pink-500/20",
+    gridClass: "md:col-span-2 md:row-span-1 min-h-[220px]",
+  },
+  {
+    id: 5,
+    titleKey: "academic.gallery5Title",
+    descKey: "academic.gallery5Desc",
+    categoryKey: "academic.gallery5Category",
+    image: "/lab-gallery-5.jpg",
+    fallbackColor: "from-emerald-600/20 to-teal-500/20",
+    gridClass: "md:col-span-1 md:row-span-2 min-h-[320px] md:min-h-[460px]",
+  },
+  {
+    id: 6,
+    titleKey: "academic.gallery6Title",
+    descKey: "academic.gallery6Desc",
+    categoryKey: "academic.gallery6Category",
+    image: "/lab-gallery-6.jpg",
+    fallbackColor: "from-cyan-600/20 to-blue-500/20",
+    gridClass: "md:col-span-1 md:row-span-1 min-h-[220px]",
+  },
+  {
+    id: 7,
+    titleKey: "academic.gallery7Title",
+    descKey: "academic.gallery7Desc",
+    categoryKey: "academic.gallery7Category",
+    image: "/lab-gallery-7.jpg",
+    fallbackColor: "from-rose-600/20 to-orange-500/20",
+    gridClass: "md:col-span-1 md:row-span-1 min-h-[220px]",
+  },
+  {
+    id: 8,
+    titleKey: "academic.gallery8Title",
+    descKey: "academic.gallery8Desc",
+    categoryKey: "academic.gallery8Category",
+    image: "/lab-gallery-8.jpg",
+    fallbackColor: "from-amber-600/20 to-yellow-500/20",
+    gridClass: "md:col-span-2 md:row-span-1 min-h-[220px]",
+  },
+  {
+    id: 9,
+    titleKey: "academic.gallery9Title",
+    descKey: "academic.gallery9Desc",
+    categoryKey: "academic.gallery9Category",
+    image: "/lab-gallery-9.jpg",
+    fallbackColor: "from-purple-600/20 to-fuchsia-500/20",
+    gridClass: "md:col-span-1 md:row-span-1 min-h-[220px]",
+  },
+  {
+    id: 10,
+    titleKey: "academic.gallery10Title",
+    descKey: "academic.gallery10Desc",
+    categoryKey: "academic.gallery10Category",
+    image: "/lab-gallery-10.jpg",
+    fallbackColor: "from-slate-600/20 to-zinc-500/20",
     gridClass: "md:col-span-3 md:row-span-1 min-h-[320px] md:min-h-[420px]",
   },
 ];
@@ -276,6 +334,255 @@ const CERTIFICATES = [
     image: "/certificate-6.png",
   },
 ];
+
+const AWARDS = [
+  {
+    id: 1,
+    titleKey: "academic.award1Title",
+    descKey: "academic.award1Desc",
+    image: "/award-1.jpg",
+  },
+  {
+    id: 2,
+    titleKey: "academic.award2Title",
+    descKey: "academic.award2Desc",
+    image: "/award-2.jpg",
+  },
+  {
+    id: 3,
+    titleKey: "academic.award3Title",
+    descKey: "academic.award3Desc",
+    image: "/award-3.jpg",
+  },
+];
+
+const CONTESTS = [
+  {
+    id: 1,
+    titleKey: "academic.contest1Title",
+    image: "/x-zense-101.jpg",
+  },
+  {
+    id: 2,
+    titleKey: "academic.contest2Title",
+    image: "/QMC.jpg",
+  },
+  {
+    id: 3,
+    titleKey: "academic.contest3Title",
+    image: "/qcmgroupe.jpg",
+  },
+  {
+    id: 4,
+    titleKey: "academic.contest4Title",
+    image: "/ภาพการทำงานของ software-1.jpg",
+  },
+  {
+    id: 5,
+    titleKey: "academic.contest5Title",
+    image: "/sensor-hero.png",
+  },
+  {
+    id: 6,
+    titleKey: "academic.contest6Title",
+    image: "/x-zense-view2.jpg",
+  },
+  {
+    id: 7,
+    titleKey: "academic.contest7Title",
+    image: "/x-zense-view3.jpg",
+  },
+  {
+    id: 8,
+    titleKey: "academic.contest8Title",
+    image: "/biotech-course.png",
+  },
+  {
+    id: 9,
+    titleKey: "academic.contest9Title",
+    image: "/reagents-kit.png",
+  },
+];
+
+const EVENTS = [
+  {
+    id: 1,
+    titleKey: "academic.event1Title",
+    descKey: "academic.event1Desc",
+    dateKey: "academic.event1Date",
+    image: "/event-1.png",
+  },
+  {
+    id: 2,
+    titleKey: "academic.event2Title",
+    descKey: "academic.event2Desc",
+    dateKey: "academic.event2Date",
+    image: "/event-2.png",
+  },
+  {
+    id: 3,
+    titleKey: "academic.event3Title",
+    descKey: "academic.event3Desc",
+    dateKey: "academic.event3Date",
+    image: "/event-3.png",
+  },
+];
+
+const PARTNERS = [
+  {
+    id: 1,
+    nameKey: "academic.school1",
+    image: "/partner-1.png",
+  },
+  {
+    id: 2,
+    nameKey: "academic.school2",
+    image: "/partner-2.jpg",
+  },
+  {
+    id: 3,
+    nameKey: "academic.school3",
+    image: "/partner-3.jpg",
+  },
+  {
+    id: 4,
+    nameKey: "academic.school4",
+    image: "/partner-4.png",
+  },
+  {
+    id: 5,
+    nameKey: "academic.school5",
+    image: "/partner-1.png",
+  },
+  {
+    id: 6,
+    nameKey: "academic.school6",
+    image: "/partner-2.jpg",
+  },
+  {
+    id: 7,
+    nameKey: "academic.school7",
+    image: "/partner-3.jpg",
+  },
+  {
+    id: 8,
+    nameKey: "academic.school8",
+    image: "/partner-4.png",
+  },
+  {
+    id: 9,
+    nameKey: "academic.school9",
+    image: "/partner-1.png",
+  },
+  {
+    id: 10,
+    nameKey: "academic.school10",
+    image: "/partner-2.jpg",
+  },
+  {
+    id: 11,
+    nameKey: "academic.school11",
+    image: "/partner-3.jpg",
+  },
+  {
+    id: 12,
+    nameKey: "academic.school12",
+    image: "/partner-4.png",
+  },
+  {
+    id: 13,
+    nameKey: "academic.school13",
+    image: "/partner-1.png",
+  },
+  {
+    id: 14,
+    nameKey: "academic.school14",
+    image: "/partner-2.jpg",
+  },
+  {
+    id: 15,
+    nameKey: "academic.school15",
+    image: "/partner-3.jpg",
+  },
+];
+
+function ContestCarousel() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const { t } = useLanguage();
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % CONTESTS.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev - 1 + CONTESTS.length) % CONTESTS.length);
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % CONTESTS.length);
+  };
+
+  return (
+    <div className="relative max-w-4xl mx-auto group overflow-hidden mt-8">
+      {/* Slider Container - No borders, no white box */}
+      <div className="relative aspect-[16/9] w-full bg-transparent flex items-center justify-center">
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={currentIndex}
+            src={CONTESTS[currentIndex].image}
+            alt={t(CONTESTS[currentIndex].titleKey)}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+            className="max-w-full max-h-full object-contain drop-shadow-md select-none pointer-events-none"
+          />
+        </AnimatePresence>
+
+        {/* Previous Button */}
+        <button
+          onClick={handlePrev}
+          className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-slate-900/20 hover:bg-slate-900/50 text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 cursor-pointer border-none z-30"
+        >
+          <ChevronLeft className="w-6 h-6" />
+        </button>
+
+        {/* Next Button */}
+        <button
+          onClick={handleNext}
+          className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-slate-900/20 hover:bg-slate-900/50 text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 cursor-pointer border-none z-30"
+        >
+          <ChevronRight className="w-6 h-6" />
+        </button>
+      </div>
+
+      {/* Caption under the Image */}
+      <div className="text-center mt-6">
+        <h3 className="text-slate-800 text-base md:text-lg font-bold uppercase tracking-wider">
+          {t(CONTESTS[currentIndex].titleKey)}
+        </h3>
+      </div>
+
+      {/* Indicator Dots */}
+      <div className="flex justify-center gap-2 mt-4">
+        {CONTESTS.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => setCurrentIndex(idx)}
+            className={`w-2 h-2 rounded-full transition-all cursor-pointer border-none ${
+              currentIndex === idx
+                ? "bg-blue-600 w-5"
+                : "bg-slate-300 hover:bg-slate-400"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function CertificateCard({ cert }) {
   const [imgErr, setImgErr] = useState(false);
@@ -692,6 +999,114 @@ export default function AcademicTraining() {
         </motion.div>
       </section>
 
+      {/* Contest Submissions & Awards Section */}
+      <section className="max-w-7xl mx-auto px-6 mb-28 relative z-10 scroll-mt-24">
+        {/* Awards Showcase Header */}
+        <div className="text-center mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 border border-blue-100 rounded-full text-blue-600 text-xs font-bold uppercase tracking-widest mb-4 shadow-sm"
+          >
+            <Award className="w-3.5 h-3.5 text-blue-500" />
+            <span>{t("academic.awardsTitle")}</span>
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight"
+          >
+            {t("academic.awardsTitle")}
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-base text-slate-500 font-medium max-w-2xl mx-auto mt-3"
+          >
+            {t("academic.awardsDesc")}
+          </motion.p>
+        </div>
+
+        {/* Awards Grid */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20"
+        >
+          {AWARDS.map((award) => (
+            <motion.div
+              key={award.id}
+              variants={itemVariants}
+              whileHover={{
+                y: -6,
+                boxShadow: "0 20px 45px -10px rgba(0,0,0,0.08)",
+              }}
+              className="bg-white border border-slate-100 rounded-[2rem] overflow-hidden shadow-sm flex flex-col group transition-all duration-300 relative"
+            >
+              <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-blue-600 to-sky-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20"></div>
+              <div className="aspect-[4/3] w-full overflow-hidden bg-slate-900 relative">
+                <img
+                  src={award.image}
+                  alt={t(award.titleKey)}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+              <div className="p-6 flex flex-col flex-1">
+                <h3 className="text-lg font-bold text-slate-800 mb-2 leading-snug group-hover:text-blue-600 transition-colors">
+                  {t(award.titleKey)}
+                </h3>
+                <p className="text-sm text-slate-500 leading-relaxed font-light">
+                  {t(award.descKey)}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Contests Submissions Section Header */}
+        <div className="text-center mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 border border-blue-100 rounded-full text-blue-600 text-xs font-bold uppercase tracking-widest mb-4 shadow-sm"
+          >
+            <Cpu className="w-3.5 h-3.5 text-blue-500" />
+            <span>{t("academic.contestsTitle")}</span>
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight"
+          >
+            {t("academic.contestsTitle")}
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-base text-slate-500 font-medium max-w-2xl mx-auto mt-3"
+          >
+            {t("academic.contestsDesc")}
+          </motion.p>
+        </div>
+
+        {/* Contests Image Slider / Carousel - No borders, no white box background */}
+        <ContestCarousel />
+      </section>
+
       {/* Student Certificates Section */}
       <section className="max-w-7xl mx-auto px-6 mb-28 relative z-10 scroll-mt-24">
         <div className="text-center mb-12">
@@ -740,6 +1155,80 @@ export default function AcademicTraining() {
         >
           {CERTIFICATES.map((cert) => (
             <CertificateCard key={cert.id} cert={cert} />
+          ))}
+        </motion.div>
+      </section>
+
+      {/* Upcoming Events Section */}
+      <section className="max-w-7xl mx-auto px-6 mb-28 relative z-10 scroll-mt-24">
+        <div className="text-center mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 border border-blue-100 rounded-full text-blue-600 text-xs font-bold uppercase tracking-widest mb-4 shadow-sm"
+          >
+            <Calendar className="w-3.5 h-3.5 text-blue-500" />
+            <span>{t("academic.eventsTitle")}</span>
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight"
+          >
+            {t("academic.eventsTitle")}
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-base text-slate-500 font-medium max-w-2xl mx-auto mt-3"
+          >
+            {t("academic.eventsDesc")}
+          </motion.p>
+        </div>
+
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+        >
+          {EVENTS.map((event) => (
+            <motion.div
+              key={event.id}
+              variants={itemVariants}
+              whileHover={{
+                y: -6,
+                boxShadow: "0 20px 45px -10px rgba(0,0,0,0.08)",
+              }}
+              className="bg-white border border-slate-100 rounded-[2rem] overflow-hidden shadow-sm flex flex-col group transition-all duration-300 relative"
+            >
+              <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-blue-600 to-sky-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20"></div>
+              <div className="aspect-[16/10] w-full overflow-hidden bg-slate-900 relative">
+                <img
+                  src={event.image}
+                  alt={t(event.titleKey)}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <span className="absolute bottom-4 left-4 bg-slate-950/70 text-white font-bold text-[10px] tracking-wider uppercase px-3 py-1.5 rounded-lg z-10 backdrop-blur-sm border border-slate-800">
+                  {t(event.dateKey)}
+                </span>
+              </div>
+              <div className="p-6 flex flex-col flex-1">
+                <h3 className="text-lg font-bold text-slate-800 mb-2 leading-snug group-hover:text-blue-600 transition-colors">
+                  {t(event.titleKey)}
+                </h3>
+                <p className="text-sm text-slate-500 leading-relaxed font-light">
+                  {t(event.descKey)}
+                </p>
+              </div>
+            </motion.div>
           ))}
         </motion.div>
       </section>
@@ -1044,6 +1533,69 @@ export default function AcademicTraining() {
                   {language === "th" ? "ซื้อหลักสูตร" : "Buy Course"}
                 </button>
               </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </section>
+
+      {/* Cooperating Schools Section */}
+      <section className="max-w-7xl mx-auto px-6 mb-24 relative z-10 scroll-mt-24">
+        <div className="text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 border border-blue-100 rounded-full text-blue-600 text-xs font-bold uppercase tracking-widest mb-4 shadow-sm"
+          >
+            <Handshake className="w-3.5 h-3.5 text-blue-500" />
+            <span>{t("academic.schoolsTitle")}</span>
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight"
+          >
+            {t("academic.schoolsTitle")}
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-base text-slate-500 font-medium max-w-2xl mx-auto mt-3"
+          >
+            {t("academic.schoolsDesc")}
+          </motion.p>
+        </div>
+
+        {/* Partners Grid */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto justify-items-center items-center"
+        >
+          {PARTNERS.map((partner) => (
+            <motion.div
+              key={partner.id}
+              variants={itemVariants}
+              whileHover={{ scale: 1.05 }}
+              className="flex flex-col items-center gap-4 text-center group cursor-pointer"
+            >
+              <div className="w-28 h-28 md:w-32 md:h-32 bg-white rounded-3xl border border-slate-100 shadow-sm flex items-center justify-center p-4 group-hover:shadow-md group-hover:border-blue-100 transition-all duration-300 overflow-hidden relative">
+                <img
+                  src={partner.image}
+                  alt={t(partner.nameKey)}
+                  className="max-w-full max-h-full object-contain filter group-hover:brightness-105 transition-all"
+                />
+              </div>
+              <span className="text-xs font-bold text-slate-600 max-w-[200px] leading-relaxed group-hover:text-blue-600 transition-colors">
+                {t(partner.nameKey)}
+              </span>
             </motion.div>
           ))}
         </motion.div>

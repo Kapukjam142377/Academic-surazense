@@ -13,6 +13,7 @@
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   --animate-sway: sway 15s ease-in-out infinite alternate;
+  --animate-marquee: marquee 30s linear infinite;
 }
 
 @keyframes sway {
@@ -21,6 +22,15 @@
   }
   100% {
     transform: scale(1.05) translate(-1.5%, 1%);
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
   }
 }
 
