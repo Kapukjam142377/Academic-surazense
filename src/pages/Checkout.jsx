@@ -34,7 +34,7 @@ export default function Checkout() {
     );
   }
 
-  const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? "" : "http://34.87.78.35:8000");
+  const API_URL = import.meta.env.PROD ? "" : (import.meta.env.VITE_API_URL || "http://34.87.78.35:8000");
 
   const [form, setForm] = useState({
     name: user

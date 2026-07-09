@@ -101,7 +101,7 @@ export default function Admin() {
   const [registrationsList, setRegistrationsList] = useState([]);
   const [runsList, setRunsList] = useState([]);
 
-  const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? "" : "http://34.87.78.35:8000");
+  const API_URL = import.meta.env.PROD ? "" : (import.meta.env.VITE_API_URL || "http://34.87.78.35:8000");
 
   // Check API health on mount
   useEffect(() => {
