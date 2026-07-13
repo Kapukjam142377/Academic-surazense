@@ -410,21 +410,95 @@ const EVENTS = [
     titleKey: "academic.event1Title",
     descKey: "academic.event1Desc",
     dateKey: "academic.event1Date",
-    image: "/event-1.png",
+    image: "/activity1.png",
   },
   {
     id: 2,
     titleKey: "academic.event2Title",
     descKey: "academic.event2Desc",
     dateKey: "academic.event2Date",
-    image: "/event-2.png",
+    image: "/activity2.png",
   },
   {
     id: 3,
     titleKey: "academic.event3Title",
     descKey: "academic.event3Desc",
     dateKey: "academic.event3Date",
-    image: "/event-3.png",
+    image: "/activity3.png",
+  },
+  {
+    id: 4,
+    titleKey: "academic.event4Title",
+    descKey: "academic.event4Desc",
+    dateKey: "academic.event4Date",
+    image: "/activity4.png",
+  },
+  {
+    id: 5,
+    titleKey: "academic.event5Title",
+    descKey: "academic.event5Desc",
+    dateKey: "academic.event5Date",
+    image: "/activity5.png",
+  },
+  {
+    id: 6,
+    titleKey: "academic.event6Title",
+    descKey: "academic.event6Desc",
+    dateKey: "academic.event6Date",
+    image: "/activity6.png",
+  },
+  {
+    id: 7,
+    titleKey: "academic.event7Title",
+    descKey: "academic.event7Desc",
+    dateKey: "academic.event7Date",
+    image: "/activity7.png",
+  },
+  {
+    id: 8,
+    titleKey: "academic.event8Title",
+    descKey: "academic.event8Desc",
+    dateKey: "academic.event8Date",
+    image: "/activity8.png",
+  },
+];
+
+const PAST_RESEARCH = [
+  {
+    id: 1,
+    title: "A study of probes on the surface of QCM for possible diagnostic test reuse",
+  },
+  {
+    id: 2,
+    title: "Piezoelectric-based biosensor for the detection of cell-free RNAs",
+  },
+  {
+    id: 3,
+    title: "COMSOL Simulation Study of Multi-Channel QCM for Multi-DNA Binding in Biosensing Applications",
+  },
+  {
+    id: 4,
+    title: "Biosensor for human papillomavirus (HPV) detection",
+  },
+  {
+    id: 5,
+    title: "Label-Free Detection of HbA1c Using a Graphene Oxide-Modified Piezoelectric Acoustic Biosensor",
+  },
+  {
+    id: 6,
+    title: "A Preliminary Study of EGFR Testing in Patient Samples Using a Surface Acoustic Wave (SAW) Biosensor for Lung Cancer Mutation Detection",
+  },
+  {
+    id: 7,
+    title: "Mechano-Responsive Gold Nanospike Nano-Architectures for Antibacterial Surface Applications: A Preliminary Study",
+  },
+  {
+    id: 8,
+    title: "A Potential Study of a Quartz Crystal Microbalance Biosensor for Rapid Detection of Human Papillomavirus-16",
+  },
+  {
+    id: 9,
+    title: "Vibration sensor project",
   },
 ];
 
@@ -432,77 +506,77 @@ const PARTNERS = [
   {
     id: 1,
     nameKey: "academic.school1",
-    image: "/partner-1.png",
+    image: "/รูปภาพ1.png",
   },
   {
     id: 2,
     nameKey: "academic.school2",
-    image: "/partner-2.jpg",
+    image: "/รูปภาพ2.png",
   },
   {
     id: 3,
     nameKey: "academic.school3",
-    image: "/partner-3.jpg",
+    image: "/รูปภาพ3.png",
   },
   {
     id: 4,
     nameKey: "academic.school4",
-    image: "/partner-4.png",
+    image: "/รูปภาพ4.png",
   },
   {
     id: 5,
     nameKey: "academic.school5",
-    image: "/partner-1.png",
+    image: "/รูปภาพ5.png",
   },
   {
     id: 6,
     nameKey: "academic.school6",
-    image: "/partner-2.jpg",
+    image: "/รูปภาพ6.png",
   },
   {
     id: 7,
     nameKey: "academic.school7",
-    image: "/partner-3.jpg",
+    image: "/รูปภาพ7.png",
   },
   {
     id: 8,
     nameKey: "academic.school8",
-    image: "/partner-4.png",
+    image: "/รูปภาพ8.jpg",
   },
   {
     id: 9,
     nameKey: "academic.school9",
-    image: "/partner-1.png",
+    image: "/รูปภาพ9.jpg",
   },
   {
     id: 10,
     nameKey: "academic.school10",
-    image: "/partner-2.jpg",
+    image: "/รูปภาพ10.png",
   },
   {
     id: 11,
     nameKey: "academic.school11",
-    image: "/partner-3.jpg",
+    image: "/รูปภาพ11.png",
   },
   {
     id: 12,
     nameKey: "academic.school12",
-    image: "/partner-4.png",
+    image: "/รูปภาพ12.png",
   },
   {
     id: 13,
     nameKey: "academic.school13",
-    image: "/partner-1.png",
+    image: "/รูปภาพ13.png",
   },
   {
     id: 14,
     nameKey: "academic.school14",
-    image: "/partner-2.jpg",
+    image: "/รูปภาพ14.png",
   },
   {
     id: 15,
     nameKey: "academic.school15",
-    image: "/partner-3.jpg",
+    image: "/รูปภาพ15.png",
   },
 ];
 
@@ -1159,6 +1233,84 @@ export default function AcademicTraining() {
         </motion.div>
       </section>
 
+      {/* Past Research Topics Section */}
+      <section className="max-w-7xl mx-auto px-6 mb-28 relative z-10 scroll-mt-24">
+        <div className="text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 border border-blue-100 rounded-full text-blue-600 text-xs font-bold uppercase tracking-widest mb-4 shadow-sm"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-blue-500" />
+            <span>{t("academic.pastResearchTitle")}</span>
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight"
+          >
+            {t("academic.pastResearchTitle")}
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-base text-slate-500 font-medium max-w-3xl mx-auto mt-3 leading-relaxed"
+          >
+            {t("academic.pastResearchDesc")}
+          </motion.p>
+        </div>
+
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          {PAST_RESEARCH.map((project, idx) => (
+            <motion.div
+              key={project.id}
+              variants={itemVariants}
+              whileHover={{
+                y: -6,
+                boxShadow: "0 20px 40px -10px rgba(0,0,0,0.06)",
+                borderColor: "rgba(59, 130, 246, 0.2)",
+              }}
+              className="bg-white border border-slate-100 rounded-[2rem] p-8 flex flex-col justify-between transition-all duration-300 relative group overflow-hidden"
+            >
+              {/* Decorative subtle background gradient on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-50/10 to-indigo-50/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+              
+              <div>
+                <div className="flex justify-between items-center mb-6 z-10 relative">
+                  <div className="w-10 h-10 rounded-2xl bg-blue-50/80 border border-blue-100/50 flex items-center justify-center text-blue-600 transition-colors duration-300 group-hover:bg-blue-600 group-hover:text-white">
+                    <FileText className="w-5 h-5" />
+                  </div>
+                  <span className="text-xs font-mono font-bold text-slate-400 bg-slate-50 group-hover:bg-blue-50 group-hover:text-blue-600 px-3 py-1 rounded-full transition-colors duration-300">
+                    Project {String(idx + 1).padStart(2, '0')}
+                  </span>
+                </div>
+
+                <h3 className="text-[15px] font-bold text-slate-800 leading-snug group-hover:text-blue-600 transition-colors duration-300 z-10 relative mb-4">
+                  {project.title}
+                </h3>
+              </div>
+              
+              {/* A subtle link visual at the bottom */}
+              <div className="mt-4 pt-4 border-t border-slate-100/50 flex items-center gap-1.5 text-xs font-bold text-slate-400 group-hover:text-blue-500 transition-colors duration-300">
+                <span>Surasense Supported Research</span>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </section>
+
       {/* Upcoming Events Section */}
       <section className="max-w-7xl mx-auto px-6 mb-28 relative z-10 scroll-mt-24">
         <div className="text-center mb-12">
@@ -1192,41 +1344,27 @@ export default function AcademicTraining() {
           </motion.p>
         </div>
 
+        {/* Events Flex Container */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          className="flex flex-wrap justify-center gap-8 max-w-5xl mx-auto items-center"
         >
           {EVENTS.map((event) => (
             <motion.div
               key={event.id}
               variants={itemVariants}
-              whileHover={{
-                y: -6,
-                boxShadow: "0 20px 45px -10px rgba(0,0,0,0.08)",
-              }}
-              className="bg-white border border-slate-100 rounded-[2rem] overflow-hidden shadow-sm flex flex-col group transition-all duration-300 relative"
+              whileHover={{ scale: 1.08 }}
+              className="flex items-center justify-center cursor-pointer w-[calc(50%-1rem)] sm:w-[calc(33.33%-1.33rem)] lg:w-[calc(20%-1.6rem)]"
             >
-              <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-blue-600 to-sky-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20"></div>
-              <div className="aspect-[16/10] w-full overflow-hidden bg-slate-900 relative">
+              <div className="w-28 h-28 md:w-32 md:h-32 flex items-center justify-center p-2 relative overflow-hidden">
                 <img
                   src={event.image}
-                  alt={t(event.titleKey)}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  alt=""
+                  className="max-w-full max-h-full object-contain filter transition-all duration-300"
                 />
-                <span className="absolute bottom-4 left-4 bg-slate-950/70 text-white font-bold text-[10px] tracking-wider uppercase px-3 py-1.5 rounded-lg z-10 backdrop-blur-sm border border-slate-800">
-                  {t(event.dateKey)}
-                </span>
-              </div>
-              <div className="p-6 flex flex-col flex-1">
-                <h3 className="text-lg font-bold text-slate-800 mb-2 leading-snug group-hover:text-blue-600 transition-colors">
-                  {t(event.titleKey)}
-                </h3>
-                <p className="text-sm text-slate-500 leading-relaxed font-light">
-                  {t(event.descKey)}
-                </p>
               </div>
             </motion.div>
           ))}
@@ -1442,7 +1580,7 @@ export default function AcademicTraining() {
       {/* Courses Curriculum Section */}
       <section
         id="courses"
-        className="max-w-7xl mx-auto px-6 relative z-10 scroll-mt-24"
+        className="max-w-7xl mx-auto px-6 mb-32 relative z-10 scroll-mt-24"
       >
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
@@ -1571,31 +1709,28 @@ export default function AcademicTraining() {
           </motion.p>
         </div>
 
-        {/* Partners Grid */}
+        {/* Partners Flex Container */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto justify-items-center items-center"
+          className="flex flex-wrap justify-center gap-8 max-w-5xl mx-auto items-center"
         >
           {PARTNERS.map((partner) => (
             <motion.div
               key={partner.id}
               variants={itemVariants}
-              whileHover={{ scale: 1.05 }}
-              className="flex flex-col items-center gap-4 text-center group cursor-pointer"
+              whileHover={{ scale: 1.08 }}
+              className="flex items-center justify-center cursor-pointer w-[calc(50%-1rem)] sm:w-[calc(33.33%-1.33rem)] lg:w-[calc(20%-1.6rem)]"
             >
-              <div className="w-28 h-28 md:w-32 md:h-32 bg-white rounded-3xl border border-slate-100 shadow-sm flex items-center justify-center p-4 group-hover:shadow-md group-hover:border-blue-100 transition-all duration-300 overflow-hidden relative">
+              <div className="w-28 h-28 md:w-32 md:h-32 flex items-center justify-center p-2 relative overflow-hidden">
                 <img
                   src={partner.image}
                   alt={t(partner.nameKey)}
-                  className="max-w-full max-h-full object-contain filter group-hover:brightness-105 transition-all"
+                  className="max-w-full max-h-full object-contain filter group-hover:brightness-105 transition-all duration-300"
                 />
               </div>
-              <span className="text-xs font-bold text-slate-600 max-w-[200px] leading-relaxed group-hover:text-blue-600 transition-colors">
-                {t(partner.nameKey)}
-              </span>
             </motion.div>
           ))}
         </motion.div>

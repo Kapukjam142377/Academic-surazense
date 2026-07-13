@@ -313,6 +313,21 @@ export const translations = {
       event3Desc:
         "Conducting live laboratory demonstrations on frequency sweeps and digital spline smoothing algorithms.",
       event3Date: "December 18, 2026",
+      event4Title: "Scientific Conference 2026",
+      event4Desc: "Participating in the annual scientific conference to share our latest biosensor breakthroughs.",
+      event4Date: "To be announced",
+      event5Title: "Healthcare Industry Exhibition",
+      event5Desc: "Showcasing our diagnostic solutions to potential medical device distributors and industry partners.",
+      event5Date: "To be announced",
+      event6Title: "University Research Workshop",
+      event6Desc: "Collaborating with local university departments in a hands-on QCM sensing workshop.",
+      event6Date: "To be announced",
+      event7Title: "Medical Innovation Summit",
+      event7Desc: "Engaging with healthcare leaders to discuss biosensor integration in point-of-care clinical diagnostics.",
+      event7Date: "To be announced",
+      event8Title: "Biosensor Training Seminar",
+      event8Desc: "Conducting diagnostic tool training seminars for medical professionals and researchers.",
+      event8Date: "To be announced",
 
       schoolsTitle: "Cooperating Schools & Partners",
       schoolsDesc:
@@ -344,6 +359,8 @@ export const translations = {
       contest8Desc: "A portable diagnostics unit combining QCM sweep logic with microfluidic test-strips for clinical biomarker screening.",
       contest9Title: "Clinical Reagent Micro-Dispenser",
       contest9Desc: "An automated precision droplet dispenser developed to simplify antigen coating workflows in diagnostic assays.",
+      pastResearchTitle: "Past Research Topics",
+      pastResearchDesc: "Throughout the years, Surasense Laboratory has supported scientific research and projects of students.",
     },
     contacts: {
       contactUs: "Contact Us",
@@ -941,6 +958,21 @@ export const translations = {
       event3Desc:
         "จัดการสาธิตวิธีทำแล็บกวาดความถี่และคณิตศาสตร์กรองสัญญาณรบกวนโดยใช้โปรแกรมสมการสปลายน์",
       event3Date: "18 ธันวาคม 2569",
+      event4Title: "การประชุมวิชาการทางวิทยาศาสตร์ 2569",
+      event4Desc: "เข้าร่วมการประชุมวิชาการประจำปีเพื่อแบ่งปันนวัตกรรมไบโอเซนเซอร์ล่าสุดของเรา",
+      event4Date: "จะประกาศให้ทราบภายหลัง",
+      event5Title: "นิทรรศการอุตสาหกรรมสุขภาพ",
+      event5Desc: "จัดแสดงโซลูชันการวินิจฉัยทางการแพทย์ให้แก่พันธมิตรและผู้จัดจำหน่ายอุปกรณ์ทางการแพทย์",
+      event5Date: "จะประกาศให้ทราบภายหลัง",
+      event6Title: "เวิร์กชอปงานวิจัยร่วมกับมหาวิทยาลัย",
+      event6Desc: "ร่วมมือกับภาควิชาต่าง ๆ ของมหาวิทยาลัยในการจัดเวิร์กชอปเทคโนโลยีเซนเซอร์ QCM",
+      event6Date: "จะประกาศให้ทราบภายหลัง",
+      event7Title: "งานประชุมสุดยอดนวัตกรรมการแพทย์",
+      event7Desc: "พบปะกับผู้นำด้านการดูแลสุขภาพเพื่อหารือเกี่ยวกับระบบเซนเซอร์ตรวจจับโรคจุดดูแลผู้ป่วย",
+      event7Date: "จะประกาศให้ทราบภายหลัง",
+      event8Title: "สัมมนาฝึกอบรมเทคโนโลยีไบโอเซนเซอร์",
+      event8Desc: "จัดสัมมนาฝึกอบรมการใช้งานอุปกรณ์ตรวจวัดแก่ผู้เชี่ยวชาญทางการแพทย์และนักวิจัย",
+      event8Date: "จะประกาศให้ทราบภายหลัง",
 
       schoolsTitle: "โรงเรียนและสถาบันเครือข่ายความร่วมมือ",
       schoolsDesc:
@@ -972,6 +1004,8 @@ export const translations = {
       contest8Desc: "โมดูลตรวจคัดกรองโรคขนาดพกพาที่รวมส่วนวัดสัญญาณ QCM และตลับตรวจหาตัวบ่งชี้เข้าด้วยกัน",
       contest9Title: "เครื่องหยดสารเคมีวินิจฉัยอัตโนมัติ",
       contest9Desc: "อุปกรณ์หยดสารชีวเคมีปริมาณน้อยมากโดยอัตโนมัติ ช่วยลดความยุ่งยากในขั้นตอนเตรียมผิวสัมผัสเซนเซอร์",
+      pastResearchTitle: "หัวข้อวิจัยที่ผ่านมา",
+      pastResearchDesc: "ตลอดระยะเวลาที่ผ่านมา ห้องปฏิบัติการ สุรเซนส์ (Surasense Laboratory) ได้สนับสนุนการทำวิจัยและโครงงานวิทยาศาสตร์ของนักเรียนและนักศึกษา",
     },
     contacts: {
       contactUs: "ติดต่อเรา",
