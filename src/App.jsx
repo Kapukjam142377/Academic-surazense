@@ -20,6 +20,8 @@ import Contacts from "./pages/Contacts";
 import Admin from "./pages/Admin";
 import OrderHistory from "./pages/OrderHistory";
 import Profile from "./pages/Profile";
+import Event from "./pages/Event";
+import Conference from "./pages/Conference";
 import { CartProvider } from "./context/CartContext";
 import { LanguageProvider } from "./context/LanguageContext";
 import { UserProvider } from "./context/UserContext";
@@ -86,6 +88,8 @@ function App() {
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/services" element={<Services />} />
+                <Route path="/event" element={<Event />} />
+                <Route path="/conference" element={<Conference />} />
                 <Route path="/news" element={<News />} />
                 <Route path="/contacts" element={<Contacts />} />
                 <Route path="/admin" element={<Admin />} />

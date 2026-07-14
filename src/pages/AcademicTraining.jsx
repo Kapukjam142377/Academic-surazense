@@ -17,6 +17,8 @@ import {
   ShoppingCart,
   Calendar,
   Handshake,
+  X,
+  ZoomIn,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
@@ -360,47 +362,47 @@ const CONTESTS = [
   {
     id: 1,
     titleKey: "academic.contest1Title",
-    image: "/x-zense-101.jpg",
+    image: "/Submissions8.png",
   },
   {
     id: 2,
     titleKey: "academic.contest2Title",
-    image: "/QMC.jpg",
+    image: "/Submissions2.png",
   },
   {
     id: 3,
     titleKey: "academic.contest3Title",
-    image: "/qcmgroupe.jpg",
+    image: "/Submissions3.png",
   },
   {
     id: 4,
     titleKey: "academic.contest4Title",
-    image: "/ภาพการทำงานของ software-1.jpg",
+    image: "/Submissions4.png",
   },
   {
     id: 5,
     titleKey: "academic.contest5Title",
-    image: "/sensor-hero.png",
+    image: "/Submissions5.png",
   },
   {
     id: 6,
     titleKey: "academic.contest6Title",
-    image: "/x-zense-view2.jpg",
+    image: "/Submissions6.png",
   },
   {
     id: 7,
     titleKey: "academic.contest7Title",
-    image: "/x-zense-view3.jpg",
+    image: "/Submissions7.jpg",
   },
   {
     id: 8,
     titleKey: "academic.contest8Title",
-    image: "/biotech-course.png",
+    image: "/Submissions1.jpg",
   },
   {
     id: 9,
     titleKey: "academic.contest9Title",
-    image: "/reagents-kit.png",
+    image: "/Submissions9.jpg",
   },
 ];
 
@@ -580,81 +582,88 @@ const PARTNERS = [
   },
 ];
 
-function ContestCarousel() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+const gridContainerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 },
+  },
+};
+
+const gridItemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+};
+
+function ContestGrid() {
   const { t } = useLanguage();
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % CONTESTS.length);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + CONTESTS.length) % CONTESTS.length);
-  };
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % CONTESTS.length);
-  };
+  const [selectedImage, setSelectedImage] = useState(null);
 
   return (
-    <div className="relative max-w-4xl mx-auto group overflow-hidden mt-8">
-      {/* Slider Container - No borders, no white box */}
-      <div className="relative aspect-[16/9] w-full bg-transparent flex items-center justify-center">
-        <AnimatePresence mode="wait">
-          <motion.img
-            key={currentIndex}
-            src={CONTESTS[currentIndex].image}
-            alt={t(CONTESTS[currentIndex].titleKey)}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.6, ease: "easeInOut" }}
-            className="max-w-full max-h-full object-contain drop-shadow-md select-none pointer-events-none"
-          />
-        </AnimatePresence>
-
-        {/* Previous Button */}
-        <button
-          onClick={handlePrev}
-          className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-slate-900/20 hover:bg-slate-900/50 text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 cursor-pointer border-none z-30"
-        >
-          <ChevronLeft className="w-6 h-6" />
-        </button>
-
-        {/* Next Button */}
-        <button
-          onClick={handleNext}
-          className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-slate-900/20 hover:bg-slate-900/50 text-white flex items-center justify-center backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100 cursor-pointer border-none z-30"
-        >
-          <ChevronRight className="w-6 h-6" />
-        </button>
-      </div>
-
-      {/* Caption under the Image */}
-      <div className="text-center mt-6">
-        <h3 className="text-slate-800 text-base md:text-lg font-bold uppercase tracking-wider">
-          {t(CONTESTS[currentIndex].titleKey)}
-        </h3>
-      </div>
-
-      {/* Indicator Dots */}
-      <div className="flex justify-center gap-2 mt-4">
-        {CONTESTS.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => setCurrentIndex(idx)}
-            className={`w-2 h-2 rounded-full transition-all cursor-pointer border-none ${
-              currentIndex === idx
-                ? "bg-blue-600 w-5"
-                : "bg-slate-300 hover:bg-slate-400"
-            }`}
-          />
+    <>
+      <motion.div
+        variants={gridContainerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.05 }}
+        className="flex flex-wrap justify-center gap-8 max-w-5xl mx-auto items-center mt-12"
+      >
+        {CONTESTS.map((contest) => (
+          <motion.div
+            key={contest.id}
+            variants={gridItemVariants}
+            whileHover={{ scale: 1.08 }}
+            className="flex items-center justify-center cursor-pointer w-[calc(50%-1rem)] md:w-[calc(33.33%-2rem)]"
+            onClick={() => setSelectedImage(contest)}
+          >
+            <div className="w-full aspect-[4/3] flex items-center justify-center p-1 relative overflow-hidden">
+              <img
+                src={contest.image}
+                alt={t(contest.titleKey)}
+                className="max-w-full max-h-full object-contain filter group-hover:brightness-105 transition-all duration-300"
+              />
+            </div>
+          </motion.div>
         ))}
-      </div>
-    </div>
+      </motion.div>
+
+      {/* Lightbox / Modal for zoomed image */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 bg-slate-900/90 backdrop-blur-md z-50 flex flex-col items-center justify-center p-4 cursor-zoom-out"
+          >
+            {/* Close button */}
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center backdrop-blur-sm transition-all border-none cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Image container */}
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+              className="max-w-5xl max-h-[85vh] w-full flex flex-col items-center justify-center cursor-default"
+            >
+              <img
+                src={selectedImage.image}
+                alt={t(selectedImage.titleKey)}
+                className="max-w-full max-h-[80vh] object-contain shadow-2xl"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
@@ -1177,8 +1186,8 @@ export default function AcademicTraining() {
           </motion.p>
         </div>
 
-        {/* Contests Image Slider / Carousel - No borders, no white box background */}
-        <ContestCarousel />
+        {/* Contests Image Grid - Responsive grid layout with hover effects */}
+        <ContestGrid />
       </section>
 
       {/* Student Certificates Section */}

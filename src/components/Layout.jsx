@@ -16,6 +16,8 @@ import {
   User,
   LogOut,
   Clock,
+  Calendar,
+  Presentation,
 } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useLanguage } from "../context/LanguageContext";
@@ -171,6 +173,18 @@ export default function Layout({ children }) {
             className={`${linkBaseClass} ${isActive("/dashboard")}`}
           >
             {t("nav.services")}
+          </Link>
+          <Link
+            to="/event"
+            className={`${linkBaseClass} ${isActive("/event")}`}
+          >
+            {t("nav.event")}
+          </Link>
+          <Link
+            to="/conference"
+            className={`${linkBaseClass} ${isActive("/conference")}`}
+          >
+            {t("nav.conference")}
           </Link>
 
           <Link to="/news" className={`${linkBaseClass} ${isActive("/news")}`}>
@@ -481,6 +495,34 @@ export default function Layout({ children }) {
             <Briefcase className="w-5 h-5 stroke-[2.2px]" />
             <span className="uppercase tracking-wider">
               {t("nav.services")}
+            </span>
+          </Link>
+
+          <Link
+            to="/event"
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] font-bold no-underline transition-all ${
+              location.pathname === "/event"
+                ? "bg-blue-50 text-blue-600 shadow-sm shadow-blue-500/5"
+                : "text-slate-600 hover:bg-slate-50 hover:text-blue-600"
+            }`}
+          >
+            <Calendar className="w-5 h-5 stroke-[2.2px]" />
+            <span className="uppercase tracking-wider">
+              {t("nav.event")}
+            </span>
+          </Link>
+
+          <Link
+            to="/conference"
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl text-[14px] font-bold no-underline transition-all ${
+              location.pathname === "/conference"
+                ? "bg-blue-50 text-blue-600 shadow-sm shadow-blue-500/5"
+                : "text-slate-600 hover:bg-slate-50 hover:text-blue-600"
+            }`}
+          >
+            <Presentation className="w-5 h-5 stroke-[2.2px]" />
+            <span className="uppercase tracking-wider">
+              {t("nav.conference")}
             </span>
           </Link>
 
