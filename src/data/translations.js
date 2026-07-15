@@ -277,15 +277,18 @@ export const translations = {
       awardsTitle: "Awards & Recognition",
       awardsDesc:
         "Celebrating our team's scientific excellence, design innovations, and contributions to translational medicine.",
-      award1Title: "Outstanding HealthTech Innovation",
-      award1Desc:
-        "First prize award for EGFR cell-free DNA biosensor cancer diagnostic kit development.",
-      award2Title: "Young Scientist Design Award",
-      award2Desc:
-        "Recognition of outstanding electronic engineering in portable QCM hardware module design.",
-      award3Title: "National Medical Research Medal",
-      award3Desc:
-        "Awarded by leading medical institutes for significant contribution to early-stage biomarker detection.",
+      award1Title: "Science Castle in Singapore",
+      award1Desc: "Outstanding Poster Award won by our student team at Science Castle Singapore.",
+      award2Title: "Student Poster Session",
+      award2Desc: "Student researchers presenting scientific findings and biosensing prototypes.",
+      award3Title: "IMRC NextGen 2025",
+      award3Desc: "Final Round Presentation showcasing advanced diagnostic research.",
+      award4Title: "APACPH 2025",
+      award4Desc: "Scientific discussions and presentation at the Asia-Pacific Academic Consortium for Public Health conference.",
+      award5Title: "The 3rd International Conference on Biodiversity and Biotechnology",
+      award5Desc: "Gold Medal Award for Outstanding Poster Presentation.",
+      award6Title: "NanoThailand 2025",
+      award6Desc: "The 9th International Nanotechnology Conference presentation on diagnostics.",
 
       contestsTitle: "Contest Submissions",
       contestsDesc:
@@ -924,15 +927,18 @@ export const translations = {
       awardsTitle: "รางวัลและความภาคภูมิใจ",
       awardsDesc:
         "เฉลิมฉลองความสำเร็จทางวิชาการ การออกแบบนวัตกรรม และการมีส่วนร่วมในวิทยาศาสตร์การแพทย์ปริวรรต",
-      award1Title: "รางวัลนวัตกรรม HealthTech ดีเด่น",
-      award1Desc:
-        "รางวัลชนะเลิศอันดับหนึ่งจากการพัฒนาชุดตรวจหาตัวบ่งชี้มะเร็งปอด EGFR ไบโอเซนเซอร์",
-      award2Title: "รางวัลการออกแบบนักวิทยาศาสตร์รุ่นเยาว์",
-      award2Desc:
-        "เกียรติบัตรการออกแบบวงจรอิเล็กทรอนิกส์ยอดเยี่ยมสำหรับอุปกรณ์ตรวจวัด QCM ขนาดพกพา",
-      award3Title: "เหรียญเกียรติยศงานวิจัยการแพทย์แห่งชาติ",
-      award3Desc:
-        "รางวัลยกย่องผลงานวิจัยการตรวจวัดสารบ่งชี้ทางชีวภาพในระยะเริ่มต้นจากสถาบันการแพทย์ชั้นนำ",
+      award1Title: "Science Castle ณ ประเทศสิงคโปร์",
+      award1Desc: "รางวัล Outstanding Poster Award โดยทีมผู้ช่วยวิจัยในงาน Science Castle Singapore",
+      award2Title: "งานนำเสนอโปสเตอร์ผลงานวิจัย",
+      award2Desc: "นักศึกษาร่วมนำเสนอผลงานวิจัยนวัตกรรมไบโอเซนเซอร์แก่กลุ่มนักวิชาการ",
+      award3Title: "IMRC NextGen 2025",
+      award3Desc: "การนำเสนอผลงานรอบชิงชนะเลิศในหัวข้อการพัฒนาเครื่องมือวินิจฉัยทางการแพทย์",
+      award4Title: "APACPH 2025",
+      award4Desc: "เข้าร่วมนำเสนอผลงานวิจัยในงานประชุมสัมมนาระดับนานาชาติ APACPH",
+      award5Title: "งานประชุมวิชาการระดับนานาชาติทางด้านความหลากหลายทางชีวภาพและเทคโนโลยีชีวภาพ ครั้งที่ 3",
+      award5Desc: "รางวัลเหรียญทอง (Gold Medal Award) สำหรับการนำเสนอโปสเตอร์ผลงานวิจัยดีเยี่ยม",
+      award6Title: "NanoThailand 2025",
+      award6Desc: "งานนำเสนอผลงานวิชาการทางด้านนาโนเทคโนโลยีระดับนานาชาติในเวที NanoThailand",
 
       contestsTitle: "ผลงานส่งประกวดที่ผ่านมา",
       contestsDesc:

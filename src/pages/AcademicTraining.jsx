@@ -5,7 +5,6 @@ import {
   BookOpen,
   Cpu,
   Activity,
-  FileText,
   Award,
   ChevronRight,
   ChevronLeft,
@@ -222,15 +221,6 @@ const LAB_GALLERY_IMAGES = [
     fallbackColor: "from-purple-600/20 to-fuchsia-500/20",
     gridClass: "md:col-span-1 md:row-span-1 min-h-[220px]",
   },
-  {
-    id: 10,
-    titleKey: "academic.gallery10Title",
-    descKey: "academic.gallery10Desc",
-    categoryKey: "academic.gallery10Category",
-    image: "/lab-gallery-10.jpg",
-    fallbackColor: "from-slate-600/20 to-zinc-500/20",
-    gridClass: "md:col-span-3 md:row-span-1 min-h-[320px] md:min-h-[420px]",
-  },
 ];
 
 function GalleryCard({ item }) {
@@ -248,7 +238,7 @@ function GalleryCard({ item }) {
         },
       }}
       whileHover={{ y: -6, boxShadow: "0 20px 40px -10px rgba(0,0,0,0.12)" }}
-      className={`relative overflow-hidden rounded-[2rem] border border-slate-200/50 shadow-sm bg-slate-950 group cursor-pointer ${item.gridClass} transition-shadow duration-300`}
+      className={`relative overflow-hidden shadow-sm bg-slate-950 group cursor-pointer ${item.gridClass} transition-shadow duration-300`}
     >
       {/* Fallback elegant background when image is missing */}
       <div
@@ -342,19 +332,37 @@ const AWARDS = [
     id: 1,
     titleKey: "academic.award1Title",
     descKey: "academic.award1Desc",
-    image: "/award-1.jpg",
+    image: "/Award1.jpg",
   },
   {
     id: 2,
     titleKey: "academic.award2Title",
     descKey: "academic.award2Desc",
-    image: "/award-2.jpg",
+    image: "/Award5.jpg",
   },
   {
     id: 3,
     titleKey: "academic.award3Title",
     descKey: "academic.award3Desc",
-    image: "/award-3.jpg",
+    image: "/Award6.jpg",
+  },
+  {
+    id: 4,
+    titleKey: "academic.award4Title",
+    descKey: "academic.award4Desc",
+    image: "/Award2.jpg",
+  },
+  {
+    id: 5,
+    titleKey: "academic.award5Title",
+    descKey: "academic.award5Desc",
+    image: "/Award3.jpg",
+  },
+  {
+    id: 6,
+    titleKey: "academic.award6Title",
+    descKey: "academic.award6Desc",
+    image: "/Award4.jpg",
   },
 ];
 
@@ -412,7 +420,7 @@ const EVENTS = [
     titleKey: "academic.event1Title",
     descKey: "academic.event1Desc",
     dateKey: "academic.event1Date",
-    image: "/activity1.png",
+    image: "/activity1.webp",
   },
   {
     id: 2,
@@ -440,7 +448,7 @@ const EVENTS = [
     titleKey: "academic.event5Title",
     descKey: "academic.event5Desc",
     dateKey: "academic.event5Date",
-    image: "/activity5.png",
+    image: "/activity5.avif",
   },
   {
     id: 6,
@@ -594,6 +602,144 @@ const gridItemVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
 };
+
+function AwardsGrid() {
+  const { t } = useLanguage();
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  return (
+    <>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-7xl mx-auto mt-12 items-stretch mb-20">
+        {/* Left Column (Spans 2 columns on large screens) */}
+        <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Top Left: Castle Singapore (Spans all 3 columns of sub-grid) */}
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ scale: 1.02 }}
+            className="md:col-span-3 cursor-pointer overflow-hidden shadow-sm relative group aspect-[16/10] lg:aspect-auto lg:h-[480px]"
+            onClick={() => setSelectedImage(AWARDS[0])}
+          >
+            <img
+              src={AWARDS[0].image}
+              alt={t(AWARDS[0].titleKey)}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </motion.div>
+
+          {/* Bottom Left: Poster vertical (Spans 1 column) */}
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ scale: 1.02 }}
+            className="md:col-span-1 cursor-pointer overflow-hidden shadow-sm relative group aspect-[3/4] lg:aspect-auto lg:h-[380px]"
+            onClick={() => setSelectedImage(AWARDS[1])}
+          >
+            <img
+              src={AWARDS[1].image}
+              alt={t(AWARDS[1].titleKey)}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </motion.div>
+
+          {/* Bottom Middle: IMRC (Spans 2 columns) */}
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ scale: 1.02 }}
+            className="md:col-span-2 cursor-pointer overflow-hidden shadow-sm relative group aspect-[4/3] lg:aspect-auto lg:h-[380px]"
+            onClick={() => setSelectedImage(AWARDS[2])}
+          >
+            <img
+              src={AWARDS[2].image}
+              alt={t(AWARDS[2].titleKey)}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </motion.div>
+        </div>
+
+        {/* Right Column (Spans 1 column on large screens, containing 3 stacked rows) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-1 gap-6 lg:grid-rows-3">
+          {/* Top Right: APACPH */}
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ scale: 1.02 }}
+            className="cursor-pointer overflow-hidden shadow-sm relative group aspect-[4/3] lg:aspect-auto lg:h-[278px]"
+            onClick={() => setSelectedImage(AWARDS[3])}
+          >
+            <img
+              src={AWARDS[3].image}
+              alt={t(AWARDS[3].titleKey)}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </motion.div>
+
+          {/* Middle Right: Biodiversity */}
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ scale: 1.02 }}
+            className="cursor-pointer overflow-hidden shadow-sm relative group aspect-[4/3] lg:aspect-auto lg:h-[278px]"
+            onClick={() => setSelectedImage(AWARDS[4])}
+          >
+            <img
+              src={AWARDS[4].image}
+              alt={t(AWARDS[4].titleKey)}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </motion.div>
+
+          {/* Bottom Right: NanoThailand */}
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ scale: 1.02 }}
+            className="cursor-pointer overflow-hidden shadow-sm relative group aspect-[4/3] lg:aspect-auto lg:h-[278px]"
+            onClick={() => setSelectedImage(AWARDS[5])}
+          >
+            <img
+              src={AWARDS[5].image}
+              alt={t(AWARDS[5].titleKey)}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Lightbox / Modal for zoomed image */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 bg-slate-900/90 backdrop-blur-md z-50 flex flex-col items-center justify-center p-4 cursor-zoom-out"
+          >
+            {/* Close button */}
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center backdrop-blur-sm transition-all border-none cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Image container */}
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="max-w-5xl max-h-[85vh] w-full flex flex-col items-center justify-center relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={selectedImage.image}
+                alt={t(selectedImage.titleKey)}
+                className="max-w-full max-h-[85vh] object-contain shadow-2xl"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
 
 function ContestGrid() {
   const { t } = useLanguage();
@@ -1003,46 +1149,16 @@ export default function AcademicTraining() {
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: "easeOut", delay: 0.4 }}
-            className="text-base md:text-lg lg:text-xl text-slate-500 max-w-4xl mx-auto mb-12 leading-relaxed font-medium"
+            className="text-base md:text-lg lg:text-xl text-slate-500 max-w-4xl mx-auto mb-6 leading-relaxed font-medium"
           >
             {t("academic.introDesc")}
           </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, ease: "easeOut", delay: 0.3 }}
-            className="flex flex-col sm:flex-row justify-center gap-4"
-          >
-            <a
-              href="#labs"
-              className="bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-[15px] hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/35 hover:-translate-y-0.5 transition-all text-center min-w-[180px]"
-            >
-              {t("academic.exploreLabs")}
-            </a>
-            <a
-              href="#courses"
-              className="bg-white text-slate-700 border-2 border-slate-200 px-8 py-4 rounded-full font-bold text-[15px] hover:border-slate-300 hover:bg-slate-50 hover:-translate-y-0.5 transition-all text-center min-w-[180px]"
-            >
-              {t("academic.viewCourses")}
-            </a>
-          </motion.div>
         </div>
       </div>
 
       {/* Medical / Engineer Training Gallery Section */}
-      <section className="max-w-7xl mx-auto px-6 mb-28 relative z-10 scroll-mt-24">
+      <section className="max-w-7xl mx-auto px-6 mb-16 relative z-10 scroll-mt-24">
         <div className="text-center mb-12">
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 border border-blue-100 rounded-full text-blue-600 text-xs font-bold uppercase tracking-widest mb-4 shadow-sm"
-          >
-            <Activity className="w-3.5 h-3.5 text-blue-500" />
-            <span>{t("academic.trainingAtmosphere")}</span>
-          </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -1082,400 +1198,29 @@ export default function AcademicTraining() {
         </motion.div>
       </section>
 
-      {/* Contest Submissions & Awards Section */}
-      <section className="max-w-7xl mx-auto px-6 mb-28 relative z-10 scroll-mt-24">
-        {/* Awards Showcase Header */}
-        <div className="text-center mb-12">
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 border border-blue-100 rounded-full text-blue-600 text-xs font-bold uppercase tracking-widest mb-4 shadow-sm"
-          >
-            <Award className="w-3.5 h-3.5 text-blue-500" />
-            <span>{t("academic.awardsTitle")}</span>
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight"
-          >
-            {t("academic.awardsTitle")}
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-base text-slate-500 font-medium max-w-2xl mx-auto mt-3"
-          >
-            {t("academic.awardsDesc")}
-          </motion.p>
-        </div>
-
-        {/* Awards Grid */}
+      {/* Action Buttons Section */}
+      <div className="max-w-7xl mx-auto px-6 mb-24 relative z-10 text-center">
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.15 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20"
-        >
-          {AWARDS.map((award) => (
-            <motion.div
-              key={award.id}
-              variants={itemVariants}
-              whileHover={{
-                y: -6,
-                boxShadow: "0 20px 45px -10px rgba(0,0,0,0.08)",
-              }}
-              className="bg-white border border-slate-100 rounded-[2rem] overflow-hidden shadow-sm flex flex-col group transition-all duration-300 relative"
-            >
-              <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-blue-600 to-sky-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20"></div>
-              <div className="aspect-[4/3] w-full overflow-hidden bg-slate-900 relative">
-                <img
-                  src={award.image}
-                  alt={t(award.titleKey)}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-              </div>
-              <div className="p-6 flex flex-col flex-1">
-                <h3 className="text-lg font-bold text-slate-800 mb-2 leading-snug group-hover:text-blue-600 transition-colors">
-                  {t(award.titleKey)}
-                </h3>
-                <p className="text-sm text-slate-500 leading-relaxed font-light">
-                  {t(award.descKey)}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Contests Submissions Section Header */}
-        <div className="text-center mb-12">
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 border border-blue-100 rounded-full text-blue-600 text-xs font-bold uppercase tracking-widest mb-4 shadow-sm"
-          >
-            <Cpu className="w-3.5 h-3.5 text-blue-500" />
-            <span>{t("academic.contestsTitle")}</span>
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight"
-          >
-            {t("academic.contestsTitle")}
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-base text-slate-500 font-medium max-w-2xl mx-auto mt-3"
-          >
-            {t("academic.contestsDesc")}
-          </motion.p>
-        </div>
-
-        {/* Contests Image Grid - Responsive grid layout with hover effects */}
-        <ContestGrid />
-      </section>
-
-      {/* Student Certificates Section */}
-      <section className="max-w-7xl mx-auto px-6 mb-28 relative z-10 scroll-mt-24">
-        <div className="text-center mb-12">
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 border border-blue-100 rounded-full text-blue-600 text-xs font-bold uppercase tracking-widest mb-4 shadow-sm"
-          >
-            <GraduationCap className="w-3.5 h-3.5 text-blue-500" />
-            <span>{t("academic.studentAchievements")}</span>
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight"
-          >
-            {t("academic.completionCertificates")}
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-base text-slate-500 font-medium max-w-2xl mx-auto mt-3"
-          >
-            {t("academic.completionCertificatesDesc")}
-          </motion.p>
-        </div>
-
-        <motion.div
-          variants={{
-            hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: { staggerChildren: 0.15 },
-            },
-          }}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.15 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6"
-        >
-          {CERTIFICATES.map((cert) => (
-            <CertificateCard key={cert.id} cert={cert} />
-          ))}
-        </motion.div>
-      </section>
-
-      {/* Past Research Topics Section */}
-      <section className="max-w-7xl mx-auto px-6 mb-28 relative z-10 scroll-mt-24">
-        <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 border border-blue-100 rounded-full text-blue-600 text-xs font-bold uppercase tracking-widest mb-4 shadow-sm"
-          >
-            <BookOpen className="w-3.5 h-3.5 text-blue-500" />
-            <span>{t("academic.pastResearchTitle")}</span>
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight"
-          >
-            {t("academic.pastResearchTitle")}
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-base text-slate-500 font-medium max-w-3xl mx-auto mt-3 leading-relaxed"
-          >
-            {t("academic.pastResearchDesc")}
-          </motion.p>
-        </div>
-
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          {PAST_RESEARCH.map((project, idx) => (
-            <motion.div
-              key={project.id}
-              variants={itemVariants}
-              whileHover={{
-                y: -6,
-                boxShadow: "0 20px 40px -10px rgba(0,0,0,0.06)",
-                borderColor: "rgba(59, 130, 246, 0.2)",
-              }}
-              className="bg-white border border-slate-100 rounded-[2rem] p-8 flex flex-col justify-between transition-all duration-300 relative group overflow-hidden"
-            >
-              {/* Decorative subtle background gradient on hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-50/10 to-indigo-50/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-              
-              <div>
-                <div className="flex justify-between items-center mb-6 z-10 relative">
-                  <div className="w-10 h-10 rounded-2xl bg-blue-50/80 border border-blue-100/50 flex items-center justify-center text-blue-600 transition-colors duration-300 group-hover:bg-blue-600 group-hover:text-white">
-                    <FileText className="w-5 h-5" />
-                  </div>
-                  <span className="text-xs font-mono font-bold text-slate-400 bg-slate-50 group-hover:bg-blue-50 group-hover:text-blue-600 px-3 py-1 rounded-full transition-colors duration-300">
-                    Project {String(idx + 1).padStart(2, '0')}
-                  </span>
-                </div>
-
-                <h3 className="text-[15px] font-bold text-slate-800 leading-snug group-hover:text-blue-600 transition-colors duration-300 z-10 relative mb-4">
-                  {project.title}
-                </h3>
-              </div>
-              
-              {/* A subtle link visual at the bottom */}
-              <div className="mt-4 pt-4 border-t border-slate-100/50 flex items-center gap-1.5 text-xs font-bold text-slate-400 group-hover:text-blue-500 transition-colors duration-300">
-                <span>Surasense Supported Research</span>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </section>
-
-      {/* Upcoming Events Section */}
-      <section className="max-w-7xl mx-auto px-6 mb-28 relative z-10 scroll-mt-24">
-        <div className="text-center mb-12">
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 border border-blue-100 rounded-full text-blue-600 text-xs font-bold uppercase tracking-widest mb-4 shadow-sm"
-          >
-            <Calendar className="w-3.5 h-3.5 text-blue-500" />
-            <span>{t("academic.eventsTitle")}</span>
-          </motion.div>
-          <motion.h2
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight"
-          >
-            {t("academic.eventsTitle")}
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-base text-slate-500 font-medium max-w-2xl mx-auto mt-3"
-          >
-            {t("academic.eventsDesc")}
-          </motion.p>
-        </div>
-
-        {/* Events Flex Container */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.15 }}
-          className="flex flex-wrap justify-center gap-8 max-w-5xl mx-auto items-center"
-        >
-          {EVENTS.map((event) => (
-            <motion.div
-              key={event.id}
-              variants={itemVariants}
-              whileHover={{ scale: 1.08 }}
-              className="flex items-center justify-center cursor-pointer w-[calc(50%-1rem)] sm:w-[calc(33.33%-1.33rem)] lg:w-[calc(20%-1.6rem)]"
-            >
-              <div className="w-28 h-28 md:w-32 md:h-32 flex items-center justify-center p-2 relative overflow-hidden">
-                <img
-                  src={event.image}
-                  alt=""
-                  className="max-w-full max-h-full object-contain filter transition-all duration-300"
-                />
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </section>
-
-      {/* Interactive Selector Widget */}
-      <section className="max-w-5xl mx-auto px-6 mb-24 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.98 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, amount: 0.3 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="bg-white/80 backdrop-blur-xl rounded-[2.5rem] border border-slate-200/60 p-8 md:p-12 shadow-xl shadow-blue-950/5"
+          className="flex flex-col sm:flex-row justify-center items-center gap-4"
         >
-          <div className="text-center mb-8">
-            <span className="text-xs font-bold text-blue-600 uppercase tracking-widest bg-blue-50 px-3.5 py-1.5 rounded-full mb-3 inline-block">
-              {t("academic.interactiveGuide")}
-            </span>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mt-2">
-              {t("academic.findIdealPath")}
-            </h2>
-            <p className="text-sm text-slate-500 mt-2">
-              {t("academic.selectBackground")}
-            </p>
-          </div>
-
-          <div className="flex flex-col md:flex-row gap-3 justify-center mb-10">
-            {BACKGROUNDS.map((bg) => (
-              <button
-                key={bg.id}
-                onClick={() => setSelectedBackground(bg.id)}
-                className={`px-6 py-3.5 rounded-2xl text-sm font-bold transition-all flex items-center justify-center cursor-pointer border ${
-                  selectedBackground === bg.id
-                    ? "bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/25 scale-[1.02]"
-                    : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100 hover:border-slate-300"
-                }`}
-              >
-                {t(bg.labelKey)}
-              </button>
-            ))}
-          </div>
-
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={selectedBackground}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.4 }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50 p-6 md:p-8 rounded-[2rem] border border-slate-200/50"
-            >
-              <div>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-sm">
-                    <Beaker className="w-5 h-5" />
-                  </div>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                    {t("academic.recommendedLab")}
-                  </span>
-                </div>
-                <h3 className="text-lg font-bold text-slate-800 mb-2">
-                  {t(LABS.find((l) => l.id === activeRec?.recommend)?.titleKey)}
-                </h3>
-                <p className="text-sm text-slate-500 leading-relaxed">
-                  {t(LABS.find((l) => l.id === activeRec?.recommend)?.descKey)}
-                </p>
-              </div>
-
-              <div className="border-t md:border-t-0 md:border-l border-slate-200 pt-6 md:pt-0 md:pl-8 flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center shadow-sm">
-                      <BookOpen className="w-5 h-5" />
-                    </div>
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                      {t("academic.recommendedCourse")}
-                    </span>
-                  </div>
-                  <h4 className="text-lg font-bold text-slate-800 mb-2">
-                    {t(
-                      COURSES.find((c) => c.id === activeRec?.course)?.titleKey,
-                    )}
-                  </h4>
-                  <p className="text-sm text-slate-500 leading-relaxed mb-4">
-                    {t(
-                      COURSES.find((c) => c.id === activeRec?.course)?.descKey,
-                    )}
-                  </p>
-                </div>
-                <Link
-                  to="/products"
-                  className="inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-700 group mt-auto"
-                >
-                  <span>{t("academic.inquireSyllabus")}</span>
-                  <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                </Link>
-              </div>
-            </motion.div>
-          </AnimatePresence>
+          <a
+            href="#labs"
+            className="bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-[15px] hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/35 hover:-translate-y-0.5 transition-all text-center min-w-[180px]"
+          >
+            {t("academic.exploreLabs")}
+          </a>
+          <a
+            href="#courses"
+            className="bg-white text-slate-700 border-2 border-slate-200 px-8 py-4 rounded-full font-bold text-[15px] hover:border-slate-300 hover:bg-slate-50 hover:-translate-y-0.5 transition-all text-center min-w-[180px]"
+          >
+            {t("academic.viewCourses")}
+          </a>
         </motion.div>
-      </section>
+      </div>
 
       {/* Laboratories Section */}
       <section
@@ -1685,19 +1430,312 @@ export default function AcademicTraining() {
         </motion.div>
       </section>
 
-      {/* Cooperating Schools Section */}
-      <section className="max-w-7xl mx-auto px-6 mb-24 relative z-10 scroll-mt-24">
-        <div className="text-center mb-16">
-          <motion.div
+      {/* Interactive Selector Widget */}
+      <section className="max-w-5xl mx-auto px-6 mb-24 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8 }}
+          className="bg-white/80 backdrop-blur-xl rounded-[2.5rem] border border-slate-200/60 p-8 md:p-12 shadow-xl shadow-blue-950/5"
+        >
+          <div className="text-center mb-8">
+            <span className="text-xs font-bold text-blue-600 uppercase tracking-widest bg-blue-50 px-3.5 py-1.5 rounded-full mb-3 inline-block">
+              {t("academic.interactiveGuide")}
+            </span>
+            <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mt-2">
+              {t("academic.findIdealPath")}
+            </h2>
+            <p className="text-sm text-slate-500 mt-2">
+              {t("academic.selectBackground")}
+            </p>
+          </div>
+
+          <div className="flex flex-col md:flex-row gap-3 justify-center mb-10">
+            {BACKGROUNDS.map((bg) => (
+              <button
+                key={bg.id}
+                onClick={() => setSelectedBackground(bg.id)}
+                className={`px-6 py-3.5 rounded-2xl text-sm font-bold transition-all flex items-center justify-center cursor-pointer border ${
+                  selectedBackground === bg.id
+                    ? "bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/25 scale-[1.02]"
+                    : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100 hover:border-slate-300"
+                }`}
+              >
+                {t(bg.labelKey)}
+              </button>
+            ))}
+          </div>
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={selectedBackground}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.4 }}
+              className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50 p-6 md:p-8 rounded-[2rem] border border-slate-200/50"
+            >
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shadow-sm">
+                    <Beaker className="w-5 h-5" />
+                  </div>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    {t("academic.recommendedLab")}
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-slate-800 mb-2">
+                  {t(LABS.find((l) => l.id === activeRec?.recommend)?.titleKey)}
+                </h3>
+                <p className="text-sm text-slate-500 leading-relaxed">
+                  {t(LABS.find((l) => l.id === activeRec?.recommend)?.descKey)}
+                </p>
+              </div>
+
+              <div className="border-t md:border-t-0 md:border-l border-slate-200 pt-6 md:pt-0 md:pl-8 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center shadow-sm">
+                      <BookOpen className="w-5 h-5" />
+                    </div>
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                      {t("academic.recommendedCourse")}
+                    </span>
+                  </div>
+                  <h4 className="text-lg font-bold text-slate-800 mb-2">
+                    {t(
+                      COURSES.find((c) => c.id === activeRec?.course)?.titleKey,
+                    )}
+                  </h4>
+                  <p className="text-sm text-slate-500 leading-relaxed mb-4">
+                    {t(
+                      COURSES.find((c) => c.id === activeRec?.course)?.descKey,
+                    )}
+                  </p>
+                </div>
+                <Link
+                  to="/products"
+                  className="inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-700 group mt-auto"
+                >
+                  <span>{t("academic.inquireSyllabus")}</span>
+                  <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                </Link>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </motion.div>
+      </section>
+
+
+
+      {/* Contest Submissions & Awards Section */}
+      <section className="max-w-7xl mx-auto px-6 mb-28 relative z-10 scroll-mt-24">
+        {/* Awards Showcase Header */}
+        <div className="text-center mb-12">
+          <motion.h2
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 border border-blue-100 rounded-full text-blue-600 text-xs font-bold uppercase tracking-widest mb-4 shadow-sm"
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight"
           >
-            <Handshake className="w-3.5 h-3.5 text-blue-500" />
-            <span>{t("academic.schoolsTitle")}</span>
-          </motion.div>
+            {t("academic.awardsTitle")}
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-base text-slate-500 font-medium max-w-2xl mx-auto mt-3"
+          >
+            {t("academic.awardsDesc")}
+          </motion.p>
+        </div>
+
+        {/* Awards Grid */}
+        <AwardsGrid />
+
+        {/* Contests Submissions Section Header */}
+        <div className="text-center mb-12">
+          <motion.h2
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight"
+          >
+            {t("academic.contestsTitle")}
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-base text-slate-500 font-medium max-w-2xl mx-auto mt-3"
+          >
+            {t("academic.contestsDesc")}
+          </motion.p>
+        </div>
+
+        {/* Contests Image Grid - Responsive grid layout with hover effects */}
+        <ContestGrid />
+      </section>
+
+      {/* Student Certificates Section */}
+      <section className="max-w-7xl mx-auto px-6 mb-28 relative z-10 scroll-mt-24">
+        <div className="text-center mb-12">
+          <motion.h2
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight"
+          >
+            {t("academic.completionCertificates")}
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-base text-slate-500 font-medium max-w-2xl mx-auto mt-3"
+          >
+            {t("academic.completionCertificatesDesc")}
+          </motion.p>
+        </div>
+
+        <motion.div
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: { staggerChildren: 0.15 },
+            },
+          }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+        >
+          {CERTIFICATES.map((cert) => (
+            <CertificateCard key={cert.id} cert={cert} />
+          ))}
+        </motion.div>
+      </section>
+
+      {/* Past Research Topics Section */}
+      <section className="max-w-7xl mx-auto px-6 mb-28 relative z-10 scroll-mt-24">
+        <div className="text-center mb-16">
+          <motion.h2
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight"
+          >
+            {t("academic.pastResearchTitle")}
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-base text-slate-500 font-medium max-w-3xl mx-auto mt-3 leading-relaxed"
+          >
+            {t("academic.pastResearchDesc")}
+          </motion.p>
+        </div>
+
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          {PAST_RESEARCH.map((project) => (
+            <motion.div
+              key={project.id}
+              variants={itemVariants}
+              whileHover={{
+                y: -6,
+                boxShadow: "0 20px 40px -10px rgba(0,0,0,0.06)",
+                borderColor: "rgba(59, 130, 246, 0.2)",
+              }}
+              className="bg-white border border-slate-100 rounded-[2rem] p-8 flex flex-col justify-between transition-all duration-300 relative group overflow-hidden"
+            >
+              {/* Decorative subtle background gradient on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-50/10 to-indigo-50/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+              <div>
+                <h3 className="text-[15px] font-bold text-slate-800 leading-snug group-hover:text-blue-600 transition-colors duration-300 z-10 relative mb-4">
+                  {project.title}
+                </h3>
+              </div>
+
+              {/* A subtle link visual at the bottom */}
+              <div className="mt-4 pt-4 border-t border-slate-100/50 flex items-center gap-1.5 text-xs font-bold text-slate-400 group-hover:text-blue-500 transition-colors duration-300">
+                <span>Surasense Supported Research</span>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </section>
+
+      {/* Upcoming Events Section */}
+      <section className="max-w-7xl mx-auto px-6 mb-28 relative z-10 scroll-mt-24">
+        <div className="text-center mb-12">
+          <motion.h2
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight"
+          >
+            {t("academic.eventsTitle")}
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-base text-slate-500 font-medium max-w-2xl mx-auto mt-3"
+          >
+            {t("academic.eventsDesc")}
+          </motion.p>
+        </div>
+
+        {/* Events Flex Container */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          className="flex flex-wrap justify-center gap-8 max-w-5xl mx-auto items-center"
+        >
+          {EVENTS.map((event) => (
+            <motion.div
+              key={event.id}
+              variants={itemVariants}
+              whileHover={{ scale: 1.08 }}
+              className="flex items-center justify-center cursor-pointer w-[calc(50%-1rem)] sm:w-[calc(33.33%-1.33rem)] lg:w-[calc(25%-1.5rem)]"
+            >
+              <div className="w-36 h-36 md:w-48 md:h-48 flex items-center justify-center p-2 relative overflow-hidden">
+                <img
+                  src={event.image}
+                  alt=""
+                  className="max-w-full max-h-full object-contain filter transition-all duration-300"
+                />
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </section>
+
+      {/* Cooperating Schools Section */}
+      <section className="max-w-7xl mx-auto px-6 mb-24 relative z-10 scroll-mt-24">
+        <div className="text-center mb-16">
           <motion.h2
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
