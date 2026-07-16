@@ -36,8 +36,12 @@ export default function Profile() {
   }, [user, navigate]);
 
   // Profile Form States
-  const [firstName, setFirstName] = useState(user?.first_name || user?.firstName || "");
-  const [lastName, setLastName] = useState(user?.last_name || user?.lastName || "");
+  const [firstName, setFirstName] = useState(
+    user?.first_name || user?.firstName || "",
+  );
+  const [lastName, setLastName] = useState(
+    user?.last_name || user?.lastName || "",
+  );
   const [username, setUsername] = useState(user?.username || "");
   const [phone, setPhone] = useState(user?.phone || "");
   const [gender, setGender] = useState(user?.gender || "");
@@ -47,15 +51,29 @@ export default function Profile() {
   // New registration fields
   const [nickname, setNickname] = useState(user?.nickname || "");
   const [titleName, setTitleName] = useState(user?.titleName || "");
-  const [customTitleName, setCustomTitleName] = useState(user?.customTitleName || "");
+  const [customTitleName, setCustomTitleName] = useState(
+    user?.customTitleName || "",
+  );
   const [middleName, setMiddleName] = useState(user?.middleName || "");
   const [idNumber, setIdNumber] = useState(user?.idNumber || "");
-  const [currentAddress, setCurrentAddress] = useState(user?.currentAddress || "");
-  const [studentCardFront, setStudentCardFront] = useState(user?.studentCardFront || "");
-  const [studentCardBack, setStudentCardBack] = useState(user?.studentCardBack || "");
-  const [mobileNumber, setMobileNumber] = useState(user?.mobileNumber || user?.phone || "");
-  const [institutionName, setInstitutionName] = useState(user?.institutionName || "");
-  const [institutionAddress, setInstitutionAddress] = useState(user?.institutionAddress || "");
+  const [currentAddress, setCurrentAddress] = useState(
+    user?.currentAddress || "",
+  );
+  const [studentCardFront, setStudentCardFront] = useState(
+    user?.studentCardFront || "",
+  );
+  const [studentCardBack, setStudentCardBack] = useState(
+    user?.studentCardBack || "",
+  );
+  const [mobileNumber, setMobileNumber] = useState(
+    user?.mobileNumber || user?.phone || "",
+  );
+  const [institutionName, setInstitutionName] = useState(
+    user?.institutionName || "",
+  );
+  const [institutionAddress, setInstitutionAddress] = useState(
+    user?.institutionAddress || "",
+  );
   const [education, setEducation] = useState(user?.education || "");
   const [activeTab, setActiveTab] = useState("general"); // "general" or "competition"
 
@@ -87,15 +105,21 @@ export default function Profile() {
     if (file) {
       if (!file.type.startsWith("image/")) {
         setToast({
-          message: language === "th" ? "กรุณาอัปโหลดเฉพาะไฟล์รูปภาพ" : "Please upload only image files",
-          type: "error"
+          message:
+            language === "th"
+              ? "กรุณาอัปโหลดเฉพาะไฟล์รูปภาพ"
+              : "Please upload only image files",
+          type: "error",
         });
         return;
       }
       if (file.size > 100 * 1024 * 1024) {
         setToast({
-          message: language === "th" ? "ขนาดไฟล์ต้องไม่เกิน 100 MB" : "File size must be under 100 MB",
-          type: "error"
+          message:
+            language === "th"
+              ? "ขนาดไฟล์ต้องไม่เกิน 100 MB"
+              : "File size must be under 100 MB",
+          type: "error",
         });
         return;
       }
@@ -366,7 +390,7 @@ export default function Profile() {
               <p className="text-xs text-amber-600 bg-amber-50 border border-amber-100 rounded-xl px-4 py-3 mb-6 leading-relaxed font-semibold">
                 {t(
                   "This form is created for collecting personal data for registering in competitions or presentations only.",
-                  "แบบฟอร์มนี้จัดทำขึ้นเพื่อใช้ในการจัดเก็บข้อมูลส่วนบุคคลสำหรับการลงทะเบียนเข้าร่วมงานแข่งขันหรืองานนำเสนอผลงานเท่านั้น"
+                  "แบบฟอร์มนี้จัดทำขึ้นเพื่อใช้ในการจัดเก็บข้อมูลส่วนบุคคลสำหรับการลงทะเบียนเข้าร่วมงานแข่งขันหรืองานนำเสนอผลงานเท่านั้น",
                 )}
               </p>
 
@@ -553,17 +577,28 @@ export default function Profile() {
                     {/* Title Name (คำนำหน้าชื่อ) */}
                     <div className="flex flex-col gap-2">
                       <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                        {t("Title Name (คำนำหน้าชื่อ)", "คำนำหน้าชื่อ (Title Name)")}
+                        {t(
+                          "Title Name (คำนำหน้าชื่อ)",
+                          "คำนำหน้าชื่อ (Title Name)",
+                        )}
                       </label>
                       <select
                         value={titleName}
                         onChange={(e) => setTitleName(e.target.value)}
                         className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all text-slate-800 cursor-pointer"
                       >
-                        <option value="">-- {t("Select Title", "เลือกคำนำหน้าชื่อ")} --</option>
-                        <option value="Mr.">{t("Mr. (นาย)", "นาย (Mr.)")}</option>
-                        <option value="Ms.">{t("Ms. (นางสาว)", "นางสาว (Ms.)")}</option>
-                        <option value="Other">{t("Other (อื่นๆ)", "อื่นๆ (Other)")}</option>
+                        <option value="">
+                          -- {t("Select Title", "เลือกคำนำหน้าชื่อ")} --
+                        </option>
+                        <option value="Mr.">
+                          {t("Mr. (นาย)", "นาย (Mr.)")}
+                        </option>
+                        <option value="Ms.">
+                          {t("Ms. (นางสาว)", "นางสาว (Ms.)")}
+                        </option>
+                        <option value="Other">
+                          {t("Other (อื่นๆ)", "อื่นๆ (Other)")}
+                        </option>
                       </select>
                       {titleName === "Other" && (
                         <input
@@ -632,7 +667,10 @@ export default function Profile() {
                     <div className="flex flex-col gap-2">
                       <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
                         <CreditCard className="w-3.5 h-3.5 text-slate-400" />
-                        {t("Identification Number / เลขบัตรประชาชน", "เลขบัตรประชาชน (Identification Number)")}
+                        {t(
+                          "Identification Number / เลขบัตรประชาชน",
+                          "เลขบัตรประชาชน (Identification Number)",
+                        )}
                       </label>
                       <input
                         type="text"
@@ -646,7 +684,10 @@ export default function Profile() {
                     <div className="flex flex-col gap-2">
                       <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
                         <Phone className="w-3.5 h-3.5 text-slate-400" />
-                        {t("Mobile Number (เบอร์มือถือ)", "เบอร์มือถือ (Mobile Number)")}
+                        {t(
+                          "Mobile Number (เบอร์มือถือ)",
+                          "เบอร์มือถือ (Mobile Number)",
+                        )}
                       </label>
                       <input
                         type="tel"
@@ -660,17 +701,38 @@ export default function Profile() {
                     <div className="flex flex-col gap-2">
                       <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
                         <GraduationCap className="w-3.5 h-3.5 text-slate-400" />
-                        {t("Education (ระดับการศึกษา)", "ระดับการศึกษา (Education)")}
+                        {t(
+                          "Education (ระดับการศึกษา)",
+                          "ระดับการศึกษา (Education)",
+                        )}
                       </label>
                       <select
                         value={education}
                         onChange={(e) => setEducation(e.target.value)}
                         className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 focus:bg-white transition-all text-slate-800 cursor-pointer"
                       >
-                        <option value="">-- {t("Select Education Level", "เลือกระดับการศึกษา")} --</option>
-                        <option value="Primary">{t("Primary School (ประถมศึกษา)", "ประถมศึกษา (Primary School)")}</option>
-                        <option value="Secondary">{t("Secondary School (มัธยมศึกษา)", "มัธยมศึกษา (Secondary School)")}</option>
-                        <option value="Bachelor">{t("Bachelor's Degree (ปริญญาตรี)", "ปริญญาตรี (Bachelor's Degree)")}</option>
+                        <option value="">
+                          -- {t("Select Education Level", "เลือกระดับการศึกษา")}{" "}
+                          --
+                        </option>
+                        <option value="Primary">
+                          {t(
+                            "Primary School (ประถมศึกษา)",
+                            "ประถมศึกษา (Primary School)",
+                          )}
+                        </option>
+                        <option value="Secondary">
+                          {t(
+                            "Secondary School (มัธยมศึกษา)",
+                            "มัธยมศึกษา (Secondary School)",
+                          )}
+                        </option>
+                        <option value="Bachelor">
+                          {t(
+                            "Bachelor's Degree (ปริญญาตรี)",
+                            "ปริญญาตรี (Bachelor's Degree)",
+                          )}
+                        </option>
                       </select>
                     </div>
 
@@ -678,7 +740,10 @@ export default function Profile() {
                     <div className="flex flex-col gap-2">
                       <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
                         <Building2 className="w-3.5 h-3.5 text-slate-400" />
-                        {t("Institution Name (สถาบัน/โรงเรียน)", "สถาบัน/โรงเรียน (Institution Name)")}
+                        {t(
+                          "Institution Name (สถาบัน/โรงเรียน)",
+                          "สถาบัน/โรงเรียน (Institution Name)",
+                        )}
                       </label>
                       <input
                         type="text"
@@ -693,7 +758,10 @@ export default function Profile() {
                   <div className="flex flex-col gap-2 mt-6">
                     <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
                       <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                      {t("Current Address (ที่อยู่ปัจจุบัน)", "ที่อยู่ปัจจุบัน (Current Address)")}
+                      {t(
+                        "Current Address (ที่อยู่ปัจจุบัน)",
+                        "ที่อยู่ปัจจุบัน (Current Address)",
+                      )}
                     </label>
                     <textarea
                       rows="3"
@@ -711,7 +779,10 @@ export default function Profile() {
                   <div className="flex flex-col gap-2 mt-6">
                     <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
                       <Building2 className="w-3.5 h-3.5 text-slate-400" />
-                      {t("Institution Address (ที่อยู่ สถาบัน/โรงเรียน)", "ที่อยู่สถาบัน/โรงเรียน (Institution Address)")}
+                      {t(
+                        "Institution Address (ที่อยู่ สถาบัน/โรงเรียน)",
+                        "ที่อยู่สถาบัน/โรงเรียน (Institution Address)",
+                      )}
                     </label>
                     <textarea
                       rows="3"
@@ -729,15 +800,25 @@ export default function Profile() {
                   <div className="flex flex-col gap-2 mt-6">
                     <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
                       <UploadCloud className="w-3.5 h-3.5 text-slate-400" />
-                      {t("Student ID Card: Front (บัตรนักเรียนหน้าแรก)", "Student ID Card: Front (บัตรนักเรียนหน้าแรก)")}
+                      {t(
+                        "Student ID Card: Front (บัตรนักเรียนหน้าแรก)",
+                        "Student ID Card: Front (บัตรนักเรียนหน้าแรก)",
+                      )}
                     </label>
                     <span className="text-[11px] text-slate-400 font-medium -mt-1 leading-normal">
-                      {t("(Please upload a photo of your Student ID Card.)", "(Please upload a photo of your Student ID Card.)")}
+                      {t(
+                        "(Please upload a photo of your Student ID Card.)",
+                        "(Please upload a photo of your Student ID Card.)",
+                      )}
                     </span>
                     <div className="mt-2 border-2 border-dashed border-slate-200 hover:border-blue-500 rounded-2xl p-6 transition-all duration-300 bg-slate-50/50 flex flex-col items-center justify-center relative overflow-hidden group">
                       {studentCardFront ? (
                         <div className="w-full flex flex-col items-center gap-3">
-                          <img src={studentCardFront} alt="Student ID Front" className="max-h-48 rounded-xl object-contain shadow-md" />
+                          <img
+                            src={studentCardFront}
+                            alt="Student ID Front"
+                            className="max-h-48 rounded-xl object-contain shadow-md"
+                          />
                           <button
                             type="button"
                             onClick={() => setStudentCardFront("")}
@@ -751,16 +832,24 @@ export default function Profile() {
                         <label className="w-full h-full flex flex-col items-center justify-center cursor-pointer py-4">
                           <UploadCloud className="w-10 h-10 text-slate-400 group-hover:text-blue-500 transition-colors mb-3" />
                           <span className="text-sm font-bold text-slate-600 group-hover:text-blue-600 transition-colors mb-1">
-                            {t("Click to upload photo", "คลิกเพื่ออัปโหลดรูปภาพ")}
+                            {t(
+                              "Click to upload photo",
+                              "คลิกเพื่ออัปโหลดรูปภาพ",
+                            )}
                           </span>
                           <span className="text-xs text-slate-400">
-                            {t("Supported file: image (Max 100 MB)", "อัปโหลดไฟล์ที่รองรับ 1 รายการ: image ขนาดสูงสุด 100 MB")}
+                            {t(
+                              "Supported file: image (Max 100 MB)",
+                              "อัปโหลดไฟล์ที่รองรับ 1 รายการ: image ขนาดสูงสุด 100 MB",
+                            )}
                           </span>
                           <input
                             type="file"
                             accept="image/*"
                             className="hidden"
-                            onChange={(e) => handleFileChange(e, setStudentCardFront)}
+                            onChange={(e) =>
+                              handleFileChange(e, setStudentCardFront)
+                            }
                           />
                         </label>
                       )}
@@ -771,15 +860,25 @@ export default function Profile() {
                   <div className="flex flex-col gap-2 mt-6">
                     <label className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
                       <UploadCloud className="w-3.5 h-3.5 text-slate-400" />
-                      {t("Student ID Card: Black (บัตรนักเรียนหน้าหลัง)", "Student ID Card: Black (บัตรนักเรียนหน้าหลัง)")}
+                      {t(
+                        "Student ID Card: Black (บัตรนักเรียนหน้าหลัง)",
+                        "Student ID Card: Black (บัตรนักเรียนหน้าหลัง)",
+                      )}
                     </label>
                     <span className="text-[11px] text-slate-400 font-medium -mt-1 leading-normal">
-                      {t("(Please upload a photo of your Student ID Card.)", "(Please upload a photo of your Student ID Card.)")}
+                      {t(
+                        "(Please upload a photo of your Student ID Card.)",
+                        "(Please upload a photo of your Student ID Card.)",
+                      )}
                     </span>
                     <div className="mt-2 border-2 border-dashed border-slate-200 hover:border-blue-500 rounded-2xl p-6 transition-all duration-300 bg-slate-50/50 flex flex-col items-center justify-center relative overflow-hidden group">
                       {studentCardBack ? (
                         <div className="w-full flex flex-col items-center gap-3">
-                          <img src={studentCardBack} alt="Student ID Back" className="max-h-48 rounded-xl object-contain shadow-md" />
+                          <img
+                            src={studentCardBack}
+                            alt="Student ID Back"
+                            className="max-h-48 rounded-xl object-contain shadow-md"
+                          />
                           <button
                             type="button"
                             onClick={() => setStudentCardBack("")}
@@ -793,16 +892,24 @@ export default function Profile() {
                         <label className="w-full h-full flex flex-col items-center justify-center cursor-pointer py-4">
                           <UploadCloud className="w-10 h-10 text-slate-400 group-hover:text-blue-500 transition-colors mb-3" />
                           <span className="text-sm font-bold text-slate-600 group-hover:text-blue-600 transition-colors mb-1">
-                            {t("Click to upload photo", "คลิกเพื่ออัปโหลดรูปภาพ")}
+                            {t(
+                              "Click to upload photo",
+                              "คลิกเพื่ออัปโหลดรูปภาพ",
+                            )}
                           </span>
                           <span className="text-xs text-slate-400">
-                            {t("Supported file: image (Max 100 MB)", "อัปโหลดไฟล์ที่รองรับ 1 รายการ: image ขนาดสูงสุด 100 MB")}
+                            {t(
+                              "Supported file: image (Max 100 MB)",
+                              "อัปโหลดไฟล์ที่รองรับ 1 รายการ: image ขนาดสูงสุด 100 MB",
+                            )}
                           </span>
                           <input
                             type="file"
                             accept="image/*"
                             className="hidden"
-                            onChange={(e) => handleFileChange(e, setStudentCardBack)}
+                            onChange={(e) =>
+                              handleFileChange(e, setStudentCardBack)
+                            }
                           />
                         </label>
                       )}

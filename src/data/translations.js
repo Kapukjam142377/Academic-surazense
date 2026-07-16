@@ -278,17 +278,23 @@ export const translations = {
       awardsDesc:
         "Celebrating our team's scientific excellence, design innovations, and contributions to translational medicine.",
       award1Title: "Science Castle in Singapore",
-      award1Desc: "Outstanding Poster Award won by our student team at Science Castle Singapore.",
+      award1Desc:
+        "Outstanding Poster Award won by our student team at Science Castle Singapore.",
       award2Title: "Student Poster Session",
-      award2Desc: "Student researchers presenting scientific findings and biosensing prototypes.",
+      award2Desc:
+        "Student researchers presenting scientific findings and biosensing prototypes.",
       award3Title: "IMRC NextGen 2025",
-      award3Desc: "Final Round Presentation showcasing advanced diagnostic research.",
+      award3Desc:
+        "Final Round Presentation showcasing advanced diagnostic research.",
       award4Title: "APACPH 2025",
-      award4Desc: "Scientific discussions and presentation at the Asia-Pacific Academic Consortium for Public Health conference.",
-      award5Title: "The 3rd International Conference on Biodiversity and Biotechnology",
+      award4Desc:
+        "Scientific discussions and presentation at the Asia-Pacific Academic Consortium for Public Health conference.",
+      award5Title:
+        "The 3rd International Conference on Biodiversity and Biotechnology",
       award5Desc: "Gold Medal Award for Outstanding Poster Presentation.",
       award6Title: "NanoThailand 2025",
-      award6Desc: "The 9th International Nanotechnology Conference presentation on diagnostics.",
+      award6Desc:
+        "The 9th International Nanotechnology Conference presentation on diagnostics.",
 
       contestsTitle: "Contest Submissions",
       contestsDesc:
@@ -319,19 +325,24 @@ export const translations = {
         "Conducting live laboratory demonstrations on frequency sweeps and digital spline smoothing algorithms.",
       event3Date: "December 18, 2026",
       event4Title: "Scientific Conference 2026",
-      event4Desc: "Participating in the annual scientific conference to share our latest biosensor breakthroughs.",
+      event4Desc:
+        "Participating in the annual scientific conference to share our latest biosensor breakthroughs.",
       event4Date: "To be announced",
       event5Title: "Healthcare Industry Exhibition",
-      event5Desc: "Showcasing our diagnostic solutions to potential medical device distributors and industry partners.",
+      event5Desc:
+        "Showcasing our diagnostic solutions to potential medical device distributors and industry partners.",
       event5Date: "To be announced",
       event6Title: "University Research Workshop",
-      event6Desc: "Collaborating with local university departments in a hands-on QCM sensing workshop.",
+      event6Desc:
+        "Collaborating with local university departments in a hands-on QCM sensing workshop.",
       event6Date: "To be announced",
       event7Title: "Medical Innovation Summit",
-      event7Desc: "Engaging with healthcare leaders to discuss biosensor integration in point-of-care clinical diagnostics.",
+      event7Desc:
+        "Engaging with healthcare leaders to discuss biosensor integration in point-of-care clinical diagnostics.",
       event7Date: "To be announced",
       event8Title: "Biosensor Training Seminar",
-      event8Desc: "Conducting diagnostic tool training seminars for medical professionals and researchers.",
+      event8Desc:
+        "Conducting diagnostic tool training seminars for medical professionals and researchers.",
       event8Date: "To be announced",
 
       schoolsTitle: "Cooperating Schools & Partners",
@@ -353,19 +364,26 @@ export const translations = {
       school14: "Princess Chulabhorn Science High School Mukdahan",
       school15: "Princess Chulabhorn Science High School Satun",
       contest4Title: "Resonance Analyzer Desktop App",
-      contest4Desc: "A cross-platform React/Electron desktop application displaying real-time frequency sweeps and spline peak curves.",
+      contest4Desc:
+        "A cross-platform React/Electron desktop application displaying real-time frequency sweeps and spline peak curves.",
       contest5Title: "Biosensor Gold-Surface Functionalizer",
-      contest5Desc: "A chemical functionalization setup optimized for coating gold sensor substrates with capture antibodies.",
+      contest5Desc:
+        "A chemical functionalization setup optimized for coating gold sensor substrates with capture antibodies.",
       contest6Title: "Multi-Channel QCM Interfacing Board",
-      contest6Desc: "An ESP32-powered micro-controller shield supporting parallel frequency readings from multiple quartz crystals.",
+      contest6Desc:
+        "An ESP32-powered micro-controller shield supporting parallel frequency readings from multiple quartz crystals.",
       contest7Title: "Baseline Polynomial Subtractor",
-      contest7Desc: "A math-driven baseline correction module utilizing custom regression algorithms to filter thermal drift.",
+      contest7Desc:
+        "A math-driven baseline correction module utilizing custom regression algorithms to filter thermal drift.",
       contest8Title: "Handheld Point-of-Care Diagnostics Device",
-      contest8Desc: "A portable diagnostics unit combining QCM sweep logic with microfluidic test-strips for clinical biomarker screening.",
+      contest8Desc:
+        "A portable diagnostics unit combining QCM sweep logic with microfluidic test-strips for clinical biomarker screening.",
       contest9Title: "Clinical Reagent Micro-Dispenser",
-      contest9Desc: "An automated precision droplet dispenser developed to simplify antigen coating workflows in diagnostic assays.",
+      contest9Desc:
+        "An automated precision droplet dispenser developed to simplify antigen coating workflows in diagnostic assays.",
       pastResearchTitle: "Past Research Topics",
-      pastResearchDesc: "Throughout the years, Surasense Laboratory has supported scientific research and projects of students.",
+      pastResearchDesc:
+        "Throughout the years, Surasense Laboratory has supported scientific research and projects of students.",
     },
     contacts: {
       contactUs: "Contact Us",
@@ -928,17 +946,24 @@ export const translations = {
       awardsDesc:
         "เฉลิมฉลองความสำเร็จทางวิชาการ การออกแบบนวัตกรรม และการมีส่วนร่วมในวิทยาศาสตร์การแพทย์ปริวรรต",
       award1Title: "Science Castle ณ ประเทศสิงคโปร์",
-      award1Desc: "รางวัล Outstanding Poster Award โดยทีมผู้ช่วยวิจัยในงาน Science Castle Singapore",
+      award1Desc:
+        "รางวัล Outstanding Poster Award โดยทีมผู้ช่วยวิจัยในงาน Science Castle Singapore",
       award2Title: "งานนำเสนอโปสเตอร์ผลงานวิจัย",
-      award2Desc: "นักศึกษาร่วมนำเสนอผลงานวิจัยนวัตกรรมไบโอเซนเซอร์แก่กลุ่มนักวิชาการ",
+      award2Desc:
+        "นักศึกษาร่วมนำเสนอผลงานวิจัยนวัตกรรมไบโอเซนเซอร์แก่กลุ่มนักวิชาการ",
       award3Title: "IMRC NextGen 2025",
-      award3Desc: "การนำเสนอผลงานรอบชิงชนะเลิศในหัวข้อการพัฒนาเครื่องมือวินิจฉัยทางการแพทย์",
+      award3Desc:
+        "การนำเสนอผลงานรอบชิงชนะเลิศในหัวข้อการพัฒนาเครื่องมือวินิจฉัยทางการแพทย์",
       award4Title: "APACPH 2025",
-      award4Desc: "เข้าร่วมนำเสนอผลงานวิจัยในงานประชุมสัมมนาระดับนานาชาติ APACPH",
-      award5Title: "งานประชุมวิชาการระดับนานาชาติทางด้านความหลากหลายทางชีวภาพและเทคโนโลยีชีวภาพ ครั้งที่ 3",
-      award5Desc: "รางวัลเหรียญทอง (Gold Medal Award) สำหรับการนำเสนอโปสเตอร์ผลงานวิจัยดีเยี่ยม",
+      award4Desc:
+        "เข้าร่วมนำเสนอผลงานวิจัยในงานประชุมสัมมนาระดับนานาชาติ APACPH",
+      award5Title:
+        "งานประชุมวิชาการระดับนานาชาติทางด้านความหลากหลายทางชีวภาพและเทคโนโลยีชีวภาพ ครั้งที่ 3",
+      award5Desc:
+        "รางวัลเหรียญทอง (Gold Medal Award) สำหรับการนำเสนอโปสเตอร์ผลงานวิจัยดีเยี่ยม",
       award6Title: "NanoThailand 2025",
-      award6Desc: "งานนำเสนอผลงานวิชาการทางด้านนาโนเทคโนโลยีระดับนานาชาติในเวที NanoThailand",
+      award6Desc:
+        "งานนำเสนอผลงานวิชาการทางด้านนาโนเทคโนโลยีระดับนานาชาติในเวที NanoThailand",
 
       contestsTitle: "ผลงานส่งประกวดที่ผ่านมา",
       contestsDesc:
@@ -969,19 +994,24 @@ export const translations = {
         "จัดการสาธิตวิธีทำแล็บกวาดความถี่และคณิตศาสตร์กรองสัญญาณรบกวนโดยใช้โปรแกรมสมการสปลายน์",
       event3Date: "18 ธันวาคม 2569",
       event4Title: "การประชุมวิชาการทางวิทยาศาสตร์ 2569",
-      event4Desc: "เข้าร่วมการประชุมวิชาการประจำปีเพื่อแบ่งปันนวัตกรรมไบโอเซนเซอร์ล่าสุดของเรา",
+      event4Desc:
+        "เข้าร่วมการประชุมวิชาการประจำปีเพื่อแบ่งปันนวัตกรรมไบโอเซนเซอร์ล่าสุดของเรา",
       event4Date: "จะประกาศให้ทราบภายหลัง",
       event5Title: "นิทรรศการอุตสาหกรรมสุขภาพ",
-      event5Desc: "จัดแสดงโซลูชันการวินิจฉัยทางการแพทย์ให้แก่พันธมิตรและผู้จัดจำหน่ายอุปกรณ์ทางการแพทย์",
+      event5Desc:
+        "จัดแสดงโซลูชันการวินิจฉัยทางการแพทย์ให้แก่พันธมิตรและผู้จัดจำหน่ายอุปกรณ์ทางการแพทย์",
       event5Date: "จะประกาศให้ทราบภายหลัง",
       event6Title: "เวิร์กชอปงานวิจัยร่วมกับมหาวิทยาลัย",
-      event6Desc: "ร่วมมือกับภาควิชาต่าง ๆ ของมหาวิทยาลัยในการจัดเวิร์กชอปเทคโนโลยีเซนเซอร์ QCM",
+      event6Desc:
+        "ร่วมมือกับภาควิชาต่าง ๆ ของมหาวิทยาลัยในการจัดเวิร์กชอปเทคโนโลยีเซนเซอร์ QCM",
       event6Date: "จะประกาศให้ทราบภายหลัง",
       event7Title: "งานประชุมสุดยอดนวัตกรรมการแพทย์",
-      event7Desc: "พบปะกับผู้นำด้านการดูแลสุขภาพเพื่อหารือเกี่ยวกับระบบเซนเซอร์ตรวจจับโรคจุดดูแลผู้ป่วย",
+      event7Desc:
+        "พบปะกับผู้นำด้านการดูแลสุขภาพเพื่อหารือเกี่ยวกับระบบเซนเซอร์ตรวจจับโรคจุดดูแลผู้ป่วย",
       event7Date: "จะประกาศให้ทราบภายหลัง",
       event8Title: "สัมมนาฝึกอบรมเทคโนโลยีไบโอเซนเซอร์",
-      event8Desc: "จัดสัมมนาฝึกอบรมการใช้งานอุปกรณ์ตรวจวัดแก่ผู้เชี่ยวชาญทางการแพทย์และนักวิจัย",
+      event8Desc:
+        "จัดสัมมนาฝึกอบรมการใช้งานอุปกรณ์ตรวจวัดแก่ผู้เชี่ยวชาญทางการแพทย์และนักวิจัย",
       event8Date: "จะประกาศให้ทราบภายหลัง",
 
       schoolsTitle: "โรงเรียนและสถาบันเครือข่ายความร่วมมือ",
@@ -1003,19 +1033,26 @@ export const translations = {
       school14: "โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย มุกดาหาร",
       school15: "โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย สตูล",
       contest4Title: "แอปพลิเคชันเดสก์ท็อปสำหรับวิเคราะห์เรโซแนนซ์",
-      contest4Desc: "โปรแกรมคอมพิวเตอร์แบบข้ามแพลตฟอร์ม แสดงผลการกวาดความถี่และเส้นโค้งจุดยอดสปลายน์แบบเรียลไทม์",
+      contest4Desc:
+        "โปรแกรมคอมพิวเตอร์แบบข้ามแพลตฟอร์ม แสดงผลการกวาดความถี่และเส้นโค้งจุดยอดสปลายน์แบบเรียลไทม์",
       contest5Title: "เครื่องเคลือบพื้นผิวทองไบโอเซนเซอร์",
-      contest5Desc: "ชุดอุปกรณ์ทางเคมีสำหรับเตรียมพื้นผิวแผ่นทองเซนเซอร์เพื่อจับพันธะกับแอนติบอดีดักจับอย่างแม่นยำ",
+      contest5Desc:
+        "ชุดอุปกรณ์ทางเคมีสำหรับเตรียมพื้นผิวแผ่นทองเซนเซอร์เพื่อจับพันธะกับแอนติบอดีดักจับอย่างแม่นยำ",
       contest6Title: "บอร์ดเชื่อมต่อเซนเซอร์ QCM หลายช่องสัญญาณ",
-      contest6Desc: "แผงวงจรควบคุมด้วยชิป ESP32 รองรับการวัดและอ่านค่าความถี่จากแผ่นแก้วควอตซ์หลายแผ่นขนานกัน",
+      contest6Desc:
+        "แผงวงจรควบคุมด้วยชิป ESP32 รองรับการวัดและอ่านค่าความถี่จากแผ่นแก้วควอตซ์หลายแผ่นขนานกัน",
       contest7Title: "โมดูลหักล้างเส้นฐานโพลิโนเมียล",
-      contest7Desc: "ระบบซอฟต์แวร์ช่วยปรับปรุงกราฟและหักล้างค่าเบี่ยงเบนอุณหภูมิโดยใช้สมการถดถอยคณิตศาสตร์ขั้นสูง",
+      contest7Desc:
+        "ระบบซอฟต์แวร์ช่วยปรับปรุงกราฟและหักล้างค่าเบี่ยงเบนอุณหภูมิโดยใช้สมการถดถอยคณิตศาสตร์ขั้นสูง",
       contest8Title: "เครื่องวินิจฉัยโรคพกพา ณ จุดดูแลผู้ป่วย",
-      contest8Desc: "โมดูลตรวจคัดกรองโรคขนาดพกพาที่รวมส่วนวัดสัญญาณ QCM และตลับตรวจหาตัวบ่งชี้เข้าด้วยกัน",
+      contest8Desc:
+        "โมดูลตรวจคัดกรองโรคขนาดพกพาที่รวมส่วนวัดสัญญาณ QCM และตลับตรวจหาตัวบ่งชี้เข้าด้วยกัน",
       contest9Title: "เครื่องหยดสารเคมีวินิจฉัยอัตโนมัติ",
-      contest9Desc: "อุปกรณ์หยดสารชีวเคมีปริมาณน้อยมากโดยอัตโนมัติ ช่วยลดความยุ่งยากในขั้นตอนเตรียมผิวสัมผัสเซนเซอร์",
+      contest9Desc:
+        "อุปกรณ์หยดสารชีวเคมีปริมาณน้อยมากโดยอัตโนมัติ ช่วยลดความยุ่งยากในขั้นตอนเตรียมผิวสัมผัสเซนเซอร์",
       pastResearchTitle: "หัวข้อวิจัยที่ผ่านมา",
-      pastResearchDesc: "ตลอดระยะเวลาที่ผ่านมา ห้องปฏิบัติการ สุรเซนส์ (Surasense Laboratory) ได้สนับสนุนการทำวิจัยและโครงงานวิทยาศาสตร์ของนักเรียนและนักศึกษา",
+      pastResearchDesc:
+        "ตลอดระยะเวลาที่ผ่านมา ห้องปฏิบัติการ สุรเซนส์ (Surasense Laboratory) ได้สนับสนุนการทำวิจัยและโครงงานวิทยาศาสตร์ของนักเรียนและนักศึกษา",
     },
     contacts: {
       contactUs: "ติดต่อเรา",

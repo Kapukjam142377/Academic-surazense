@@ -507,9 +507,7 @@ export default function Layout({ children }) {
             }`}
           >
             <Calendar className="w-5 h-5 stroke-[2.2px]" />
-            <span className="uppercase tracking-wider">
-              {t("nav.event")}
-            </span>
+            <span className="uppercase tracking-wider">{t("nav.event")}</span>
           </Link>
 
           <Link

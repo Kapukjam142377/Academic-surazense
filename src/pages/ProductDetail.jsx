@@ -234,7 +234,9 @@ export default function ProductDetail() {
                 <div className="bg-amber-50 border border-amber-200/60 rounded-2xl p-5 text-[13px] md:text-sm text-amber-800 leading-relaxed flex items-start gap-3.5 shadow-sm">
                   <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
                   <span>
-                    Currently under development for research and training purposes only. Not intended for use as a medical device. Please visit respect training website for more details.
+                    Currently under development for research and training
+                    purposes only. Not intended for use as a medical device.
+                    Please visit respect training website for more details.
                   </span>
                 </div>
               </div>

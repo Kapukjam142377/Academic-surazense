@@ -460,7 +460,10 @@ export default function Products() {
                           <div className="mt-auto bg-amber-50 border border-amber-200/60 rounded-2xl p-4 text-[12px] text-amber-800 leading-relaxed flex items-start gap-2.5 shadow-sm">
                             <AlertCircle className="w-4.5 h-4.5 text-amber-600 shrink-0 mt-0.5" />
                             <span>
-                              Currently under development for research and training purposes only. Not intended for use as a medical device. Please visit respect training website for more details.
+                              Currently under development for research and
+                              training purposes only. Not intended for use as a
+                              medical device. Please visit respect training
+                              website for more details.
                             </span>
                           </div>
                         ) : (

@@ -23,7 +23,9 @@ export function useAnalysisResult({
   chartData,
   setToast,
 }) {
-  const API_URL = import.meta.env.PROD ? "" : (import.meta.env.VITE_API_URL || "http://34.87.78.35:8000");
+  const API_URL = import.meta.env.PROD
+    ? ""
+    : import.meta.env.VITE_API_URL || "http://34.87.78.35:8000";
 
   const [threshold, setThreshold] = useState(10); // Hz, default EGFR threshold
   const [targetName, setTargetName] = useState("EGFR");

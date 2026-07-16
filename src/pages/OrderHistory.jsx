@@ -14,7 +14,9 @@ import { useUser } from "../context/UserContext";
 import { useLanguage } from "../context/LanguageContext";
 import OrderCard, { getOrderTab } from "../components/orders/OrderCard";
 
-const API_URL = import.meta.env.PROD ? "" : (import.meta.env.VITE_API_URL || "http://34.87.78.35:8000");
+const API_URL = import.meta.env.PROD
+  ? ""
+  : import.meta.env.VITE_API_URL || "http://34.87.78.35:8000";
 
 // ── Tab definitions ──────────────────────────────────────────────────────────
 const TABS = [

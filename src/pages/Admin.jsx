@@ -101,7 +101,9 @@ export default function Admin() {
   const [registrationsList, setRegistrationsList] = useState([]);
   const [runsList, setRunsList] = useState([]);
 
-  const API_URL = import.meta.env.PROD ? "" : (import.meta.env.VITE_API_URL || "http://34.87.78.35:8000");
+  const API_URL = import.meta.env.PROD
+    ? ""
+    : import.meta.env.VITE_API_URL || "http://34.87.78.35:8000";
 
   // Check API health on mount
   useEffect(() => {
@@ -152,70 +154,87 @@ export default function Admin() {
       const analysesData = await analysesRes.json();
 
       // Map registrations/orders together
-      const mappedOrders = ordersData.map(o => ({
+      const mappedOrders = ordersData.map((o) => ({
         id: `order-${o.id}`,
         db_id: o.id,
-        db_type: 'order',
+        db_type: "order",
         user_id: o.user_id,
         user_email: o.customer_email,
         user_name: o.customer_name,
         customer_phone: o.customer_phone,
         item_type: "product",
         item_id: o.items && o.items.length > 0 ? o.items[0].product_id : "N/A",
-        item_title: o.items && o.items.length > 0 
-          ? o.items.map(item => `${item.product_name} (x${item.quantity})`).join(", ") 
-          : "Products",
+        item_title:
+          o.items && o.items.length > 0
+            ? o.items
+                .map((item) => `${item.product_name} (x${item.quantity})`)
+                .join(", ")
+            : "Products",
         amount: o.total_amount,
         currency: "THB",
         payment_method: o.payment_method,
         payment_status: o.payment_status,
         paid_at: o.payment_status === "paid" ? o.updated_at : null,
         created_at: o.created_at,
-        shipping_address: o.shipping_address
+        shipping_address: o.shipping_address,
       }));
 
-      const mappedRegs = regsData.map(r => {
-        const user = usersData.find(u => u.id === r.user_id);
+      const mappedRegs = regsData.map((r) => {
+        const user = usersData.find((u) => u.id === r.user_id);
         return {
           id: `reg-${r.id}`,
           db_id: r.id,
-          db_type: 'registration',
+          db_type: "registration",
           user_id: r.user_id,
           user_email: user ? user.email : `user-${r.user_id}`,
-          user_name: user ? `${user.first_name || ""} ${user.last_name || ""}`.trim() || user.username || `User ${r.user_id}` : `User ${r.user_id}`,
+          user_name: user
+            ? `${user.first_name || ""} ${user.last_name || ""}`.trim() ||
+              user.username ||
+              `User ${r.user_id}`
+            : `User ${r.user_id}`,
           customer_phone: user ? user.phone : "",
           item_type: "course",
           item_id: r.course_id,
-          item_title: {
-            "lab-qcm": "Lab 1: QCM Sensor Calibration",
-            "lab-biomarker": "Lab 2: Biomarker Binding Kinetics",
-            "lab-signal": "Lab 3: Quantitative Biosignal Analysis",
-            "course-intro": "Introduction to Biosensors & Surface Science",
-            "course-instrument": "QCM Instrumentation & Fluidics",
-            "course-data": "Biosignal Processing & Kinetics Data Analysis"
-          }[r.course_id] || r.course_id,
-          amount: {
-            "lab-qcm": 1500,
-            "lab-biomarker": 1500,
-            "lab-signal": 1500,
-            "course-intro": 990,
-            "course-instrument": 1200,
-            "course-data": 1490
-          }[r.course_id] || 0,
+          item_title:
+            {
+              "lab-qcm": "Lab 1: QCM Sensor Calibration",
+              "lab-biomarker": "Lab 2: Biomarker Binding Kinetics",
+              "lab-signal": "Lab 3: Quantitative Biosignal Analysis",
+              "course-intro": "Introduction to Biosensors & Surface Science",
+              "course-instrument": "QCM Instrumentation & Fluidics",
+              "course-data": "Biosignal Processing & Kinetics Data Analysis",
+            }[r.course_id] || r.course_id,
+          amount:
+            {
+              "lab-qcm": 1500,
+              "lab-biomarker": 1500,
+              "lab-signal": 1500,
+              "course-intro": 990,
+              "course-instrument": 1200,
+              "course-data": 1490,
+            }[r.course_id] || 0,
           currency: "THB",
           payment_method: "bank_transfer",
-          payment_status: r.status === "confirmed" ? "paid" : (r.status === "completed" ? "paid" : "pending"),
-          paid_at: r.status === "confirmed" || r.status === "completed" ? r.updated_at : null,
+          payment_status:
+            r.status === "confirmed"
+              ? "paid"
+              : r.status === "completed"
+                ? "paid"
+                : "pending",
+          paid_at:
+            r.status === "confirmed" || r.status === "completed"
+              ? r.updated_at
+              : null,
           created_at: r.registration_date,
-          shipping_address: null
+          shipping_address: null,
         };
       });
 
       setRegistrationsList([...mappedOrders, ...mappedRegs]);
 
       // Map runs
-      const mappedRuns = analysesData.map(r => {
-        const user = usersData.find(u => u.id === r.user_id);
+      const mappedRuns = analysesData.map((r) => {
+        const user = usersData.find((u) => u.id === r.user_id);
         return {
           id: r.id,
           user_id: r.user_id,
@@ -224,11 +243,10 @@ export default function Admin() {
           measurement_type: r.measurement_type,
           delta_f: r.delta_f,
           created_at: r.created_at,
-          file1_name: r.file1_name
+          file1_name: r.file1_name,
         };
       });
       setRunsList(mappedRuns);
-
     } catch (err) {
       console.error("Error fetching admin data:", err);
     }
@@ -622,9 +640,10 @@ export default function Admin() {
 
     if (isApiOnline) {
       try {
-        const url = item.db_type === "order"
-          ? `${API_URL}/api/orders/${item.db_id}`
-          : `${API_URL}/api/registrations/${item.db_id}`;
+        const url =
+          item.db_type === "order"
+            ? `${API_URL}/api/orders/${item.db_id}`
+            : `${API_URL}/api/registrations/${item.db_id}`;
         const res = await fetch(url, {
           method: "DELETE",
         });
@@ -672,11 +691,14 @@ export default function Admin() {
             refunded: "cancelled",
           };
           const backendStatus = statusMap[newStatus] || newStatus;
-          res = await fetch(`${API_URL}/api/registrations/${item.db_id}/status`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ status: backendStatus }),
-          });
+          res = await fetch(
+            `${API_URL}/api/registrations/${item.db_id}/status`,
+            {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ status: backendStatus }),
+            },
+          );
         }
         if (!res.ok) throw new Error("Failed to update status");
         fetchDataFromApi();
@@ -824,7 +846,10 @@ export default function Admin() {
 
     // User registrations
     usersList.forEach((u) => {
-      const displayName = [u.first_name, u.last_name].filter(Boolean).join(" ").trim() || u.username || u.email;
+      const displayName =
+        [u.first_name, u.last_name].filter(Boolean).join(" ").trim() ||
+        u.username ||
+        u.email;
       list.push({
         id: `user-${u.id}-${u.created_at}`,
         type: "user",

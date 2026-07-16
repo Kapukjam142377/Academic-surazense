@@ -479,7 +479,8 @@ const EVENTS = [
 const PAST_RESEARCH = [
   {
     id: 1,
-    title: "A study of probes on the surface of QCM for possible diagnostic test reuse",
+    title:
+      "A study of probes on the surface of QCM for possible diagnostic test reuse",
   },
   {
     id: 2,
@@ -487,7 +488,8 @@ const PAST_RESEARCH = [
   },
   {
     id: 3,
-    title: "COMSOL Simulation Study of Multi-Channel QCM for Multi-DNA Binding in Biosensing Applications",
+    title:
+      "COMSOL Simulation Study of Multi-Channel QCM for Multi-DNA Binding in Biosensing Applications",
   },
   {
     id: 4,
@@ -495,19 +497,23 @@ const PAST_RESEARCH = [
   },
   {
     id: 5,
-    title: "Label-Free Detection of HbA1c Using a Graphene Oxide-Modified Piezoelectric Acoustic Biosensor",
+    title:
+      "Label-Free Detection of HbA1c Using a Graphene Oxide-Modified Piezoelectric Acoustic Biosensor",
   },
   {
     id: 6,
-    title: "A Preliminary Study of EGFR Testing in Patient Samples Using a Surface Acoustic Wave (SAW) Biosensor for Lung Cancer Mutation Detection",
+    title:
+      "A Preliminary Study of EGFR Testing in Patient Samples Using a Surface Acoustic Wave (SAW) Biosensor for Lung Cancer Mutation Detection",
   },
   {
     id: 7,
-    title: "Mechano-Responsive Gold Nanospike Nano-Architectures for Antibacterial Surface Applications: A Preliminary Study",
+    title:
+      "Mechano-Responsive Gold Nanospike Nano-Architectures for Antibacterial Surface Applications: A Preliminary Study",
   },
   {
     id: 8,
-    title: "A Potential Study of a Quartz Crystal Microbalance Biosensor for Rapid Detection of Human Papillomavirus-16",
+    title:
+      "A Potential Study of a Quartz Crystal Microbalance Biosensor for Rapid Detection of Human Papillomavirus-16",
   },
   {
     id: 9,
@@ -934,7 +940,9 @@ export default function AcademicTraining() {
   };
   const [flyingItem, setFlyingItem] = useState(null);
 
-  const API_URL = import.meta.env.PROD ? "" : (import.meta.env.VITE_API_URL || "http://34.87.78.35:8000");
+  const API_URL = import.meta.env.PROD
+    ? ""
+    : import.meta.env.VITE_API_URL || "http://34.87.78.35:8000";
 
   useEffect(() => {
     if (user) {
@@ -1624,8 +1632,6 @@ export default function AcademicTraining() {
           </AnimatePresence>
         </motion.div>
       </section>
-
-
 
       {/* Contest Submissions & Awards Section */}
       <section className="max-w-7xl mx-auto px-6 mb-28 relative z-10 scroll-mt-24">
