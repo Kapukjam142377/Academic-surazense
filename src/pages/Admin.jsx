@@ -128,6 +128,118 @@ export default function Admin() {
     checkApiHealth();
   }, [API_URL]);
 
+  const fetchDataFromApi = async () => {
+    try {
+      // 1. Fetch users
+      const usersRes = await fetch(`${API_URL}/api/users`);
+      if (!usersRes.ok) throw new Error("Failed to fetch users");
+      const usersData = await usersRes.json();
+      setUsersList(usersData);
+
+      // 2. Fetch orders
+      const ordersRes = await fetch(`${API_URL}/api/orders`);
+      if (!ordersRes.ok) throw new Error("Failed to fetch orders");
+      const ordersData = await ordersRes.json();
+
+      // 3. Fetch registrations
+      const regsRes = await fetch(`${API_URL}/api/registrations`);
+      if (!regsRes.ok) throw new Error("Failed to fetch registrations");
+      const regsData = await regsRes.json();
+
+      // 4. Fetch QCM analyses
+      const analysesRes = await fetch(`${API_URL}/api/analyses`);
+      if (!analysesRes.ok) throw new Error("Failed to fetch analyses");
+      const analysesData = await analysesRes.json();
+
+      // Map registrations/orders together
+      const mappedOrders = ordersData.map(o => ({
+        id: `order-${o.id}`,
+        db_id: o.id,
+        db_type: 'order',
+        user_id: o.user_id,
+        user_email: o.customer_email,
+        user_name: o.customer_name,
+        customer_phone: o.customer_phone,
+        item_type: "product",
+        item_id: o.items && o.items.length > 0 ? o.items[0].product_id : "N/A",
+        item_title: o.items && o.items.length > 0 
+          ? o.items.map(item => `${item.product_name} (x${item.quantity})`).join(", ") 
+          : "Products",
+        amount: o.total_amount,
+        currency: "THB",
+        payment_method: o.payment_method,
+        payment_status: o.payment_status,
+        paid_at: o.payment_status === "paid" ? o.updated_at : null,
+        created_at: o.created_at,
+        shipping_address: o.shipping_address
+      }));
+
+      const mappedRegs = regsData.map(r => {
+        const user = usersData.find(u => u.id === r.user_id);
+        return {
+          id: `reg-${r.id}`,
+          db_id: r.id,
+          db_type: 'registration',
+          user_id: r.user_id,
+          user_email: user ? user.email : `user-${r.user_id}`,
+          user_name: user ? `${user.first_name || ""} ${user.last_name || ""}`.trim() || user.username || `User ${r.user_id}` : `User ${r.user_id}`,
+          customer_phone: user ? user.phone : "",
+          item_type: "course",
+          item_id: r.course_id,
+          item_title: {
+            "lab-qcm": "Lab 1: QCM Sensor Calibration",
+            "lab-biomarker": "Lab 2: Biomarker Binding Kinetics",
+            "lab-signal": "Lab 3: Quantitative Biosignal Analysis",
+            "course-intro": "Introduction to Biosensors & Surface Science",
+            "course-instrument": "QCM Instrumentation & Fluidics",
+            "course-data": "Biosignal Processing & Kinetics Data Analysis"
+          }[r.course_id] || r.course_id,
+          amount: {
+            "lab-qcm": 1500,
+            "lab-biomarker": 1500,
+            "lab-signal": 1500,
+            "course-intro": 990,
+            "course-instrument": 1200,
+            "course-data": 1490
+          }[r.course_id] || 0,
+          currency: "THB",
+          payment_method: "bank_transfer",
+          payment_status: r.status === "confirmed" ? "paid" : (r.status === "completed" ? "paid" : "pending"),
+          paid_at: r.status === "confirmed" || r.status === "completed" ? r.updated_at : null,
+          created_at: r.registration_date,
+          shipping_address: null
+        };
+      });
+
+      setRegistrationsList([...mappedOrders, ...mappedRegs]);
+
+      // Map runs
+      const mappedRuns = analysesData.map(r => {
+        const user = usersData.find(u => u.id === r.user_id);
+        return {
+          id: r.id,
+          user_id: r.user_id,
+          user_email: user ? user.email : `user-${r.user_id}`,
+          title: r.title,
+          measurement_type: r.measurement_type,
+          delta_f: r.delta_f,
+          created_at: r.created_at,
+          file1_name: r.file1_name
+        };
+      });
+      setRunsList(mappedRuns);
+
+    } catch (err) {
+      console.error("Error fetching admin data:", err);
+    }
+  };
+
+  useEffect(() => {
+    if (isApiOnline) {
+      fetchDataFromApi();
+    }
+  }, [isApiOnline]);
+
   // Load and pre-populate mock data in LocalStorage if not exists
   useEffect(() => {
     // 1. Load/Mock Users
@@ -434,19 +546,33 @@ export default function Admin() {
   };
 
   // User list actions
-  const handleChangeUserRole = (userId, newRole) => {
-    const updated = usersList.map((u) =>
-      u.id === userId
-        ? {
-            ...u,
-            role: newRole,
-            qcm_balance: newRole === "customer" ? 10 : undefined,
-            qcm_quota: newRole === "customer" ? 10 : undefined,
-          }
-        : u,
-    );
-    setUsersList(updated);
-    localStorage.setItem("surazense_mock_users", JSON.stringify(updated));
+  const handleChangeUserRole = async (userId, newRole) => {
+    if (isApiOnline) {
+      try {
+        const res = await fetch(`${API_URL}/api/users/${userId}/role`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ role: newRole }),
+        });
+        if (!res.ok) throw new Error("Failed to update user role");
+        fetchDataFromApi();
+      } catch (err) {
+        alert("Failed to update user role in database: " + err.message);
+      }
+    } else {
+      const updated = usersList.map((u) =>
+        u.id === userId
+          ? {
+              ...u,
+              role: newRole,
+              qcm_balance: newRole === "customer" ? 10 : undefined,
+              qcm_quota: newRole === "customer" ? 10 : undefined,
+            }
+          : u,
+      );
+      setUsersList(updated);
+      localStorage.setItem("surazense_mock_users", JSON.stringify(updated));
+    }
   };
 
   const handleUpdateQcmBalance = (userId, newBalance) => {
@@ -457,56 +583,142 @@ export default function Admin() {
     localStorage.setItem("surazense_mock_users", JSON.stringify(updated));
   };
 
-  const handleDeleteUser = (userId) => {
+  const handleDeleteUser = async (userId) => {
     const check = window.confirm(
       language === "th"
         ? "คุณแน่ใจหรือไม่ที่จะลบผู้ใช้นี้?"
         : "Are you sure you want to delete this user?",
     );
     if (!check) return;
-    const updated = usersList.filter((u) => u.id !== userId);
-    setUsersList(updated);
-    localStorage.setItem("surazense_mock_users", JSON.stringify(updated));
+
+    if (isApiOnline) {
+      try {
+        const res = await fetch(`${API_URL}/api/users/${userId}`, {
+          method: "DELETE",
+        });
+        if (!res.ok) throw new Error("Failed to delete user");
+        fetchDataFromApi();
+      } catch (err) {
+        alert("Failed to delete user from database: " + err.message);
+      }
+    } else {
+      const updated = usersList.filter((u) => u.id !== userId);
+      setUsersList(updated);
+      localStorage.setItem("surazense_mock_users", JSON.stringify(updated));
+    }
   };
 
   // Order / Payment actions
-  const handleDeleteEnrollment = (orderId) => {
+  const handleDeleteEnrollment = async (orderId) => {
     const check = window.confirm(
       language === "th"
         ? "คุณแน่ใจหรือไม่ที่จะลบคำสั่งซื้อนี้?"
         : "Are you sure you want to delete this order?",
     );
     if (!check) return;
-    const updated = registrationsList.filter((r) => r.id !== orderId);
-    setRegistrationsList(updated);
-    localStorage.setItem(
-      "surazense_mock_registrations",
-      JSON.stringify(updated),
-    );
+
+    const item = registrationsList.find((r) => r.id === orderId);
+    if (!item) return;
+
+    if (isApiOnline) {
+      try {
+        const url = item.db_type === "order"
+          ? `${API_URL}/api/orders/${item.db_id}`
+          : `${API_URL}/api/registrations/${item.db_id}`;
+        const res = await fetch(url, {
+          method: "DELETE",
+        });
+        if (!res.ok) throw new Error("Failed to delete record");
+        fetchDataFromApi();
+      } catch (err) {
+        alert("Failed to delete record from database: " + err.message);
+      }
+    } else {
+      const updated = registrationsList.filter((r) => r.id !== orderId);
+      setRegistrationsList(updated);
+      localStorage.setItem(
+        "surazense_mock_registrations",
+        JSON.stringify(updated),
+      );
+    }
   };
 
-  const handleUpdateOrderStatus = (orderId, newStatus) => {
-    const updated = registrationsList.map((r) =>
-      r.id === orderId ? { ...r, payment_status: newStatus } : r,
-    );
-    setRegistrationsList(updated);
-    localStorage.setItem(
-      "surazense_mock_registrations",
-      JSON.stringify(updated),
-    );
+  const handleUpdateOrderStatus = async (orderId, newStatus) => {
+    const item = registrationsList.find((r) => r.id === orderId);
+    if (!item) return;
+
+    if (isApiOnline) {
+      try {
+        let res;
+        if (item.db_type === "order") {
+          const payload = {};
+          if (["paid", "refunded", "pending"].includes(newStatus)) {
+            payload.payment_status = newStatus;
+          } else {
+            payload.order_status = newStatus;
+          }
+          res = await fetch(`${API_URL}/api/orders/${item.db_id}/status`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+        } else {
+          const statusMap = {
+            paid: "confirmed",
+            pending: "pending",
+            confirmed: "confirmed",
+            completed: "completed",
+            cancelled: "cancelled",
+            refunded: "cancelled",
+          };
+          const backendStatus = statusMap[newStatus] || newStatus;
+          res = await fetch(`${API_URL}/api/registrations/${item.db_id}/status`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: backendStatus }),
+          });
+        }
+        if (!res.ok) throw new Error("Failed to update status");
+        fetchDataFromApi();
+      } catch (err) {
+        alert("Failed to update status in database: " + err.message);
+      }
+    } else {
+      const updated = registrationsList.map((r) =>
+        r.id === orderId ? { ...r, payment_status: newStatus } : r,
+      );
+      setRegistrationsList(updated);
+      localStorage.setItem(
+        "surazense_mock_registrations",
+        JSON.stringify(updated),
+      );
+    }
   };
 
   // QCM run actions
-  const handleDeleteRun = (runId) => {
+  const handleDeleteRun = async (runId) => {
     const check = window.confirm(
       language === "th"
         ? "คุณแน่ใจหรือไม่ที่จะลบข้อมูลสแกนนี้?"
         : "Are you sure you want to delete this scan record?",
     );
     if (!check) return;
-    const updated = runsList.filter((r) => r.id !== runId);
-    setRunsList(updated);
-    localStorage.setItem("surazense_mock_runs", JSON.stringify(updated));
+
+    if (isApiOnline) {
+      try {
+        const res = await fetch(`${API_URL}/api/analyses/${runId}`, {
+          method: "DELETE",
+        });
+        if (!res.ok) throw new Error("Failed to delete scan record");
+        fetchDataFromApi();
+      } catch (err) {
+        alert("Failed to delete scan record from database: " + err.message);
+      }
+    } else {
+      const updated = runsList.filter((r) => r.id !== runId);
+      setRunsList(updated);
+      localStorage.setItem("surazense_mock_runs", JSON.stringify(updated));
+    }
   };
 
   // Change Admin passcode
@@ -612,14 +824,15 @@ export default function Admin() {
 
     // User registrations
     usersList.forEach((u) => {
+      const displayName = [u.first_name, u.last_name].filter(Boolean).join(" ").trim() || u.username || u.email;
       list.push({
         id: `user-${u.id}-${u.created_at}`,
         type: "user",
         timestamp: new Date(u.created_at),
-        title_th: `บัญชีผู้ใช้งานใหม่: ${u.first_name} ${u.last_name}`,
-        title_en: `New user registration: ${u.first_name} ${u.last_name}`,
-        description_th: `ผู้ใช้ @${u.username} (${u.email}) เข้าร่วมระบบในฐานะ ${u.role}`,
-        description_en: `User @${u.username} (${u.email}) joined as a ${u.role}`,
+        title_th: `บัญชีผู้ใช้งานใหม่: ${displayName}`,
+        title_en: `New user registration: ${displayName}`,
+        description_th: `ผู้ใช้ @${u.username || "User"} (${u.email}) เข้าร่วมระบบในฐานะ ${u.role}`,
+        description_en: `User @${u.username || "User"} (${u.email}) joined as a ${u.role}`,
         color: "bg-sky-50 text-accent",
         icon: Users,
       });

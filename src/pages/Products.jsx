@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ShoppingCart,
@@ -10,8 +10,9 @@ import {
   FlaskConical,
   GraduationCap,
   Wrench,
+  AlertCircle,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { MOCK_PRODUCTS } from "../data/mockProducts";
 import { useLanguage } from "../context/LanguageContext";
@@ -26,11 +27,24 @@ const CATEGORIES = [
 ];
 
 export default function Products() {
+  const location = useLocation();
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [flyingItem, setFlyingItem] = useState(null);
   const { addToCart } = useCart();
   const { t, language } = useLanguage();
+
+  useEffect(() => {
+    if (location.state?.category) {
+      setActiveCategory(location.state.category);
+      setTimeout(() => {
+        const element = document.getElementById("product-catalog-section");
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 150);
+    }
+  }, [location.state]);
 
   const categoryGridItems = [
     {
@@ -442,23 +456,32 @@ export default function Products() {
                         </p>
 
                         {/* Price & Action */}
-                        <div className="flex items-center justify-between mt-auto">
-                          <div className="flex flex-col">
-                            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                              {t("products.priceLabel")}
-                            </span>
-                            <span className="text-2xl font-black text-slate-900">
-                              ${product.price.toFixed(2)}
+                        {product.id === 1 ? (
+                          <div className="mt-auto bg-amber-50 border border-amber-200/60 rounded-2xl p-4 text-[12px] text-amber-800 leading-relaxed flex items-start gap-2.5 shadow-sm">
+                            <AlertCircle className="w-4.5 h-4.5 text-amber-600 shrink-0 mt-0.5" />
+                            <span>
+                              Currently under development for research and training purposes only. Not intended for use as a medical device. Please visit respect training website for more details.
                             </span>
                           </div>
-                          <button
-                            onClick={(e) => handleAddToCart(product, e)}
-                            className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center hover:bg-gradient-to-r hover:from-blue-600 hover:to-sky-500 hover:border-transparent hover:text-white hover:shadow-lg hover:shadow-blue-500/30 transition-all group/btn"
-                            title={t("products.addToCart")}
-                          >
-                            <ShoppingCart className="w-6 h-6 stroke-[2px] group-hover/btn:scale-110 group-hover/btn:-rotate-6 transition-all duration-300" />
-                          </button>
-                        </div>
+                        ) : (
+                          <div className="flex items-center justify-between mt-auto">
+                            <div className="flex flex-col">
+                              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                                {t("products.priceLabel")}
+                              </span>
+                              <span className="text-2xl font-black text-slate-900">
+                                ${product.price.toFixed(2)}
+                              </span>
+                            </div>
+                            <button
+                              onClick={(e) => handleAddToCart(product, e)}
+                              className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center hover:bg-gradient-to-r hover:from-blue-600 hover:to-sky-500 hover:border-transparent hover:text-white hover:shadow-lg hover:shadow-blue-500/30 transition-all group/btn"
+                              title={t("products.addToCart")}
+                            >
+                              <ShoppingCart className="w-6 h-6 stroke-[2px] group-hover/btn:scale-110 group-hover/btn:-rotate-6 transition-all duration-300" />
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </motion.div>
                   ))}

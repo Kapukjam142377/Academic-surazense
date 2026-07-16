@@ -18,8 +18,11 @@ import {
   Handshake,
   X,
   ZoomIn,
+  Layers,
+  FlaskConical,
+  Wrench,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 import { useUser } from "../context/UserContext";
 import { useCart } from "../context/CartContext";
@@ -883,9 +886,52 @@ export default function AcademicTraining() {
   const { t, language } = useLanguage();
   const { user } = useUser();
   const { addToCart } = useCart();
+  const navigate = useNavigate();
   const [selectedBackground, setSelectedBackground] = useState("biology");
   const [registrations, setRegistrations] = useState([]);
   const [toast, setToast] = useState({ message: "", type: null });
+
+  const categoryGridItems = [
+    {
+      id: "Biosensors",
+      icon: <Cpu className="w-8 h-8 text-blue-600" />,
+      bgIcon: "bg-blue-50 border border-blue-100",
+      titleKey: "products.categoryGrids.biosensorsTitle",
+      descKey: "products.categoryGrids.biosensorsDesc",
+    },
+    {
+      id: "Modules",
+      icon: <Layers className="w-8 h-8 text-sky-600" />,
+      bgIcon: "bg-sky-50 border border-sky-100",
+      titleKey: "products.categoryGrids.modulesTitle",
+      descKey: "products.categoryGrids.modulesDesc",
+    },
+    {
+      id: "Chemicals",
+      icon: <FlaskConical className="w-8 h-8 text-emerald-600" />,
+      bgIcon: "bg-emerald-50 border border-emerald-100",
+      titleKey: "products.categoryGrids.chemicalsTitle",
+      descKey: "products.categoryGrids.chemicalsDesc",
+    },
+    {
+      id: "Courses",
+      icon: <GraduationCap className="w-8 h-8 text-purple-600" />,
+      bgIcon: "bg-purple-50 border border-purple-100",
+      titleKey: "products.categoryGrids.coursesTitle",
+      descKey: "products.categoryGrids.coursesDesc",
+    },
+    {
+      id: "Accessories",
+      icon: <Wrench className="w-8 h-8 text-slate-600" />,
+      bgIcon: "bg-slate-50 border border-slate-100",
+      titleKey: "products.categoryGrids.accessoriesTitle",
+      descKey: "products.categoryGrids.accessoriesDesc",
+    },
+  ];
+
+  const handleCategoryClick = (categoryId) => {
+    navigate("/products", { state: { category: categoryId } });
+  };
   const [flyingItem, setFlyingItem] = useState(null);
 
   const API_URL = import.meta.env.PROD ? "" : (import.meta.env.VITE_API_URL || "http://34.87.78.35:8000");
@@ -1220,6 +1266,58 @@ export default function AcademicTraining() {
             {t("academic.viewCourses")}
           </a>
         </motion.div>
+      </div>
+
+      {/* Category Grid Section (Push boundaries) */}
+      <div className="max-w-7xl mx-auto px-6 mb-24 relative z-10">
+        <div className="text-center max-w-3xl mx-auto mb-10">
+          <h2 className="text-2xl md:text-3xl font-black text-slate-800 tracking-tight leading-snug">
+            {t("products.categoryGrids.title")}
+          </h2>
+          <div className="w-20 h-1 bg-gradient-to-r from-blue-600 to-sky-500 mx-auto mt-4 rounded-full"></div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+          {categoryGridItems.map((item) => (
+            <motion.div
+              key={item.id}
+              whileHover={{
+                y: -6,
+                boxShadow:
+                  "0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+              }}
+              onClick={() => handleCategoryClick(item.id)}
+              className="bg-white rounded-[2rem] p-8 border border-slate-100 flex flex-col justify-between items-center text-center cursor-pointer transition-all duration-300 group hover:border-blue-200/50 hover:shadow-xl hover:shadow-blue-950/5 relative overflow-hidden"
+            >
+              {/* Subtle top indicator bar */}
+              <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-blue-600 to-sky-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+              <div className="flex flex-col items-center">
+                {/* Circle Icon Box */}
+                <div
+                  className={`w-16 h-16 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 ${item.bgIcon}`}
+                >
+                  {item.icon}
+                </div>
+
+                <h3 className="text-lg font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
+                  {t(item.titleKey)}
+                </h3>
+
+                <p className="text-xs text-slate-400 font-medium leading-relaxed max-w-[200px]">
+                  {t(item.descKey)}
+                </p>
+              </div>
+
+              <button className="mt-6 text-xs font-bold text-blue-600 bg-transparent border-none cursor-pointer flex items-center gap-1 group-hover:text-blue-700 select-none uppercase tracking-widest">
+                {t("products.categoryGrids.exploreMore")}
+                <span className="group-hover:translate-x-0.5 transition-transform">
+                  →
+                </span>
+              </button>
+            </motion.div>
+          ))}
+        </div>
       </div>
 
       {/* Laboratories Section */}

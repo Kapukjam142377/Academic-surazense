@@ -540,35 +540,18 @@ function Dashboard() {
                 <span className="text-xs uppercase font-bold text-slate-400 block mb-0.5">
                   Target Tumor
                 </span>
-                <select
-                  className="w-full bg-slate-50 border border-slate-100 rounded-md py-1 px-2.5 text-sm focus:outline-none focus:border-sky-500 font-semibold text-slate-700"
-                  value={analysis.targetName}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    analysis.setTargetName(val);
-                    if (val === "EGFR") analysis.setThreshold(10);
-                  }}
-                >
-                  <option value="EGFR">EGFR</option>
-                  <option value="Custom">Custom</option>
-                </select>
+                <div className="w-full bg-slate-50 border border-slate-100 rounded-md py-1 px-2.5 text-sm font-semibold text-slate-500 select-none cursor-default">
+                  EGFR
+                </div>
               </div>
 
               <div>
                 <span className="text-xs uppercase font-bold text-slate-400 block mb-0.5">
                   Threshold (Hz)
                 </span>
-                <input
-                  type="number"
-                  className="w-full bg-slate-50 border border-slate-100 rounded-md py-1 px-2 text-sm focus:outline-none focus:border-sky-500 font-semibold text-slate-700"
-                  value={analysis.threshold}
-                  onChange={(e) =>
-                    analysis.setThreshold(
-                      Math.max(1, parseInt(e.target.value) || 1),
-                    )
-                  }
-                  disabled={analysis.targetName === "EGFR"}
-                />
+                <div className="w-full bg-slate-50 border border-slate-100 rounded-md py-1 px-2 text-sm font-semibold text-slate-500 select-none cursor-default">
+                  10
+                </div>
               </div>
             </div>
 

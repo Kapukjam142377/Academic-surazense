@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ShoppingCart } from "lucide-react";
+import { ArrowLeft, ShoppingCart, AlertCircle } from "lucide-react";
 import { MOCK_PRODUCTS } from "../data/mockProducts";
 import { useLanguage } from "../context/LanguageContext";
 import { useAddToCart } from "../hooks/useAddToCart";
@@ -229,23 +229,34 @@ export default function ProductDetail() {
             </AnimatePresence>
 
             {/* Price and Add to Cart */}
-            <div className="mt-16 pt-8 border-t border-slate-100 flex items-end justify-between">
-              <div>
-                <span className="block text-sm text-slate-400 font-bold uppercase tracking-wider mb-1">
-                  {t("products.priceLabel")}
-                </span>
-                <span className="text-4xl font-black text-slate-900">
-                  ${product.price.toFixed(2)}
-                </span>
+            {product.id === 1 ? (
+              <div className="mt-16 pt-8 border-t border-slate-100">
+                <div className="bg-amber-50 border border-amber-200/60 rounded-2xl p-5 text-[13px] md:text-sm text-amber-800 leading-relaxed flex items-start gap-3.5 shadow-sm">
+                  <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                  <span>
+                    Currently under development for research and training purposes only. Not intended for use as a medical device. Please visit respect training website for more details.
+                  </span>
+                </div>
               </div>
-              <button
-                onClick={handleAddToCart}
-                className="px-8 py-4 bg-gradient-to-r from-blue-600 to-sky-500 text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-1 transition-all flex items-center gap-3 cursor-pointer border-none outline-none"
-              >
-                <ShoppingCart className="w-5 h-5" />
-                {t("products.addToCart")}
-              </button>
-            </div>
+            ) : (
+              <div className="mt-16 pt-8 border-t border-slate-100 flex items-end justify-between">
+                <div>
+                  <span className="block text-sm text-slate-400 font-bold uppercase tracking-wider mb-1">
+                    {t("products.priceLabel")}
+                  </span>
+                  <span className="text-4xl font-black text-slate-900">
+                    ${product.price.toFixed(2)}
+                  </span>
+                </div>
+                <button
+                  onClick={handleAddToCart}
+                  className="px-8 py-4 bg-gradient-to-r from-blue-600 to-sky-500 text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-1 transition-all flex items-center gap-3 cursor-pointer border-none outline-none"
+                >
+                  <ShoppingCart className="w-5 h-5" />
+                  {t("products.addToCart")}
+                </button>
+              </div>
+            )}
           </motion.div>
         </div>
       </div>
