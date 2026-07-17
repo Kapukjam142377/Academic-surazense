@@ -110,13 +110,13 @@ function SystemControlsCard({
                 className={`btn text-sm font-bold !py-1.5 ${measurementView === "A" ? "btn-primary" : "bg-slate-50"}`}
                 onClick={() => setMeasurementView("A")}
               >
-                View A (Freq)
+                View A (Spectrum)
               </button>
               <button
                 className={`btn text-xs font-bold !py-1.5 ${measurementView === "B" ? "btn-primary" : "bg-slate-50"}`}
                 onClick={() => setMeasurementView("B")}
               >
-                View B (Spectrum)
+                View B (Freq)
               </button>
             </div>
 

@@ -76,6 +76,44 @@ export default function Profile() {
   );
   const [education, setEducation] = useState(user?.education || "");
   const [activeTab, setActiveTab] = useState("general"); // "general" or "competition"
+  const [hasCompetitionProfile, setHasCompetitionProfile] = useState(false);
+
+  // Fetch competition profile on mount
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchCompetitionProfile = async () => {
+      try {
+        const API_URL = import.meta.env.PROD
+          ? ""
+          : import.meta.env.VITE_API_URL || "http://34.87.78.35:8000";
+
+        const response = await fetch(`${API_URL}/api/users/${user.id}/competition-profile`);
+        if (response.ok) {
+          const data = await response.json();
+          setHasCompetitionProfile(true);
+          setNickname(data.nickname || "");
+          setTitleName(data.title_name || "");
+          setCustomTitleName(data.custom_title_name || "");
+          setMiddleName(data.middle_name || "");
+          setIdNumber(data.id_number || "");
+          setMobileNumber(data.mobile_number || "");
+          setEducation(data.education || "");
+          setInstitutionName(data.institution_name || "");
+          setCurrentAddress(data.current_address || "");
+          setInstitutionAddress(data.institution_address || "");
+          setStudentCardFront(data.student_card_front || "");
+          setStudentCardBack(data.student_card_back || "");
+        } else if (response.status === 404) {
+          setHasCompetitionProfile(false);
+        }
+      } catch (error) {
+        console.error("Error fetching competition profile:", error);
+      }
+    };
+
+    fetchCompetitionProfile();
+  }, [user]);
 
   // Password States
   const [currentPassword, setCurrentPassword] = useState("");
@@ -97,6 +135,7 @@ export default function Profile() {
       return () => clearTimeout(timer);
     }
   }, [toast.message]);
+
 
   if (!user) return null;
 
@@ -135,6 +174,7 @@ export default function Profile() {
     e.preventDefault();
     setIsSubmitting(true);
 
+    // 1. Update general user profile
     const profileData = {
       first_name: firstName || null,
       last_name: lastName || null,
@@ -143,37 +183,100 @@ export default function Profile() {
       gender: gender || null,
       dob: dob || null,
       address: address || null,
-      nickname: nickname || null,
-      titleName: titleName || null,
-      customTitleName: customTitleName || null,
-      middleName: middleName || null,
-      idNumber: idNumber || null,
-      currentAddress: currentAddress || null,
-      studentCardFront: studentCardFront || null,
-      studentCardBack: studentCardBack || null,
-      mobileNumber: mobileNumber || null,
-      institutionName: institutionName || null,
-      institutionAddress: institutionAddress || null,
-      education: education || null,
     };
 
-    const res = await updateProfile(user.id, profileData);
+    const userRes = await updateProfile(user.id, profileData);
+
+    // 2. Update/Create competition profile in database
+    const competitionData = {
+      title_name: titleName || null,
+      custom_title_name: customTitleName || null,
+      nickname: nickname || null,
+      middle_name: middleName || null,
+      id_number: idNumber || null,
+      mobile_number: mobileNumber || null,
+      education: education || null,
+      institution_name: institutionName || null,
+      current_address: currentAddress || null,
+      institution_address: institutionAddress || null,
+      student_card_front: studentCardFront || null,
+      student_card_back: studentCardBack || null,
+    };
+
+    const API_URL = import.meta.env.PROD
+      ? ""
+      : import.meta.env.VITE_API_URL || "http://34.87.78.35:8000";
+
+    let competitionSuccess = true;
+    let competitionMessage = "";
+
+    try {
+      const method = hasCompetitionProfile ? "PATCH" : "POST";
+      const url = `${API_URL}/api/users/${user.id}/competition-profile`;
+      
+      const response = await fetch(url, {
+        method: method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(competitionData),
+      });
+
+      if (!response.ok) {
+        const errJson = await response.json();
+        throw new Error(errJson.detail || "Failed to save competition profile");
+      }
+
+      const savedProfile = await response.json();
+      setHasCompetitionProfile(true);
+      setNickname(savedProfile.nickname || "");
+      setTitleName(savedProfile.title_name || "");
+      setCustomTitleName(savedProfile.custom_title_name || "");
+      setMiddleName(savedProfile.middle_name || "");
+      setIdNumber(savedProfile.id_number || "");
+      setMobileNumber(savedProfile.mobile_number || "");
+      setEducation(savedProfile.education || "");
+      setInstitutionName(savedProfile.institution_name || "");
+      setCurrentAddress(savedProfile.current_address || "");
+      setInstitutionAddress(savedProfile.institution_address || "");
+      setStudentCardFront(savedProfile.student_card_front || "");
+      setStudentCardBack(savedProfile.student_card_back || "");
+    } catch (error) {
+      console.error("Error saving competition profile:", error);
+      competitionSuccess = false;
+      competitionMessage = error.message;
+    }
+
     setIsSubmitting(false);
 
-    if (res.success) {
+    if (userRes.success && competitionSuccess) {
       setToast({
         message:
           language === "th"
-            ? "บันทึกข้อมูลส่วนตัวสำเร็จ!"
+            ? "บันทึกข้อมูลสำเร็จ!"
             : "Profile updated successfully!",
         type: "success",
+      });
+    } else if (!userRes.success && !competitionSuccess) {
+      setToast({
+        message:
+          language === "th"
+            ? "เกิดข้อผิดพลาดในการบันทึกข้อมูลทั้งหมด"
+            : "Failed to update profile and competition data",
+        type: "error",
+      });
+    } else if (!competitionSuccess) {
+      setToast({
+        message:
+          language === "th"
+            ? `เกิดข้อผิดพลาดกับการข้อมูลการแข่งขัน: ${competitionMessage}`
+            : `Failed to save competition data: ${competitionMessage}`,
+        type: "error",
       });
     } else {
       setToast({
         message:
-          res.message ||
+          userRes.message ||
           (language === "th"
-            ? "เกิดข้อผิดพลาดในการบันทึกข้อมูล"
+            ? "เกิดข้อผิดพลาดในการบันทึกข้อมูลส่วนตัว"
             : "Failed to update profile"),
         type: "error",
       });
