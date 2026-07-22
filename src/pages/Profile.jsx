@@ -88,7 +88,9 @@ export default function Profile() {
           ? ""
           : import.meta.env.VITE_API_URL || "http://34.87.78.35:8000";
 
-        const response = await fetch(`${API_URL}/api/users/${user.id}/competition-profile`);
+        const response = await fetch(
+          `${API_URL}/api/users/${user.id}/competition-profile`,
+        );
         if (response.ok) {
           const data = await response.json();
           setHasCompetitionProfile(true);
@@ -135,7 +137,6 @@ export default function Profile() {
       return () => clearTimeout(timer);
     }
   }, [toast.message]);
-
 
   if (!user) return null;
 
@@ -213,7 +214,7 @@ export default function Profile() {
     try {
       const method = hasCompetitionProfile ? "PATCH" : "POST";
       const url = `${API_URL}/api/users/${user.id}/competition-profile`;
-      
+
       const response = await fetch(url, {
         method: method,
         headers: { "Content-Type": "application/json" },

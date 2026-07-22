@@ -20,6 +20,74 @@ export default function Checkout() {
   const { t, language } = useLanguage();
   const navigate = useNavigate();
 
+  const API_URL = import.meta.env.PROD
+    ? ""
+    : import.meta.env.VITE_API_URL || "http://34.87.78.35:8000";
+
+  const [form, setForm] = useState({
+    name: user
+      ? `${user.first_name || ""} ${user.last_name || ""}`.trim() ||
+        user.username ||
+        ""
+      : "",
+    email: user ? user.email || "" : "",
+    phone: user ? user.phone || "" : "",
+    address: "",
+    paymentMethod: "Credit Card",
+  });
+
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [completedOrder, setCompletedOrder] = useState(null);
+
+  useEffect(() => {
+    if (user) {
+      setForm((prev) => ({
+        ...prev,
+        name:
+          prev.name ||
+          `${user.first_name || ""} ${user.last_name || ""}`.trim() ||
+          user.username ||
+          "",
+        email: prev.email || user.email || "",
+        phone: prev.phone || user.phone || "",
+      }));
+    }
+  }, [user]);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const statusParam = searchParams.get("status");
+
+    if (statusParam === "success") {
+      const savedOrder = sessionStorage.getItem("pendingStripeOrder");
+      if (savedOrder) {
+        try {
+          const parsedOrder = JSON.parse(savedOrder);
+          fetch(`${API_URL}/api/orders`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ...parsedOrder, payment_status: "paid" }),
+          })
+            .then((res) => {
+              if (res.ok) return res.json();
+              throw new Error("Failed to save order");
+            })
+            .then((completed) => {
+              setCompletedOrder(completed);
+              clearCart();
+              sessionStorage.removeItem("pendingStripeOrder");
+            })
+            .catch((err) => {
+              console.error("Error saving Stripe order:", err);
+            });
+        } catch (e) {
+          console.error("Error parsing saved order:", e);
+        }
+      }
+    }
+  }, [API_URL, clearCart]);
+
   useEffect(() => {
     if (!loading && !user) {
       navigate("/login?redirect=/checkout");
@@ -33,26 +101,6 @@ export default function Checkout() {
       </div>
     );
   }
-
-  const API_URL = import.meta.env.PROD
-    ? ""
-    : import.meta.env.VITE_API_URL || "http://34.87.78.35:8000";
-
-  const [form, setForm] = useState({
-    name: user
-      ? `${user.first_name || ""} ${user.last_name || ""}`.trim() ||
-        user.username ||
-        ""
-      : "",
-    email: user ? user.email : "",
-    phone: user ? user.phone || "" : "",
-    address: "",
-    paymentMethod: "Credit Card",
-  });
-
-  const [error, setError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [completedOrder, setCompletedOrder] = useState(null);
 
   const handleInputChange = (field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -89,6 +137,40 @@ export default function Checkout() {
           quantity: item.quantity,
         })),
       };
+
+      // If Credit Card / Stripe is selected, attempt to create Stripe Checkout Session
+      if (
+        form.paymentMethod === "Credit Card" ||
+        form.paymentMethod === "Stripe"
+      ) {
+        try {
+          const stripeRes = await fetch(
+            `${API_URL}/api/checkout/create-session`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(orderData),
+            },
+          );
+
+          if (stripeRes.ok) {
+            const session = await stripeRes.json();
+            if (session.checkout_url) {
+              sessionStorage.setItem(
+                "pendingStripeOrder",
+                JSON.stringify(orderData),
+              );
+              window.location.href = session.checkout_url;
+              return;
+            }
+          }
+        } catch (stripeErr) {
+          console.warn(
+            "Stripe endpoint unreachable, continuing to standard order placement:",
+            stripeErr,
+          );
+        }
+      }
 
       const res = await fetch(`${API_URL}/api/orders`, {
         method: "POST",

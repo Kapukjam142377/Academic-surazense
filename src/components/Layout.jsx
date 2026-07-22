@@ -24,7 +24,7 @@ import { useLanguage } from "../context/LanguageContext";
 import { useUser } from "../context/UserContext";
 
 const COMPANY_WEB_URL =
-  import.meta.env.VITE_COMPANY_WEB_URL || "http://localhost:5173";
+  import.meta.env.VITE_COMPANY_WEB_URL || "https://surazense.com";
 
 export default function Layout({ children }) {
   const location = useLocation();
