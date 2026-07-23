@@ -22,6 +22,7 @@ import OrderHistory from "./pages/OrderHistory";
 import Profile from "./pages/Profile";
 import Event from "./pages/Event";
 import Conference from "./pages/Conference";
+import InvoicePrintPage from "./pages/InvoicePrintPage";
 import { CartProvider } from "./context/CartContext";
 import { LanguageProvider } from "./context/LanguageContext";
 import { UserProvider } from "./context/UserContext";
@@ -94,6 +95,7 @@ function App() {
                 <Route path="/contacts" element={<Contacts />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/orders" element={<OrderHistory />} />
+                <Route path="/orders/:id/invoice" element={<InvoicePrintPage />} />
                 <Route path="/profile" element={<Profile />} />
 
                 {/* Redirect main corporate website pages externally */}

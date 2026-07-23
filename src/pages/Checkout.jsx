@@ -58,25 +58,32 @@ export default function Checkout() {
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const statusParam = searchParams.get("status");
+    const sessionId = searchParams.get("session_id");
 
     if (statusParam === "success") {
       const savedOrder = sessionStorage.getItem("pendingStripeOrder");
       if (savedOrder) {
+        // Remove immediately to prevent concurrent duplicate submissions due to React StrictMode
+        sessionStorage.removeItem("pendingStripeOrder");
         try {
           const parsedOrder = JSON.parse(savedOrder);
           fetch(`${API_URL}/api/orders`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ ...parsedOrder, payment_status: "paid" }),
+            body: JSON.stringify({ 
+              ...parsedOrder, 
+              payment_status: "paid",
+              stripe_session_id: sessionId
+            }),
           })
-            .then((res) => {
+            .then(async (res) => {
               if (res.ok) return res.json();
-              throw new Error("Failed to save order");
+              const errData = await res.json().catch(() => ({}));
+              throw new Error(errData.detail || "Failed to save order");
             })
             .then((completed) => {
               setCompletedOrder(completed);
               clearCart();
-              sessionStorage.removeItem("pendingStripeOrder");
             })
             .catch((err) => {
               console.error("Error saving Stripe order:", err);
