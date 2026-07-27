@@ -47,11 +47,11 @@ export default function Layout({ children }) {
   }, [user]);
 
   // Redirect guard: protect admin routes from non-admin logged-in users
-  useEffect(() => {
-    if (user && user.role !== "admin" && location.pathname === "/admin") {
-      navigate("/dashboard");
-    }
-  }, [user, location.pathname, navigate]);
+  // useEffect(() => {
+  //   if (user && user.role !== "admin" && location.pathname === "/admin") {
+  //     navigate("/dashboard");
+  //   }
+  // }, [user, location.pathname, navigate]);
 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLoginSidebarOpen, setIsLoginSidebarOpen] = useState(false);

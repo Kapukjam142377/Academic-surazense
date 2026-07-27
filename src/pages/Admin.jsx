@@ -30,6 +30,8 @@ import {
   GraduationCap,
 } from "lucide-react";
 
+import { MOCK_PRODUCTS, saveProducts } from "../data/mockProducts";
+
 export default function Admin() {
   const { user, login, logout } = useUser();
   const { language, toggleLanguage } = useLanguage();
@@ -77,6 +79,18 @@ export default function Admin() {
   const [loginError, setLoginError] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
+  // Product Management states
+  const [productList, setProductList] = useState([]);
+  const [showAddProductModal, setShowAddProductModal] = useState(false);
+  const [newProdNameEn, setNewProdNameEn] = useState("");
+  const [newProdNameTh, setNewProdNameTh] = useState("");
+  const [newProdCategory, setNewProdCategory] = useState("Biosensors");
+  const [newProdPrice, setNewProdPrice] = useState("");
+  const [newProdDescEn, setNewProdDescEn] = useState("");
+  const [newProdDescTh, setNewProdDescTh] = useState("");
+  const [newProdImage, setNewProdImage] = useState("");
+  const [newProdStatus, setNewProdStatus] = useState("In Stock");
+
   const handleAdminLoginSubmit = async (e) => {
     e.preventDefault();
     setLoginError("");
@@ -112,8 +126,8 @@ export default function Admin() {
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
-        const res = await fetch(`${API_URL}/api/users/login`, {
-          method: "OPTIONS",
+        const res = await fetch(`${API_URL}/`, {
+          method: "GET",
           signal: controller.signal,
         });
         clearTimeout(timeoutId);
@@ -543,6 +557,19 @@ export default function Admin() {
       localStorage.setItem("surazense_mock_runs", JSON.stringify(initialRuns));
     }
     setRunsList(initialRuns);
+
+    // Load Products
+    const localProds = localStorage.getItem("surazense_products");
+    if (localProds) {
+      try {
+        setProductList(JSON.parse(localProds));
+      } catch (err) {
+        console.error("Failed to parse local products:", err);
+        setProductList(MOCK_PRODUCTS);
+      }
+    } else {
+      setProductList(MOCK_PRODUCTS);
+    }
   }, []);
 
   const handleVerifyPasscode = (e) => {
@@ -624,6 +651,57 @@ export default function Admin() {
       setUsersList(updated);
       localStorage.setItem("surazense_mock_users", JSON.stringify(updated));
     }
+  };
+
+  const handleAddProductSubmit = (e) => {
+    e.preventDefault();
+    if (!newProdNameEn || !newProdPrice) return;
+
+    const nextId = productList.length > 0 ? Math.max(...productList.map((p) => p.id)) + 1 : 1;
+    const newProduct = {
+      id: nextId,
+      name: {
+        en: newProdNameEn,
+        th: newProdNameTh || newProdNameEn,
+      },
+      category: newProdCategory,
+      price: parseFloat(newProdPrice),
+      description: {
+        en: newProdDescEn,
+        th: newProdDescTh || newProdDescEn,
+      },
+      image: newProdImage || null,
+      status: newProdStatus,
+      specs: {}
+    };
+
+    const updatedList = [...productList, newProduct];
+    setProductList(updatedList);
+    saveProducts(updatedList);
+
+    // Reset fields
+    setNewProdNameEn("");
+    setNewProdNameTh("");
+    setNewProdCategory("Biosensors");
+    setNewProdPrice("");
+    setNewProdDescEn("");
+    setNewProdDescTh("");
+    setNewProdImage("");
+    setNewProdStatus("In Stock");
+    setShowAddProductModal(false);
+  };
+
+  const handleDeleteProduct = (productId) => {
+    const confirmDelete = window.confirm(
+      language === "th"
+        ? "คุณแน่ใจหรือไม่ว่าต้องการลบสินค้าชิ้นนี้?"
+        : "Are you sure you want to delete this product?"
+    );
+    if (!confirmDelete) return;
+
+    const updatedList = productList.filter((p) => p.id !== productId);
+    setProductList(updatedList);
+    saveProducts(updatedList);
   };
 
   // Order / Payment actions
@@ -1170,6 +1248,20 @@ export default function Admin() {
           </button>
 
           <button
+            onClick={() => setActiveTab("products")}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all border-none cursor-pointer outline-none ${
+              activeTab === "products"
+                ? "bg-sky-50 text-accent font-bold shadow-sm shadow-sky-500/5"
+                : "text-slate-655 hover:bg-slate-50 hover:text-accent"
+            }`}
+          >
+            <Package className="w-4 h-4" />
+            <span>
+              {language === "th" ? "จัดการสินค้า" : "Product Management"}
+            </span>
+          </button>
+
+          <button
             onClick={() => setActiveTab("settings")}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all border-none cursor-pointer outline-none ${
               activeTab === "settings"
@@ -1261,6 +1353,10 @@ export default function Admin() {
                   (language === "th"
                     ? "การตั้งค่าระบบผู้ดูแลระบบ"
                     : "Admin & Server Settings")}
+                {activeTab === "products" &&
+                  (language === "th"
+                    ? "การจัดการข้อมูลรายการสินค้า"
+                    : "Catalog & Product Management")}
               </h1>
               <p className="text-xs text-slate-400 font-bold mt-1.5 leading-none">
                 {activeTab === "users" &&
@@ -1279,6 +1375,10 @@ export default function Admin() {
                   (language === "th"
                     ? "เปลี่ยนรหัสผ่านเข้าคอนโซล ตรวจสอบการเชื่อมต่อ API Server"
                     : "Manage local credentials and check connectivity.")}
+                {activeTab === "products" &&
+                  (language === "th"
+                    ? "เพิ่ม ลบ หรือแก้ไขข้อมูลรายการสินค้าบนหน้าแคตตาล็อกหลัก"
+                    : "Create, view, and remove items from the store directory.")}
               </p>
             </div>
           </div>
@@ -2265,6 +2365,294 @@ export default function Admin() {
                   </table>
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* TAB: PRODUCT MANAGEMENT */}
+          {activeTab === "products" && (
+            <div className="space-y-6">
+              {/* Header card with Search and Add Product Button */}
+              <div className="bg-white border border-slate-200/60 rounded-2xl p-6 flex flex-col sm:flex-row gap-4 items-center justify-between shadow-sm">
+                <div>
+                  <h3 className="text-base font-bold text-slate-800">
+                    {language === "th" ? "จัดการรายการสินค้า" : "Catalog Management"}
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-1">
+                    {language === "th"
+                      ? "เพิ่ม ลบ หรือแก้ไขข้อมูลสินค้าที่แสดงอยู่บนหน้าเว็บไซต์หลัก"
+                      : "Add or delete products displayed on the main corporate catalog."}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowAddProductModal(true)}
+                  className="bg-accent hover:bg-accent-hover text-white font-bold px-5 py-3 rounded-xl transition-all cursor-pointer border-none shadow-md shadow-sky-200 text-xs flex items-center gap-2"
+                >
+                  <span>+</span>
+                  {language === "th" ? "เพิ่มสินค้าใหม่" : "Add New Product"}
+                </button>
+              </div>
+
+              {/* Products Catalog Table / Grid */}
+              <div className="bg-white border border-slate-200/60 rounded-3xl overflow-hidden shadow-sm">
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse text-left text-sm">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-200/60 text-xs font-bold text-slate-400 uppercase tracking-wider">
+                        <th className="py-4 px-6 w-24">
+                          {language === "th" ? "รูปภาพ" : "Image"}
+                        </th>
+                        <th className="py-4 px-6">
+                          {language === "th" ? "ชื่อสินค้า" : "Product Name"}
+                        </th>
+                        <th className="py-4 px-6">
+                          {language === "th" ? "หมวดหมู่" : "Category"}
+                        </th>
+                        <th className="py-4 px-6">
+                          {language === "th" ? "ราคา" : "Price"}
+                        </th>
+                        <th className="py-4 px-6">
+                          {language === "th" ? "สถานะ" : "Status"}
+                        </th>
+                        <th className="py-4 px-6 text-center">
+                          {language === "th" ? "จัดการ" : "Actions"}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {productList.length === 0 ? (
+                        <tr>
+                          <td
+                            colSpan="6"
+                            className="text-center py-10 text-slate-400 font-semibold"
+                          >
+                            {language === "th"
+                              ? "ไม่พบสินค้าในระบบ"
+                              : "No products in the catalog."}
+                          </td>
+                        </tr>
+                      ) : (
+                        productList.map((product) => (
+                          <tr
+                            key={product.id}
+                            className="hover:bg-slate-50/50 transition-colors"
+                          >
+                            <td className="py-4 px-6">
+                              <div className="w-12 h-12 rounded-xl bg-slate-50 border border-slate-150 flex items-center justify-center overflow-hidden">
+                                {product.image ? (
+                                  <img
+                                    src={product.image}
+                                    alt={product.name[language] || product.name.en}
+                                    className="w-full h-full object-contain"
+                                  />
+                                ) : (
+                                  <div className="text-[10px] font-bold text-slate-400 uppercase">
+                                    No Image
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+                            <td className="py-4 px-6">
+                              <div className="font-bold text-slate-800">
+                                {product.name[language] || product.name.en}
+                              </div>
+                              <div className="text-[10px] text-slate-400 mt-1 max-w-sm truncate">
+                                {product.description[language] || product.description.en}
+                              </div>
+                            </td>
+                            <td className="py-4 px-6">
+                              <span className="px-2 py-0.5 bg-slate-100 text-slate-600 border border-slate-200 rounded text-[10px] uppercase font-extrabold">
+                                {product.category}
+                              </span>
+                            </td>
+                            <td className="py-4 px-6 font-semibold text-slate-800">
+                              ฿{(product.price * 35).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                              <span className="text-[10px] text-slate-400 font-normal block mt-0.5">
+                                (${product.price.toFixed(2)})
+                              </span>
+                            </td>
+                            <td className="py-4 px-6">
+                              <span
+                                className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase ${
+                                  product.status === "In Stock"
+                                    ? "bg-emerald-50 text-emerald-600 border border-emerald-100"
+                                    : "bg-rose-50 text-rose-600 border border-rose-100"
+                                }`}
+                              >
+                                {language === "th"
+                                  ? product.status === "In Stock"
+                                    ? "พร้อมจำหน่าย"
+                                    : "สินค้าหมด"
+                                  : product.status}
+                              </span>
+                            </td>
+                            <td className="py-4 px-6 text-center">
+                              <button
+                                onClick={() => handleDeleteProduct(product.id)}
+                                className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer flex items-center justify-center mx-auto"
+                                title="Delete Product"
+                              >
+                                <Trash2 className="w-4.5 h-4.5" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Add Product Modal */}
+              {showAddProductModal && (
+                <div className="fixed inset-0 z-[100] bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+                  <div className="bg-white rounded-[2.5rem] border border-slate-200/80 shadow-2xl p-8 w-full max-w-xl max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-center mb-6">
+                      <h2 className="text-xl font-black text-slate-800 tracking-tight">
+                        {language === "th" ? "เพิ่มสินค้าชิ้นใหม่" : "Add New Product"}
+                      </h2>
+                      <button
+                        onClick={() => setShowAddProductModal(false)}
+                        className="p-2 text-slate-400 hover:text-slate-800 hover:bg-slate-100 rounded-full transition-colors bg-transparent border-none cursor-pointer outline-none"
+                      >
+                        <X className="w-5 h-5 stroke-[2.5]" />
+                      </button>
+                    </div>
+
+                    <form onSubmit={handleAddProductSubmit} className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                            Product Name (EN) *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={newProdNameEn}
+                            onChange={(e) => setNewProdNameEn(e.target.value)}
+                            placeholder="e.g. X-ZENSE 102"
+                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                            ชื่อสินค้า (ภาษาไทย)
+                          </label>
+                          <input
+                            type="text"
+                            value={newProdNameTh}
+                            onChange={(e) => setNewProdNameTh(e.target.value)}
+                            placeholder="เช่น X-ZENSE 102"
+                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                            Category *
+                          </label>
+                          <select
+                            value={newProdCategory}
+                            onChange={(e) => setNewProdCategory(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm bg-white"
+                          >
+                            <option value="Biosensors">Biosensors</option>
+                            <option value="Modules">Modules</option>
+                            <option value="Chemicals">Chemicals</option>
+                            <option value="Courses">Courses</option>
+                            <option value="Accessories">Accessories</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                            Price ($ USD) *
+                          </label>
+                          <input
+                            type="number"
+                            step="0.01"
+                            required
+                            value={newProdPrice}
+                            onChange={(e) => setNewProdPrice(e.target.value)}
+                            placeholder="e.g. 150.00"
+                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                          Description (EN)
+                        </label>
+                        <textarea
+                          rows="3"
+                          value={newProdDescEn}
+                          onChange={(e) => setNewProdDescEn(e.target.value)}
+                          placeholder="Product description in English..."
+                          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm resize-none"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                          คำอธิบายสินค้า (ภาษาไทย)
+                        </label>
+                        <textarea
+                          rows="3"
+                          value={newProdDescTh}
+                          onChange={(e) => setNewProdDescTh(e.target.value)}
+                          placeholder="คำอธิบายสินค้าภาษาไทย..."
+                          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm resize-none"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                            Image Path (e.g. /qcmgroupe.jpg)
+                          </label>
+                          <input
+                            type="text"
+                            value={newProdImage}
+                            onChange={(e) => setNewProdImage(e.target.value)}
+                            placeholder="e.g. /product-drawing-2.jpg"
+                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                            Status *
+                          </label>
+                          <select
+                            value={newProdStatus}
+                            onChange={(e) => setNewProdStatus(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm bg-white"
+                          >
+                            <option value="In Stock">In Stock</option>
+                            <option value="Out of Stock">Out of Stock</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div className="pt-4 flex gap-3">
+                        <button
+                          type="submit"
+                          className="flex-1 bg-accent hover:bg-accent-hover text-white font-bold py-3 rounded-xl transition-all cursor-pointer border-none shadow-sm"
+                        >
+                          {language === "th" ? "บันทึก" : "Save"}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setShowAddProductModal(false)}
+                          className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl transition-all cursor-pointer border-none"
+                        >
+                          {language === "th" ? "ยกเลิก" : "Cancel"}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

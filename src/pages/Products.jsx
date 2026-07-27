@@ -33,6 +33,11 @@ export default function Products() {
   const [flyingItem, setFlyingItem] = useState(null);
   const { addToCart } = useCart();
   const { t, language } = useLanguage();
+  const [productsList, setProductsList] = useState([]);
+
+  useEffect(() => {
+    setProductsList([...MOCK_PRODUCTS]);
+  }, []);
 
   useEffect(() => {
     if (location.state?.category) {
@@ -124,7 +129,7 @@ export default function Products() {
     }
   };
 
-  const filteredProducts = MOCK_PRODUCTS.filter((product) => {
+  const filteredProducts = productsList.filter((product) => {
     const matchesCategory =
       activeCategory === "All" || product.category === activeCategory;
     const productName = product.name[language] || product.name.en || "";
@@ -301,11 +306,10 @@ export default function Products() {
                   <button
                     key={category}
                     onClick={() => setActiveCategory(category)}
-                    className={`px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all ${
-                      activeCategory === category
+                    className={`px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all ${activeCategory === category
                         ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
                         : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                    }`}
+                      }`}
                   >
                     {getCategoryTranslation(category)}
                   </button>
@@ -385,11 +389,10 @@ export default function Products() {
                           {/* Status Badge */}
                           <div className="absolute top-4 left-4 z-10">
                             <span
-                              className={`px-3 py-1 rounded-full text-xs font-bold backdrop-blur-md ${
-                                product.status === "In Stock"
+                              className={`px-3 py-1 rounded-full text-xs font-bold backdrop-blur-md ${product.status === "In Stock"
                                   ? "bg-green-100/80 text-green-700 border border-green-200/50"
                                   : "bg-orange-100/80 text-orange-700 border border-orange-200/50"
-                              }`}
+                                }`}
                             >
                               {getStatusTranslation(product.status)}
                             </span>

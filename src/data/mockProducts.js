@@ -1,4 +1,4 @@
-export const MOCK_PRODUCTS = [
+const MOCK_PRODUCTS_RAW = [
   {
     id: 1,
     name: {
@@ -482,3 +482,42 @@ export const MOCK_PRODUCTS = [
     },
   },
 ];
+
+// Initialize local storage if not exists
+if (typeof window !== "undefined" && !localStorage.getItem("surazense_products")) {
+  localStorage.setItem("surazense_products", JSON.stringify(MOCK_PRODUCTS_RAW));
+}
+
+export const MOCK_PRODUCTS = [];
+
+export const refreshMockProducts = () => {
+  let products = [];
+  if (typeof window !== "undefined") {
+    const local = localStorage.getItem("surazense_products");
+    if (local) {
+      try {
+        products = JSON.parse(local);
+      } catch (e) {
+        products = MOCK_PRODUCTS_RAW;
+      }
+    } else {
+      localStorage.setItem("surazense_products", JSON.stringify(MOCK_PRODUCTS_RAW));
+      products = MOCK_PRODUCTS_RAW;
+    }
+  } else {
+    products = MOCK_PRODUCTS_RAW;
+  }
+  
+  MOCK_PRODUCTS.length = 0;
+  MOCK_PRODUCTS.push(...products);
+};
+
+// Initial load
+refreshMockProducts();
+
+export const saveProducts = (newProducts) => {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("surazense_products", JSON.stringify(newProducts));
+    refreshMockProducts();
+  }
+};
