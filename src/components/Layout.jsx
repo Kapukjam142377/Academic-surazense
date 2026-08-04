@@ -54,19 +54,8 @@ export default function Layout({ children }) {
   // }, [user, location.pathname, navigate]);
 
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isLoginSidebarOpen, setIsLoginSidebarOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Auth Form States
-  const [authMode, setAuthMode] = useState("login"); // 'login' | 'signup'
-  const [authEmail, setAuthEmail] = useState("");
-  const [authPassword, setAuthPassword] = useState("");
-  const [authUsername, setAuthUsername] = useState("");
-  const [authFirstName, setAuthFirstName] = useState("");
-  const [authLastName, setAuthLastName] = useState("");
-  const [authPhone, setAuthPhone] = useState("");
-  const [authError, setAuthError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
 
   const cartRef = useRef(null);
@@ -75,44 +64,6 @@ export default function Layout({ children }) {
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
-
-  const handleAuthSubmit = async (e) => {
-    e.preventDefault();
-    setAuthError("");
-    setIsSubmitting(true);
-
-    if (authMode === "login") {
-      const res = await login(authEmail, authPassword);
-      if (res.success) {
-        setIsLoginSidebarOpen(false);
-        setAuthEmail("");
-        setAuthPassword("");
-      } else {
-        setAuthError(res.message);
-      }
-    } else {
-      const res = await register({
-        email: authEmail,
-        password: authPassword,
-        username: authUsername,
-        first_name: authFirstName,
-        last_name: authLastName,
-        phone: authPhone,
-      });
-      if (res.success) {
-        setIsLoginSidebarOpen(false);
-        setAuthEmail("");
-        setAuthPassword("");
-        setAuthUsername("");
-        setAuthFirstName("");
-        setAuthLastName("");
-        setAuthPhone("");
-      } else {
-        setAuthError(res.message);
-      }
-    }
-    setIsSubmitting(false);
-  };
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -380,7 +331,7 @@ export default function Layout({ children }) {
             </div>
           ) : (
             <button
-              onClick={() => setIsLoginSidebarOpen(true)}
+              onClick={() => navigate('/login')}
               className="bg-accent text-white px-5 py-2.5 rounded-full text-sm font-semibold transition-all hover:-translate-y-[1px] hover:bg-accent-hover hover:shadow-[0_4px_12px_rgba(2,132,199,0.25)] active:translate-y-0 cursor-pointer border-none"
             >
               {t("nav.login")}
@@ -623,7 +574,7 @@ export default function Layout({ children }) {
             <button
               onClick={() => {
                 setIsMobileMenuOpen(false);
-                setIsLoginSidebarOpen(true);
+                navigate('/login');
               }}
               className="w-full bg-accent hover:bg-accent-hover text-white font-bold py-3 rounded-xl transition-all shadow-md shadow-sky-200 cursor-pointer border-none text-[14px]"
             >
@@ -844,202 +795,6 @@ export default function Layout({ children }) {
         </div>
       </footer>
 
-      {/* Login Sidebar Overlay */}
-      <div
-        className={`fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[60] transition-opacity duration-300 ${
-          isLoginSidebarOpen ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
-        onClick={() => setIsLoginSidebarOpen(false)}
-      />
-
-      {/* Login Sidebar */}
-      <div
-        className={`fixed top-0 right-0 h-full w-[400px] max-w-[100vw] bg-white z-[70] shadow-2xl transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] transform ${
-          isLoginSidebarOpen ? "translate-x-0" : "translate-x-full"
-        } flex flex-col`}
-      >
-        <div className="flex justify-between items-center p-6 border-b border-slate-100">
-          <h2 className="text-2xl font-bold text-slate-800 tracking-tight">
-            {authMode === "login"
-              ? t("login.loginHeader")
-              : language === "th"
-                ? "สมัครสมาชิก"
-                : "Sign Up"}
-          </h2>
-          <button
-            onClick={() => {
-              setIsLoginSidebarOpen(false);
-              setAuthError("");
-            }}
-            className="p-2.5 text-slate-400 hover:text-slate-800 hover:bg-slate-100 rounded-full transition-colors bg-transparent border-none cursor-pointer outline-none"
-          >
-            <X className="w-5 h-5 stroke-[2.5px]" />
-          </button>
-        </div>
-
-        <div className="p-6 overflow-y-auto flex-1 custom-scrollbar">
-          <form onSubmit={handleAuthSubmit} className="flex flex-col gap-5">
-            {authError && (
-              <div className="bg-rose-50 border border-rose-100 rounded-xl p-3 text-rose-600 text-xs font-semibold">
-                {authError}
-              </div>
-            )}
-
-            {authMode === "signup" && (
-              <>
-                <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-                    {language === "th"
-                      ? "ชื่อผู้ใช้งาน (Username)"
-                      : "Username"}
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={authUsername}
-                    onChange={(e) => setAuthUsername(e.target.value)}
-                    placeholder="username"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-sky-100 focus:border-accent transition-all bg-slate-50/50 hover:bg-slate-50 focus:bg-white text-slate-800 placeholder:text-slate-400 text-sm"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-                      {language === "th" ? "ชื่อจริง" : "First Name"}
-                    </label>
-                    <input
-                      type="text"
-                      value={authFirstName}
-                      onChange={(e) => setAuthFirstName(e.target.value)}
-                      placeholder="John"
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-sky-100 focus:border-accent transition-all bg-slate-50/50 hover:bg-slate-50 focus:bg-white text-slate-800 placeholder:text-slate-400 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-                      {language === "th" ? "นามสกุล" : "Last Name"}
-                    </label>
-                    <input
-                      type="text"
-                      value={authLastName}
-                      onChange={(e) => setAuthLastName(e.target.value)}
-                      placeholder="Doe"
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-sky-100 focus:border-accent transition-all bg-slate-50/50 hover:bg-slate-50 focus:bg-white text-slate-800 placeholder:text-slate-400 text-sm"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-                    {language === "th" ? "เบอร์โทรศัพท์" : "Phone"}
-                  </label>
-                  <input
-                    type="tel"
-                    value={authPhone}
-                    onChange={(e) => setAuthPhone(e.target.value)}
-                    placeholder="08XXXXXXXX"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-sky-100 focus:border-accent transition-all bg-slate-50/50 hover:bg-slate-50 focus:bg-white text-slate-800 placeholder:text-slate-400 text-sm"
-                  />
-                </div>
-              </>
-            )}
-
-            <div>
-              <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-                {t("login.email")}
-              </label>
-              <input
-                type="email"
-                required
-                value={authEmail}
-                onChange={(e) => setAuthEmail(e.target.value)}
-                placeholder="you@example.com"
-                className="w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-sky-100 focus:border-accent transition-all bg-slate-50/50 hover:bg-slate-50 focus:bg-white text-slate-800 placeholder:text-slate-400 text-sm"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-                {t("login.password")}
-              </label>
-              <input
-                type="password"
-                required
-                value={authPassword}
-                onChange={(e) => setAuthPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-sky-100 focus:border-accent transition-all bg-slate-50/50 hover:bg-slate-50 focus:bg-white text-slate-800 placeholder:text-slate-400 text-sm"
-              />
-            </div>
-
-            {authMode === "login" && (
-              <div className="flex justify-between items-center text-xs mt-1">
-                <label className="flex items-center gap-2.5 cursor-pointer group">
-                  <input
-                    type="checkbox"
-                    className="w-4 h-4 rounded border-slate-300 text-accent focus:ring-accent transition-colors"
-                  />
-                  <span className="text-slate-600 group-hover:text-slate-800 transition-colors font-semibold">
-                    {t("login.rememberMe")}
-                  </span>
-                </label>
-                <a
-                  href="#"
-                  className="text-accent hover:text-accent-hover font-bold no-underline transition-colors"
-                >
-                  {t("login.forgotPassword")}
-                </a>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full bg-accent hover:bg-accent-hover disabled:bg-slate-300 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-sky-200 hover:shadow-xl hover:-translate-y-[1px] mt-4 cursor-pointer border-none text-[15px]"
-            >
-              {isSubmitting
-                ? language === "th"
-                  ? "กำลังดำเนินการ..."
-                  : "Processing..."
-                : authMode === "login"
-                  ? t("login.signIn")
-                  : language === "th"
-                    ? "สมัครสมาชิก"
-                    : "Sign Up"}
-            </button>
-          </form>
-
-          <p className="text-center text-slate-500 text-[15px] mt-8">
-            {authMode === "login" ? (
-              <>
-                {t("login.dontHaveAccount")}
-                <button
-                  onClick={() => {
-                    setAuthMode("signup");
-                    setAuthError("");
-                  }}
-                  className="text-accent hover:text-accent-hover font-bold no-underline transition-colors ml-1 bg-transparent border-none cursor-pointer p-0"
-                >
-                  {t("login.signUp")}
-                </button>
-              </>
-            ) : (
-              <>
-                {language === "th"
-                  ? "มีบัญชีอยู่แล้ว?"
-                  : "Already have an account?"}
-                <button
-                  onClick={() => {
-                    setAuthMode("login");
-                    setAuthError("");
-                  }}
-                  className="text-accent hover:text-accent-hover font-bold no-underline transition-colors ml-1 bg-transparent border-none cursor-pointer p-0"
-                >
-                  {t("login.signIn")}
-                </button>
-              </>
-            )}
-          </p>
-        </div>
-      </div>
 
       {/* Session Timeout Warning Modal */}
       {showTimeoutModal && (
@@ -1059,7 +814,7 @@ export default function Layout({ children }) {
             <button
               onClick={() => {
                 setShowTimeoutModal(false);
-                setIsLoginSidebarOpen(true);
+                navigate('/login');
               }}
               className="w-full bg-accent hover:bg-accent-hover text-white font-bold py-3.5 rounded-xl transition-all shadow-md shadow-sky-200 cursor-pointer text-sm border-none"
             >

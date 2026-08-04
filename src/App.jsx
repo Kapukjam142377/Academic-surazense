@@ -23,9 +23,13 @@ import Profile from "./pages/Profile";
 import Event from "./pages/Event";
 import Conference from "./pages/Conference";
 import InvoicePrintPage from "./pages/InvoicePrintPage";
+import ResetPassword from "./pages/ResetPassword";
+import VerifyEmail from "./pages/VerifyEmail";
+import OAuthCallback from "./pages/OAuthCallback";
 import { CartProvider } from "./context/CartContext";
 import { LanguageProvider } from "./context/LanguageContext";
 import { UserProvider } from "./context/UserContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const COMPANY_WEB_URL =
   import.meta.env.VITE_COMPANY_WEB_URL || "http://localhost:5173";
@@ -79,24 +83,45 @@ function App() {
               <Routes>
                 {/* Make root path route to AcademicTraining */}
                 <Route path="/" element={<AcademicTraining />} />
-                <Route path="/dashboard" element={<Dashboard />} />
+                <Route
+                  path="/dashboard"
+                  element={<ProtectedRoute><Dashboard /></ProtectedRoute>}
+                />
                 <Route path="/products" element={<Products />} />
                 <Route path="/products/:id" element={<ProductDetail />} />
                 <Route
                   path="/academic-training"
                   element={<AcademicTraining />}
                 />
-                <Route path="/checkout" element={<Checkout />} />
+                <Route
+                  path="/checkout"
+                  element={<ProtectedRoute><Checkout /></ProtectedRoute>}
+                />
                 <Route path="/login" element={<Login />} />
                 <Route path="/services" element={<Services />} />
                 <Route path="/event" element={<Event />} />
                 <Route path="/conference" element={<Conference />} />
                 <Route path="/news" element={<News />} />
                 <Route path="/contacts" element={<Contacts />} />
-                <Route path="/admin" element={<Admin />} />
-                <Route path="/orders" element={<OrderHistory />} />
-                <Route path="/orders/:id/invoice" element={<InvoicePrintPage />} />
-                <Route path="/profile" element={<Profile />} />
+                <Route
+                  path="/admin"
+                  element={<ProtectedRoute adminOnly><Admin /></ProtectedRoute>}
+                />
+                <Route
+                  path="/orders"
+                  element={<ProtectedRoute><OrderHistory /></ProtectedRoute>}
+                />
+                <Route
+                  path="/orders/:id/invoice"
+                  element={<ProtectedRoute><InvoicePrintPage /></ProtectedRoute>}
+                />
+                <Route
+                  path="/profile"
+                  element={<ProtectedRoute><Profile /></ProtectedRoute>}
+                />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/verify-email" element={<VerifyEmail />} />
+                <Route path="/auth/callback" element={<OAuthCallback />} />
 
                 {/* Redirect main corporate website pages externally */}
                 <Route

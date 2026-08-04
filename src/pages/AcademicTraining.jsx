@@ -888,6 +888,15 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
 };
 
+// ── Animated Blob Background (Same as Login Page) ────────────────────────────
+const BlobBackground = () => (
+  <div className="home-bg-blobs" aria-hidden="true">
+    <div className="blob blob-1" />
+    <div className="blob blob-2" />
+    <div className="blob blob-3" />
+  </div>
+);
+
 export default function AcademicTraining() {
   const { t, language } = useLanguage();
   const { user } = useUser();
@@ -1066,7 +1075,33 @@ export default function AcademicTraining() {
     : [labTrainingText, ""];
 
   return (
-    <div className="bg-slate-50 min-h-screen pb-24 relative overflow-hidden">
+    <div
+      className="min-h-screen pb-24 relative overflow-hidden"
+      style={{
+        background: "linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 40%, #f8fafc 100%)",
+      }}
+    >
+      <style>{`
+        .home-bg-blobs { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+        .blob {
+          position: absolute;
+          border-radius: 50%;
+          filter: blur(70px);
+          opacity: 0.35;
+          animation: blobMove 12s ease-in-out infinite alternate;
+        }
+        .blob-1 { width: 450px; height: 450px; background: radial-gradient(circle, #38bdf8, #818cf8); top: -120px; left: -120px; animation-duration: 14s; }
+        .blob-2 { width: 400px; height: 400px; background: radial-gradient(circle, #c084fc, #f472b6); bottom: 10%; right: -80px; animation-duration: 10s; animation-delay: -4s; }
+        .blob-3 { width: 300px; height: 300px; background: radial-gradient(circle, #34d399, #38bdf8); top: 40%; left: 5%; animation-duration: 18s; animation-delay: -8s; }
+        @keyframes blobMove {
+          0%   { transform: translate(0, 0) scale(1); }
+          50%  { transform: translate(30px, -20px) scale(1.08); }
+          100% { transform: translate(-20px, 30px) scale(0.96); }
+        }
+      `}</style>
+
+      {/* Animated Blob Background */}
+      <BlobBackground />
       {/* Flying Item Animation */}
       {flyingItem && (
         <motion.div
@@ -1124,8 +1159,7 @@ export default function AcademicTraining() {
         )}
       </AnimatePresence>
 
-      {/* Fallback Ambient Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-slate-50 via-sky-50/20 to-indigo-50/30 z-0 pointer-events-none" />
+
 
       {/* Hero Section */}
       <div className="relative pt-24 pb-20 md:pb-28 z-10">
