@@ -1078,7 +1078,8 @@ export default function AcademicTraining() {
     <div
       className="min-h-screen pb-24 relative overflow-hidden"
       style={{
-        background: "linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 40%, #f8fafc 100%)",
+        background:
+          "linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 40%, #f8fafc 100%)",
       }}
     >
       <style>{`
@@ -1158,8 +1159,6 @@ export default function AcademicTraining() {
           </motion.div>
         )}
       </AnimatePresence>
-
-
 
       {/* Hero Section */}
       <div className="relative pt-24 pb-20 md:pb-28 z-10">

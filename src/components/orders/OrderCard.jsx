@@ -175,10 +175,14 @@ export default function OrderCard({ order, language }) {
               {/* Actions: Request Receipt / Invoice */}
               <div className="pt-3 border-t border-slate-200/60 flex justify-start">
                 <button
-                  onClick={() => window.open(`/orders/${order.id}/invoice`, "_blank")}
+                  onClick={() =>
+                    window.open(`/orders/${order.id}/invoice`, "_blank")
+                  }
                   className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-slate-600 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all cursor-pointer border-none"
                 >
-                  {language === "th" ? "ขอใบเสร็จ / ใบแจ้งหนี้" : "Request Receipt / Invoice"}
+                  {language === "th"
+                    ? "ขอใบเสร็จ / ใบแจ้งหนี้"
+                    : "Request Receipt / Invoice"}
                 </button>
               </div>
             </div>

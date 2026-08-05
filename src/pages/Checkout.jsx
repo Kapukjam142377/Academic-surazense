@@ -70,10 +70,10 @@ export default function Checkout() {
           fetch(`${API_URL}/api/orders`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ 
-              ...parsedOrder, 
+            body: JSON.stringify({
+              ...parsedOrder,
               payment_status: "paid",
-              stripe_session_id: sessionId
+              stripe_session_id: sessionId,
             }),
           })
             .then(async (res) => {

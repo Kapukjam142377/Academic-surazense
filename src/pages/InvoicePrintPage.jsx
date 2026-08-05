@@ -50,19 +50,24 @@ export default function InvoicePrintPage() {
     setPdfGenerating(true);
 
     const padId = targetOrder.id.toString().padStart(4, "0");
-    const docName = targetOrder.payment_status === "paid" ? "Receipt" : "Invoice";
-    const docNum = targetOrder.payment_status === "paid" ? `2444-2175-${padId}` : `SZHWUG3-${padId}`;
+    const docName =
+      targetOrder.payment_status === "paid" ? "Receipt" : "Invoice";
+    const docNum =
+      targetOrder.payment_status === "paid"
+        ? `2444-2175-${padId}`
+        : `SZHWUG3-${padId}`;
     const filename = `${docName}_${docNum}.pdf`;
 
     const opt = {
-      margin:       15,
-      filename:     filename,
-      image:        { type: "jpeg", quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true },
-      jsPDF:        { unit: "mm", format: "a4", orientation: "portrait" }
+      margin: 15,
+      filename: filename,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
     };
 
-    window.html2pdf()
+    window
+      .html2pdf()
       .from(element)
       .set(opt)
       .save()
@@ -80,8 +85,10 @@ export default function InvoicePrintPage() {
     if (order) {
       if (!window.html2pdf) {
         const script = document.createElement("script");
-        script.src = "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
-        script.integrity = "sha512-GsLlZN/3F2ErC5IfS97tDK+NHhCaLkWTRfOBVuLkfmG1oqtf5cBHCXG36Vto39dy0OW3wLwTFTdXg05_3BG54A==";
+        script.src =
+          "https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js";
+        script.integrity =
+          "sha512-GsLlZN/3F2ErC5IfS97tDK+NHhCaLkWTRfOBVuLkfmG1oqtf5cBHCXG36Vto39dy0OW3wLwTFTdXg05_3BG54A==";
         script.crossOrigin = "anonymous";
         script.referrerPolicy = "no-referrer";
         script.onload = () => {
@@ -110,8 +117,13 @@ export default function InvoicePrintPage() {
   if (error || !order) {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center text-slate-600 font-sans p-6 text-center">
-        <p className="text-red-500 font-bold mb-4">Error: {error || "Order not found"}</p>
-        <Link to="/orders" className="text-blue-600 underline font-semibold text-sm">
+        <p className="text-red-500 font-bold mb-4">
+          Error: {error || "Order not found"}
+        </p>
+        <Link
+          to="/orders"
+          className="text-blue-600 underline font-semibold text-sm"
+        >
           Back to Order History
         </Link>
       </div>
@@ -185,7 +197,10 @@ export default function InvoicePrintPage() {
 
       {/* Main Print Container (Stripe OpenAI style) */}
       <div className="invoice-print-wrapper max-w-3xl mx-auto bg-white border border-slate-100 rounded-3xl shadow-xl p-12 md:p-16 print:p-0 print:border-none print:shadow-none print:rounded-none">
-        <div id="printable-invoice-container" className="invoice-print-container text-slate-900 bg-white">
+        <div
+          id="printable-invoice-container"
+          className="invoice-print-container text-slate-900 bg-white"
+        >
           {/* Header Row: Document type & Brand Logo */}
           <div className="flex justify-between items-start">
             <div>
@@ -196,25 +211,41 @@ export default function InvoicePrintPage() {
               {/* Document Metadata block */}
               <div className="mt-5 space-y-1 text-[13px] text-slate-800">
                 <div className="flex">
-                  <span className="text-slate-400 w-36 shrink-0">Invoice number</span>
-                  <span className="font-medium text-slate-900">{invoiceNumber}</span>
+                  <span className="text-slate-400 w-36 shrink-0">
+                    Invoice number
+                  </span>
+                  <span className="font-medium text-slate-900">
+                    {invoiceNumber}
+                  </span>
                 </div>
                 {order.payment_status === "paid" && (
                   <div className="flex">
-                    <span className="text-slate-400 w-36 shrink-0">Receipt number</span>
-                    <span className="font-medium text-slate-900">{receiptNumber}</span>
+                    <span className="text-slate-400 w-36 shrink-0">
+                      Receipt number
+                    </span>
+                    <span className="font-medium text-slate-900">
+                      {receiptNumber}
+                    </span>
                   </div>
                 )}
                 <div className="flex">
                   <span className="text-slate-400 w-36 shrink-0">
-                    {order.payment_status === "paid" ? "Date paid" : "Date of issue"}
+                    {order.payment_status === "paid"
+                      ? "Date paid"
+                      : "Date of issue"}
                   </span>
-                  <span className="font-medium text-slate-900">{formattedDate}</span>
+                  <span className="font-medium text-slate-900">
+                    {formattedDate}
+                  </span>
                 </div>
                 {order.payment_status !== "paid" && (
                   <div className="flex">
-                    <span className="text-slate-400 w-36 shrink-0">Date due</span>
-                    <span className="font-medium text-slate-900">{formattedDate}</span>
+                    <span className="text-slate-400 w-36 shrink-0">
+                      Date due
+                    </span>
+                    <span className="font-medium text-slate-900">
+                      {formattedDate}
+                    </span>
                   </div>
                 )}
               </div>
@@ -236,12 +267,9 @@ export default function InvoicePrintPage() {
             <div>
               <p className="font-semibold text-black">SuraZense Co., Ltd.</p>
               <p className="text-slate-500 leading-relaxed mt-1.5 whitespace-pre-line">
-                394 Village No. 4, Chaimongkon Subdistrict,
-                Mueang Nakhon Ratchasima District,
-                Nakhon Ratchasima, 30000
-                Thailand
-                info@surazense.com
-                TH VAT 0305565004265
+                394 Village No. 4, Chaimongkon Subdistrict, Mueang Nakhon
+                Ratchasima District, Nakhon Ratchasima, 30000 Thailand
+                info@surazense.com TH VAT 0305565004265
               </p>
             </div>
 
@@ -259,8 +287,14 @@ export default function InvoicePrintPage() {
 
           {/* Bold amount highlight */}
           <div className="text-[22px] font-bold text-black mt-10 mb-2">
-            ฿{total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}{" "}
-            {order.payment_status === "paid" ? `paid on ${formattedDate}` : `due ${formattedDate}`}
+            ฿
+            {total.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}{" "}
+            {order.payment_status === "paid"
+              ? `paid on ${formattedDate}`
+              : `due ${formattedDate}`}
           </div>
           {order.payment_status !== "paid" && (
             <div className="mb-4">
@@ -281,23 +315,42 @@ export default function InvoicePrintPage() {
                 <tr className="border-b border-slate-300 text-slate-400 font-medium">
                   <th className="text-left pb-2 font-normal">Description</th>
                   <th className="text-right pb-2 font-normal w-16">Qty</th>
-                  <th className="text-right pb-2 font-normal w-28">Unit price</th>
+                  <th className="text-right pb-2 font-normal w-28">
+                    Unit price
+                  </th>
                   <th className="text-right pb-2 font-normal w-28">Amount</th>
                 </tr>
               </thead>
               <tbody>
                 {(order.items ?? []).map((item, idx) => (
-                  <tr key={item.id ?? idx} className="border-b border-slate-100 text-slate-700">
+                  <tr
+                    key={item.id ?? idx}
+                    className="border-b border-slate-100 text-slate-700"
+                  >
                     <td className="py-3">
-                      <span className="font-bold text-slate-900">{item.product_name}</span>
-                      <div className="text-[11px] text-slate-400 mt-0.5">{item.product_category}</div>
+                      <span className="font-bold text-slate-900">
+                        {item.product_name}
+                      </span>
+                      <div className="text-[11px] text-slate-400 mt-0.5">
+                        {item.product_category}
+                      </div>
                     </td>
-                    <td className="py-3 text-right text-slate-900">{item.quantity}</td>
                     <td className="py-3 text-right text-slate-900">
-                      ฿{Number(item.price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      {item.quantity}
+                    </td>
+                    <td className="py-3 text-right text-slate-900">
+                      ฿
+                      {Number(item.price).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
                     </td>
                     <td className="py-3 text-right font-medium text-slate-900">
-                      ฿{(item.price * item.quantity).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      ฿
+                      {(item.price * item.quantity).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
                     </td>
                   </tr>
                 ))}
@@ -311,19 +364,35 @@ export default function InvoicePrintPage() {
               <div className="flex justify-between text-slate-500">
                 <span>Subtotal</span>
                 <span className="font-medium text-slate-900">
-                  ฿{total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  ฿
+                  {total.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </span>
               </div>
               <div className="flex justify-between text-slate-500">
                 <span>Total</span>
                 <span className="font-medium text-slate-900">
-                  ฿{total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  ฿
+                  {total.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </span>
               </div>
               <div className="flex justify-between border-t border-slate-250 pt-3 text-black font-bold">
-                <span>{order.payment_status === "paid" ? "Amount paid" : "Amount due"}</span>
                 <span>
-                  ฿{total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  {order.payment_status === "paid"
+                    ? "Amount paid"
+                    : "Amount due"}
+                </span>
+                <span>
+                  ฿
+                  {total.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </span>
               </div>
             </div>
@@ -332,28 +401,41 @@ export default function InvoicePrintPage() {
           {/* Payment History section (Only for Paid receipts) */}
           {order.payment_status === "paid" && (
             <div className="mt-10">
-              <h3 className="text-[16px] font-bold text-black mb-4">Payment history</h3>
+              <h3 className="text-[16px] font-bold text-black mb-4">
+                Payment history
+              </h3>
               <table className="w-full text-[13px] border-collapse">
                 <thead>
                   <tr className="border-b border-slate-300 text-slate-400 font-medium">
-                    <th className="text-left pb-2 font-normal">Payment method</th>
+                    <th className="text-left pb-2 font-normal">
+                      Payment method
+                    </th>
                     <th className="text-left pb-2 font-normal">Date</th>
                     <th className="text-right pb-2 font-normal">Amount paid</th>
-                    <th className="text-right pb-2 font-normal">Receipt number</th>
+                    <th className="text-right pb-2 font-normal">
+                      Receipt number
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="text-slate-700">
                     <td className="py-3 font-semibold text-slate-900">
-                      {order.payment_method === "card" || order.payment_method === "Stripe"
+                      {order.payment_method === "card" ||
+                      order.payment_method === "Stripe"
                         ? "Card"
-                        : (order.payment_method || "Card")}
+                        : order.payment_method || "Card"}
                     </td>
                     <td className="py-3 text-slate-900">{formattedDate}</td>
                     <td className="py-3 text-right text-slate-900">
-                      ฿{total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      ฿
+                      {total.toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
                     </td>
-                    <td className="py-3 text-right text-slate-900">{receiptNumber}</td>
+                    <td className="py-3 text-right text-slate-900">
+                      {receiptNumber}
+                    </td>
                   </tr>
                 </tbody>
               </table>

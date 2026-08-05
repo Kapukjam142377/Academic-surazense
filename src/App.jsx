@@ -85,7 +85,11 @@ function App() {
                 <Route path="/" element={<AcademicTraining />} />
                 <Route
                   path="/dashboard"
-                  element={<ProtectedRoute><Dashboard /></ProtectedRoute>}
+                  element={
+                    <ProtectedRoute>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  }
                 />
                 <Route path="/products" element={<Products />} />
                 <Route path="/products/:id" element={<ProductDetail />} />
@@ -95,7 +99,11 @@ function App() {
                 />
                 <Route
                   path="/checkout"
-                  element={<ProtectedRoute><Checkout /></ProtectedRoute>}
+                  element={
+                    <ProtectedRoute>
+                      <Checkout />
+                    </ProtectedRoute>
+                  }
                 />
                 <Route path="/login" element={<Login />} />
                 <Route path="/services" element={<Services />} />
@@ -105,19 +113,35 @@ function App() {
                 <Route path="/contacts" element={<Contacts />} />
                 <Route
                   path="/admin"
-                  element={<ProtectedRoute adminOnly><Admin /></ProtectedRoute>}
+                  element={
+                    <ProtectedRoute adminOnly>
+                      <Admin />
+                    </ProtectedRoute>
+                  }
                 />
                 <Route
                   path="/orders"
-                  element={<ProtectedRoute><OrderHistory /></ProtectedRoute>}
+                  element={
+                    <ProtectedRoute>
+                      <OrderHistory />
+                    </ProtectedRoute>
+                  }
                 />
                 <Route
                   path="/orders/:id/invoice"
-                  element={<ProtectedRoute><InvoicePrintPage /></ProtectedRoute>}
+                  element={
+                    <ProtectedRoute>
+                      <InvoicePrintPage />
+                    </ProtectedRoute>
+                  }
                 />
                 <Route
                   path="/profile"
-                  element={<ProtectedRoute><Profile /></ProtectedRoute>}
+                  element={
+                    <ProtectedRoute>
+                      <Profile />
+                    </ProtectedRoute>
+                  }
                 />
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route path="/verify-email" element={<VerifyEmail />} />

@@ -18,6 +18,14 @@ import {
   Clock,
   Calendar,
   Presentation,
+  Bell,
+  CheckCheck,
+  Trash2,
+  Megaphone,
+  Package,
+  AlertCircle,
+  FileText,
+  Sparkles,
 } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useLanguage } from "../context/LanguageContext";
@@ -59,6 +67,196 @@ export default function Layout({ children }) {
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
 
   const cartRef = useRef(null);
+  const notifRef = useRef(null);
+
+  // Notification Center States
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [isNotifOpen, setIsNotifOpen] = useState(false);
+  const [notifFilter, setNotifFilter] = useState("all");
+
+  const API_URL = import.meta.env.PROD
+    ? ""
+    : import.meta.env.VITE_API_URL || "http://34.87.78.35:8000";
+
+  const userId = user?.id || 1;
+
+  const MOCK_NOTIFICATIONS = [
+    {
+      id: 101,
+      user_id: userId,
+      title:
+        language === "th"
+          ? "ยินดีต้อนรับสู่ระบบ SuraZense"
+          : "Welcome to SuraZense",
+      message:
+        language === "th"
+          ? "ขอบคุณที่ลงทะเบียนใช้งานแพลตฟอร์มวิเคราะห์ไบโอเซนเซอร์ Xzense-101"
+          : "Thank you for registering on the SuraZense biosensor platform.",
+      type: "system",
+      is_read: false,
+      created_at: new Date().toISOString(),
+    },
+    {
+      id: 102,
+      user_id: userId,
+      title:
+        language === "th"
+          ? "ประกาศข่าวสารใหม่: Xzense-101 Release"
+          : "New Announcement: Xzense-101 Release",
+      message:
+        language === "th"
+          ? "เปิดตัวเครื่องอ่านสัญญาณ QCM รุ่นใหม่ ความละเอียดระดับ sub-nanogram"
+          : "Official launch of Xzense-101 QCM biosensor analyzer.",
+      type: "announcement",
+      reference_id: 1,
+      is_read: false,
+      created_at: new Date(Date.now() - 3600000).toISOString(),
+    },
+    {
+      id: 103,
+      user_id: userId,
+      title:
+        language === "th"
+          ? "คำสั่งซื้อสำเร็จ #ORD-9821"
+          : "Order Confirmed #ORD-9821",
+      message:
+        language === "th"
+          ? "เราได้รับรายการสั่งซื้อ QCM Gold Sensor Crystal เรียบร้อยแล้ว"
+          : "Your order for QCM Gold Sensor Crystal has been processed.",
+      type: "order",
+      reference_id: 9821,
+      is_read: true,
+      created_at: new Date(Date.now() - 86400000).toISOString(),
+    },
+  ];
+
+  const fetchUserNotifications = async () => {
+    if (!user) {
+      setNotifications([]);
+      return;
+    }
+    try {
+      const res = await fetch(`${API_URL}/api/users/${user.id}/notifications`);
+      if (res.ok) {
+        const data = await res.json();
+        setNotifications(data && data.length > 0 ? data : MOCK_NOTIFICATIONS);
+      } else {
+        setNotifications(MOCK_NOTIFICATIONS);
+      }
+    } catch (e) {
+      setNotifications(MOCK_NOTIFICATIONS);
+    }
+  };
+
+  const fetchUnreadCount = async () => {
+    if (!user) {
+      setUnreadCount(0);
+      return;
+    }
+    try {
+      const res = await fetch(
+        `${API_URL}/api/users/${user.id}/notifications/unread-count`,
+      );
+      if (res.ok) {
+        const data = await res.json();
+        setUnreadCount(data.unread_count);
+      } else {
+        setUnreadCount(MOCK_NOTIFICATIONS.filter((n) => !n.is_read).length);
+      }
+    } catch (e) {
+      setUnreadCount(MOCK_NOTIFICATIONS.filter((n) => !n.is_read).length);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchUserNotifications();
+      fetchUnreadCount();
+    } else {
+      setNotifications([]);
+      setUnreadCount(0);
+    }
+  }, [user, API_URL]);
+
+  const handleMarkAsRead = async (notifId) => {
+    try {
+      const res = await fetch(`${API_URL}/api/notifications/${notifId}/read`, {
+        method: "PATCH",
+      });
+      if (res.ok) {
+        fetchUserNotifications();
+        fetchUnreadCount();
+      }
+    } catch (e) {
+      setNotifications((prev) =>
+        prev.map((n) => (n.id === notifId ? { ...n, is_read: true } : n)),
+      );
+      setUnreadCount((prev) => Math.max(0, prev - 1));
+    }
+  };
+
+  const handleMarkAllAsRead = async () => {
+    try {
+      const res = await fetch(
+        `${API_URL}/api/users/${userId}/notifications/read-all`,
+        {
+          method: "PATCH",
+        },
+      );
+      if (res.ok) {
+        fetchUserNotifications();
+        fetchUnreadCount();
+      }
+    } catch (e) {
+      setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
+      setUnreadCount(0);
+    }
+  };
+
+  const handleDeleteNotif = async (notifId, e) => {
+    e.stopPropagation();
+    try {
+      const res = await fetch(`${API_URL}/api/notifications/${notifId}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        fetchUserNotifications();
+        fetchUnreadCount();
+      }
+    } catch (err) {
+      setNotifications((prev) => prev.filter((n) => n.id !== notifId));
+    }
+  };
+
+  const filteredNotifs = notifications.filter((n) => {
+    if (notifFilter === "unread") return !n.is_read;
+    if (notifFilter !== "all") return n.type === notifFilter;
+    return true;
+  });
+
+  const getNotifIcon = (type) => {
+    switch (type) {
+      case "order":
+        return <Package className="w-4 h-4 text-emerald-500" />;
+      case "announcement":
+        return <Megaphone className="w-4 h-4 text-sky-500" />;
+      case "system":
+        return <AlertCircle className="w-4 h-4 text-amber-500" />;
+      default:
+        return <Sparkles className="w-4 h-4 text-purple-500" />;
+    }
+  };
+
+  const formatNotifTime = (dateStr) => {
+    if (!dateStr) return "";
+    try {
+      const d = new Date(dateStr);
+      return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    } catch {
+      return "";
+    }
+  };
 
   // Close mobile drawer when changing page routes
   useEffect(() => {
@@ -69,6 +267,9 @@ export default function Layout({ children }) {
     function handleClickOutside(event) {
       if (cartRef.current && !cartRef.current.contains(event.target)) {
         setIsCartOpen(false);
+      }
+      if (notifRef.current && !notifRef.current.contains(event.target)) {
+        setIsNotifOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -86,7 +287,10 @@ export default function Layout({ children }) {
   const linkBaseClass =
     "text-[13px] tracking-wider uppercase transition-colors duration-200";
 
-  if (location.pathname === "/admin" || location.pathname.endsWith("/invoice")) {
+  if (
+    location.pathname === "/admin" ||
+    location.pathname.endsWith("/invoice")
+  ) {
     return (
       <div className="flex flex-col min-h-screen bg-slate-50 print:bg-white">
         <main className="flex-1 flex flex-col w-full">{children}</main>
@@ -169,6 +373,128 @@ export default function Layout({ children }) {
               TH
             </span>
           </button>
+
+          {/* Notifications Dropdown (Only for logged-in users) */}
+          {user && (
+            <div className="relative" ref={notifRef}>
+              <button
+                id="global-notif-icon"
+                onClick={() => setIsNotifOpen(!isNotifOpen)}
+                className="relative text-slate-600 hover:text-accent transition-colors flex items-center justify-center p-1 cursor-pointer bg-transparent border-none outline-none"
+                title="Notifications"
+              >
+                <Bell className="w-[1.15rem] h-[1.15rem] stroke-[2.5px]" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-2 -right-2 min-w-[1.25rem] h-5 px-1 bg-sky-500 rounded-full border-[1.5px] border-white text-[10px] font-bold text-white flex items-center justify-center shadow-sm">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+
+              {isNotifOpen && (
+                <div className="absolute top-full right-0 mt-4 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl shadow-blue-900/10 border border-slate-100 py-4 px-5 z-50">
+                  {/* Header */}
+                  <div className="flex justify-between items-center mb-3 pb-3 border-b border-slate-100">
+                    <div className="flex items-center gap-2">
+                      <Bell className="w-4 h-4 text-accent" />
+                      <h3 className="font-bold text-slate-800 text-sm">
+                        {language === "th" ? "การแจ้งเตือน" : "Notifications"}
+                      </h3>
+                      {unreadCount > 0 && (
+                        <span className="text-[10px] bg-sky-100 text-sky-700 font-bold px-2 py-0.5 rounded-full">
+                          {unreadCount}{" "}
+                          {language === "th" ? "ยังไม่อ่าน" : "unread"}
+                        </span>
+                      )}
+                    </div>
+                    {unreadCount > 0 && (
+                      <button
+                        onClick={handleMarkAllAsRead}
+                        className="text-[11px] font-semibold text-accent hover:underline flex items-center gap-1 bg-transparent border-none cursor-pointer"
+                      >
+                        <CheckCheck className="w-3.5 h-3.5" />
+                        <span>
+                          {language === "th" ? "อ่านทั้งหมด" : "Read all"}
+                        </span>
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Filter Pills */}
+                  <div className="flex items-center gap-1.5 overflow-x-auto pb-2 mb-3 text-[11px] no-scrollbar">
+                    {["all", "unread", "order", "announcement", "system"].map(
+                      (f) => (
+                        <button
+                          key={f}
+                          onClick={() => setNotifFilter(f)}
+                          className={`px-2.5 py-1 rounded-full font-medium transition-colors cursor-pointer border-none capitalize ${
+                            notifFilter === f
+                              ? "bg-accent text-white font-bold"
+                              : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                          }`}
+                        >
+                          {f}
+                        </button>
+                      ),
+                    )}
+                  </div>
+
+                  {/* Notification Items List */}
+                  <div className="space-y-2 max-h-[60vh] overflow-y-auto pr-1">
+                    {filteredNotifs.length === 0 ? (
+                      <p className="text-xs text-slate-400 text-center py-6">
+                        {language === "th"
+                          ? "ไม่มีการแจ้งเตือน"
+                          : "No notifications found."}
+                      </p>
+                    ) : (
+                      filteredNotifs.map((n) => (
+                        <div
+                          key={n.id}
+                          onClick={() => {
+                            if (!n.is_read) handleMarkAsRead(n.id);
+                            if (n.type === "announcement") navigate("/news");
+                            if (n.type === "order") navigate("/order-history");
+                            setIsNotifOpen(false);
+                          }}
+                          className={`group relative p-3 rounded-xl border transition-all cursor-pointer flex gap-3 items-start ${
+                            !n.is_read
+                              ? "bg-sky-50/70 border-sky-200/80 shadow-xs"
+                              : "bg-white hover:bg-slate-50 border-slate-100"
+                          }`}
+                        >
+                          <div className="mt-0.5 p-2 rounded-lg bg-white border border-slate-100 shadow-xs shrink-0 text-slate-600">
+                            {getNotifIcon(n.type)}
+                          </div>
+                          <div className="flex-1 min-w-0 pr-4">
+                            <h4 className="text-xs font-bold text-slate-800 line-clamp-1">
+                              {n.title}
+                            </h4>
+                            <p className="text-[11px] text-slate-500 line-clamp-2 mt-0.5 leading-relaxed">
+                              {n.message}
+                            </p>
+                            <span className="text-[9px] text-slate-400 font-mono mt-1 block">
+                              {formatNotifTime(n.created_at)}
+                            </span>
+                          </div>
+                          {!n.is_read && (
+                            <div className="w-2 h-2 rounded-full bg-sky-500 shrink-0 mt-1.5" />
+                          )}
+                          <button
+                            onClick={(e) => handleDeleteNotif(n.id, e)}
+                            className="opacity-0 group-hover:opacity-100 absolute top-2 right-2 p-1 text-slate-400 hover:text-rose-500 transition-opacity bg-transparent border-none cursor-pointer"
+                            title="Delete notification"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="relative" ref={cartRef}>
             <button
@@ -331,7 +657,7 @@ export default function Layout({ children }) {
             </div>
           ) : (
             <button
-              onClick={() => navigate('/login')}
+              onClick={() => navigate("/login")}
               className="bg-accent text-white px-5 py-2.5 rounded-full text-sm font-semibold transition-all hover:-translate-y-[1px] hover:bg-accent-hover hover:shadow-[0_4px_12px_rgba(2,132,199,0.25)] active:translate-y-0 cursor-pointer border-none"
             >
               {t("nav.login")}
@@ -574,7 +900,7 @@ export default function Layout({ children }) {
             <button
               onClick={() => {
                 setIsMobileMenuOpen(false);
-                navigate('/login');
+                navigate("/login");
               }}
               className="w-full bg-accent hover:bg-accent-hover text-white font-bold py-3 rounded-xl transition-all shadow-md shadow-sky-200 cursor-pointer border-none text-[14px]"
             >
@@ -795,7 +1121,6 @@ export default function Layout({ children }) {
         </div>
       </footer>
 
-
       {/* Session Timeout Warning Modal */}
       {showTimeoutModal && (
         <div className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
@@ -814,7 +1139,7 @@ export default function Layout({ children }) {
             <button
               onClick={() => {
                 setShowTimeoutModal(false);
-                navigate('/login');
+                navigate("/login");
               }}
               className="w-full bg-accent hover:bg-accent-hover text-white font-bold py-3.5 rounded-xl transition-all shadow-md shadow-sky-200 cursor-pointer text-sm border-none"
             >

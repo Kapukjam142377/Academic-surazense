@@ -110,7 +110,9 @@ export default function InvoiceModal({ order, language, onClose }) {
           <div className="flex items-center gap-2 text-slate-800">
             <FileText className="w-5 h-5 text-slate-600" />
             <span className="font-extrabold text-sm text-slate-700 tracking-wide">
-              {order.payment_status === "paid" ? "Stripe Receipt" : "Stripe Invoice"}
+              {order.payment_status === "paid"
+                ? "Stripe Receipt"
+                : "Stripe Invoice"}
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -145,25 +147,41 @@ export default function InvoiceModal({ order, language, onClose }) {
               {/* Document Metadata block */}
               <div className="mt-5 space-y-1 text-[13px] text-slate-800">
                 <div className="flex">
-                  <span className="text-slate-400 w-36 shrink-0">Invoice number</span>
-                  <span className="font-medium text-slate-900">{invoiceNumber}</span>
+                  <span className="text-slate-400 w-36 shrink-0">
+                    Invoice number
+                  </span>
+                  <span className="font-medium text-slate-900">
+                    {invoiceNumber}
+                  </span>
                 </div>
                 {order.payment_status === "paid" && (
                   <div className="flex">
-                    <span className="text-slate-400 w-36 shrink-0">Receipt number</span>
-                    <span className="font-medium text-slate-900">{receiptNumber}</span>
+                    <span className="text-slate-400 w-36 shrink-0">
+                      Receipt number
+                    </span>
+                    <span className="font-medium text-slate-900">
+                      {receiptNumber}
+                    </span>
                   </div>
                 )}
                 <div className="flex">
                   <span className="text-slate-400 w-36 shrink-0">
-                    {order.payment_status === "paid" ? "Date paid" : "Date of issue"}
+                    {order.payment_status === "paid"
+                      ? "Date paid"
+                      : "Date of issue"}
                   </span>
-                  <span className="font-medium text-slate-900">{formattedDate}</span>
+                  <span className="font-medium text-slate-900">
+                    {formattedDate}
+                  </span>
                 </div>
                 {order.payment_status !== "paid" && (
                   <div className="flex">
-                    <span className="text-slate-400 w-36 shrink-0">Date due</span>
-                    <span className="font-medium text-slate-900">{formattedDate}</span>
+                    <span className="text-slate-400 w-36 shrink-0">
+                      Date due
+                    </span>
+                    <span className="font-medium text-slate-900">
+                      {formattedDate}
+                    </span>
                   </div>
                 )}
               </div>
@@ -185,12 +203,9 @@ export default function InvoiceModal({ order, language, onClose }) {
             <div>
               <p className="font-semibold text-black">SuraZense Co., Ltd.</p>
               <p className="text-slate-500 leading-relaxed mt-1.5 whitespace-pre-line">
-                394 Village No. 4, Chaimongkon Subdistrict,
-                Mueang Nakhon Ratchasima District,
-                Nakhon Ratchasima, 30000
-                Thailand
-                info@surazense.com
-                TH VAT 0305565004265
+                394 Village No. 4, Chaimongkon Subdistrict, Mueang Nakhon
+                Ratchasima District, Nakhon Ratchasima, 30000 Thailand
+                info@surazense.com TH VAT 0305565004265
               </p>
             </div>
 
@@ -208,8 +223,14 @@ export default function InvoiceModal({ order, language, onClose }) {
 
           {/* Bold amount highlight */}
           <div className="text-[22px] font-bold text-black mt-10 mb-2">
-            ฿{total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}{" "}
-            {order.payment_status === "paid" ? `paid on ${formattedDate}` : `due ${formattedDate}`}
+            ฿
+            {total.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}{" "}
+            {order.payment_status === "paid"
+              ? `paid on ${formattedDate}`
+              : `due ${formattedDate}`}
           </div>
           {order.payment_status !== "paid" && (
             <div className="mb-4">
@@ -230,23 +251,42 @@ export default function InvoiceModal({ order, language, onClose }) {
                 <tr className="border-b border-slate-300 text-slate-400 font-medium">
                   <th className="text-left pb-2 font-normal">Description</th>
                   <th className="text-right pb-2 font-normal w-16">Qty</th>
-                  <th className="text-right pb-2 font-normal w-28">Unit price</th>
+                  <th className="text-right pb-2 font-normal w-28">
+                    Unit price
+                  </th>
                   <th className="text-right pb-2 font-normal w-28">Amount</th>
                 </tr>
               </thead>
               <tbody>
                 {(order.items ?? []).map((item, idx) => (
-                  <tr key={item.id ?? idx} className="border-b border-slate-100 text-slate-700">
+                  <tr
+                    key={item.id ?? idx}
+                    className="border-b border-slate-100 text-slate-700"
+                  >
                     <td className="py-3">
-                      <span className="font-bold text-slate-900">{item.product_name}</span>
-                      <div className="text-[11px] text-slate-400 mt-0.5">{item.product_category}</div>
+                      <span className="font-bold text-slate-900">
+                        {item.product_name}
+                      </span>
+                      <div className="text-[11px] text-slate-400 mt-0.5">
+                        {item.product_category}
+                      </div>
                     </td>
-                    <td className="py-3 text-right text-slate-900">{item.quantity}</td>
                     <td className="py-3 text-right text-slate-900">
-                      ฿{Number(item.price).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      {item.quantity}
+                    </td>
+                    <td className="py-3 text-right text-slate-900">
+                      ฿
+                      {Number(item.price).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
                     </td>
                     <td className="py-3 text-right font-medium text-slate-900">
-                      ฿{(item.price * item.quantity).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      ฿
+                      {(item.price * item.quantity).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
                     </td>
                   </tr>
                 ))}
@@ -260,19 +300,35 @@ export default function InvoiceModal({ order, language, onClose }) {
               <div className="flex justify-between text-slate-500">
                 <span>Subtotal</span>
                 <span className="font-medium text-slate-900">
-                  ฿{total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  ฿
+                  {total.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </span>
               </div>
               <div className="flex justify-between text-slate-500">
                 <span>Total</span>
                 <span className="font-medium text-slate-900">
-                  ฿{total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  ฿
+                  {total.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </span>
               </div>
               <div className="flex justify-between border-t border-slate-250 pt-3 text-black font-bold">
-                <span>{order.payment_status === "paid" ? "Amount paid" : "Amount due"}</span>
                 <span>
-                  ฿{total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  {order.payment_status === "paid"
+                    ? "Amount paid"
+                    : "Amount due"}
+                </span>
+                <span>
+                  ฿
+                  {total.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </span>
               </div>
             </div>
@@ -281,28 +337,41 @@ export default function InvoiceModal({ order, language, onClose }) {
           {/* Payment History section (Only for Paid receipts) */}
           {order.payment_status === "paid" && (
             <div className="mt-10">
-              <h3 className="text-[16px] font-bold text-black mb-4">Payment history</h3>
+              <h3 className="text-[16px] font-bold text-black mb-4">
+                Payment history
+              </h3>
               <table className="w-full text-[13px] border-collapse">
                 <thead>
                   <tr className="border-b border-slate-300 text-slate-400 font-medium">
-                    <th className="text-left pb-2 font-normal">Payment method</th>
+                    <th className="text-left pb-2 font-normal">
+                      Payment method
+                    </th>
                     <th className="text-left pb-2 font-normal">Date</th>
                     <th className="text-right pb-2 font-normal">Amount paid</th>
-                    <th className="text-right pb-2 font-normal">Receipt number</th>
+                    <th className="text-right pb-2 font-normal">
+                      Receipt number
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="text-slate-700">
                     <td className="py-3 font-semibold text-slate-900">
-                      {order.payment_method === "card" || order.payment_method === "Stripe"
+                      {order.payment_method === "card" ||
+                      order.payment_method === "Stripe"
                         ? "Card"
-                        : (order.payment_method || "Card")}
+                        : order.payment_method || "Card"}
                     </td>
                     <td className="py-3 text-slate-900">{formattedDate}</td>
                     <td className="py-3 text-right text-slate-900">
-                      ฿{total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      ฿
+                      {total.toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
                     </td>
-                    <td className="py-3 text-right text-slate-900">{receiptNumber}</td>
+                    <td className="py-3 text-right text-slate-900">
+                      {receiptNumber}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -311,6 +380,6 @@ export default function InvoiceModal({ order, language, onClose }) {
         </div>
       </motion.div>
     </div>,
-    document.body
+    document.body,
   );
 }

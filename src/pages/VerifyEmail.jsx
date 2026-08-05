@@ -73,7 +73,12 @@ export default function VerifyEmail() {
     }, 1000);
   };
 
-  useEffect(() => () => { if (countdownRef.current) clearInterval(countdownRef.current); }, []);
+  useEffect(
+    () => () => {
+      if (countdownRef.current) clearInterval(countdownRef.current);
+    },
+    [],
+  );
 
   // ── Auto-verify when token is in URL ──
   useEffect(() => {
@@ -107,11 +112,16 @@ export default function VerifyEmail() {
         th
           ? `ส่งอีเมลยืนยันไปที่ ${resendEmail} แล้ว กรุณาตรวจสอบ inbox`
           : `Verification email sent to ${resendEmail}. Please check your inbox.`,
-        "success"
+        "success",
       );
       startCountdown(60);
     } else {
-      showToast(res.message || (th ? "เกิดข้อผิดพลาด กรุณาลองใหม่" : "Something went wrong. Please try again."));
+      showToast(
+        res.message ||
+          (th
+            ? "เกิดข้อผิดพลาด กรุณาลองใหม่"
+            : "Something went wrong. Please try again."),
+      );
     }
   };
 
@@ -254,11 +264,14 @@ export default function VerifyEmail() {
         <BlobBackground />
 
         {toast && (
-          <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast(null)}
+          />
         )}
 
         <div className="ve-card">
-
           {/* ── VERIFYING ── */}
           {pageState === "verifying" && (
             <div className="ve-state">
@@ -266,14 +279,20 @@ export default function VerifyEmail() {
                 <div className="ve-spinner" />
               </div>
               <h1>{th ? "กำลังยืนยันอีเมล..." : "Verifying email..."}</h1>
-              <p>{th ? "กรุณารอสักครู่ ระบบกำลังตรวจสอบข้อมูลของคุณ" : "Please wait while we verify your email address."}</p>
+              <p>
+                {th
+                  ? "กรุณารอสักครู่ ระบบกำลังตรวจสอบข้อมูลของคุณ"
+                  : "Please wait while we verify your email address."}
+              </p>
             </div>
           )}
 
           {/* ── SUCCESS ── */}
           {pageState === "success" && (
             <div className="ve-state">
-              <div className="ve-redirect-bar"><div className="ve-redirect-fill" /></div>
+              <div className="ve-redirect-bar">
+                <div className="ve-redirect-fill" />
+              </div>
               <div className="ve-icon-badge ve-icon-badge--green">
                 <CheckCircle size={34} />
               </div>
@@ -283,7 +302,11 @@ export default function VerifyEmail() {
                   ? "อีเมลของคุณได้รับการยืนยันเรียบร้อยแล้ว กำลังพาคุณไปหน้าถัดไป..."
                   : "Your email has been successfully verified. Redirecting you now..."}
               </p>
-              <Link to={user ? "/" : "/login"} className="ve-btn-primary" id="btn-ve-continue">
+              <Link
+                to={user ? "/" : "/login"}
+                className="ve-btn-primary"
+                id="btn-ve-continue"
+              >
                 {th ? "ดำเนินการต่อ" : "Continue"} <ArrowRight size={16} />
               </Link>
             </div>
@@ -292,7 +315,9 @@ export default function VerifyEmail() {
           {/* ── ALREADY VERIFIED ── */}
           {pageState === "already" && (
             <div className="ve-state">
-              <div className="ve-redirect-bar"><div className="ve-redirect-fill" /></div>
+              <div className="ve-redirect-bar">
+                <div className="ve-redirect-fill" />
+              </div>
               <div className="ve-icon-badge ve-icon-badge--green">
                 <CheckCircle size={34} />
               </div>
@@ -334,8 +359,18 @@ export default function VerifyEmail() {
           {/* ── RESEND FORM ── */}
           {pageState === "resend" && (
             <>
-              <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}>
-                <div className="ve-icon-badge ve-icon-badge--blue" style={{ flexShrink: 0, marginBottom: 0 }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "1rem",
+                  marginBottom: "1.5rem",
+                }}
+              >
+                <div
+                  className="ve-icon-badge ve-icon-badge--blue"
+                  style={{ flexShrink: 0, marginBottom: 0 }}
+                >
                   <MailOpen size={30} />
                 </div>
                 <div className="ve-resend-heading" style={{ marginBottom: 0 }}>
@@ -363,14 +398,18 @@ export default function VerifyEmail() {
                     {th ? "อีเมล" : "Email address"}
                   </label>
                   <div className="ve-field__wrap">
-                    <span className="ve-field__icon"><Mail size={16} /></span>
+                    <span className="ve-field__icon">
+                      <Mail size={16} />
+                    </span>
                     <input
                       id="ve-email"
                       type="email"
                       value={resendEmail}
                       onChange={(e) => setResendEmail(e.target.value)}
                       required
-                      placeholder={th ? "อีเมลที่ลงทะเบียนไว้" : "your@email.com"}
+                      placeholder={
+                        th ? "อีเมลที่ลงทะเบียนไว้" : "your@email.com"
+                      }
                       className="ve-field__input"
                       disabled={isSending}
                     />
@@ -389,8 +428,12 @@ export default function VerifyEmail() {
                     <>
                       <RefreshCw size={16} />
                       {countdown > 0
-                        ? (th ? `ส่งใหม่ได้ใน ${countdown}s` : `Resend in ${countdown}s`)
-                        : (th ? "ส่งลิงก์ยืนยัน" : "Send Verification Link")}
+                        ? th
+                          ? `ส่งใหม่ได้ใน ${countdown}s`
+                          : `Resend in ${countdown}s`
+                        : th
+                          ? "ส่งลิงก์ยืนยัน"
+                          : "Send Verification Link"}
                     </>
                   )}
                 </button>
@@ -399,7 +442,9 @@ export default function VerifyEmail() {
                   <div style={{ display: "flex", justifyContent: "center" }}>
                     <div className="ve-countdown-badge">
                       <RefreshCw size={12} />
-                      {th ? `ส่งได้อีกครั้งใน ${countdown} วินาที` : `You can resend in ${countdown}s`}
+                      {th
+                        ? `ส่งได้อีกครั้งใน ${countdown} วินาที`
+                        : `You can resend in ${countdown}s`}
                     </div>
                   </div>
                 )}
@@ -412,7 +457,6 @@ export default function VerifyEmail() {
               </div>
             </>
           )}
-
         </div>
       </div>
     </>

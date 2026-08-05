@@ -28,6 +28,17 @@ import {
   Package,
   FlaskConical,
   GraduationCap,
+  Megaphone,
+  Pin,
+  Plus,
+  Edit3,
+  Newspaper,
+  Sparkles,
+  Eye,
+  Tag,
+  Bell,
+  Send,
+  CheckCheck,
 } from "lucide-react";
 
 import { MOCK_PRODUCTS, saveProducts } from "../data/mockProducts";
@@ -90,6 +101,41 @@ export default function Admin() {
   const [newProdDescTh, setNewProdDescTh] = useState("");
   const [newProdImage, setNewProdImage] = useState("");
   const [newProdStatus, setNewProdStatus] = useState("In Stock");
+
+  // Announcement Management states
+  const [announcementsList, setAnnouncementsList] = useState([]);
+  const [announcementSearch, setAnnouncementSearch] = useState("");
+  const [announcementCategoryFilter, setAnnouncementCategoryFilter] =
+    useState("all");
+  const [announcementPublishFilter, setAnnouncementPublishFilter] =
+    useState("all");
+  const [showCreateAnnouncementModal, setShowCreateAnnouncementModal] =
+    useState(false);
+  const [showEditAnnouncementModal, setShowEditAnnouncementModal] =
+    useState(null);
+
+  // Announcement Form states
+  const [annTitle, setAnnTitle] = useState("");
+  const [annContent, setAnnContent] = useState("");
+  const [annSummary, setAnnSummary] = useState("");
+  const [annCategory, setAnnCategory] = useState("general");
+  const [annImageUrl, setAnnImageUrl] = useState("");
+  const [annIsPublished, setAnnIsPublished] = useState(true);
+  const [annIsPinned, setAnnIsPinned] = useState(false);
+
+  // Notifications Management states
+  const [notificationsList, setNotificationsList] = useState([]);
+  const [notifSearch, setNotifSearch] = useState("");
+  const [notifTypeFilter, setNotifTypeFilter] = useState("all");
+  const [showCreateNotifModal, setShowCreateNotifModal] = useState(false);
+
+  // Notification Form states
+  const [createNotifTitle, setCreateNotifTitle] = useState("");
+  const [createNotifMessage, setCreateNotifMessage] = useState("");
+  const [createNotifType, setCreateNotifType] = useState("system");
+  const [createNotifTargetUserId, setCreateNotifTargetUserId] =
+    useState("broadcast"); // 'broadcast' or user_id
+  const [createNotifRefId, setCreateNotifRefId] = useState("");
 
   const handleAdminLoginSubmit = async (e) => {
     e.preventDefault();
@@ -261,6 +307,28 @@ export default function Admin() {
         };
       });
       setRunsList(mappedRuns);
+
+      // 5. Fetch Announcements
+      try {
+        const annRes = await fetch(`${API_URL}/api/announcements`);
+        if (annRes.ok) {
+          const annData = await annRes.json();
+          setAnnouncementsList(annData);
+        }
+      } catch (annErr) {
+        console.warn("Could not fetch announcements from API:", annErr);
+      }
+
+      // 6. Fetch Notifications
+      try {
+        const notifRes = await fetch(`${API_URL}/api/notifications`);
+        if (notifRes.ok) {
+          const notifData = await notifRes.json();
+          setNotificationsList(notifData);
+        }
+      } catch (notifErr) {
+        console.warn("Could not fetch notifications from API:", notifErr);
+      }
     } catch (err) {
       console.error("Error fetching admin data:", err);
     }
@@ -570,6 +638,102 @@ export default function Admin() {
     } else {
       setProductList(MOCK_PRODUCTS);
     }
+
+    // Load Announcements (Mock Local Storage)
+    const localAnn = localStorage.getItem("surazense_mock_announcements");
+    if (localAnn) {
+      try {
+        setAnnouncementsList(JSON.parse(localAnn));
+      } catch (err) {
+        console.error("Failed to parse mock announcements:", err);
+      }
+    } else {
+      const initialAnn = [
+        {
+          id: 1,
+          title: "SuraZense Launches Xzense-101 Next-Gen Biosensor System",
+          summary: "Revolutionary QCM system offering sub-nanogram resolution.",
+          content:
+            "We are thrilled to announce the official launch of Xzense-101...",
+          category: "news",
+          image_url:
+            "https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=1000&q=80",
+          is_published: true,
+          is_pinned: true,
+          author_id: 1,
+          created_at: new Date(
+            Date.now() - 5 * 24 * 60 * 60 * 1000,
+          ).toISOString(),
+          updated_at: new Date(
+            Date.now() - 5 * 24 * 60 * 60 * 1000,
+          ).toISOString(),
+        },
+        {
+          id: 2,
+          title: "SuraZense Wins National MedTech Innovation Award 2026",
+          summary:
+            "Recognized for groundbreaking contributions to liquid biopsy diagnostics.",
+          content:
+            "SuraZense Co., Ltd. has been awarded the National MedTech Award...",
+          category: "news",
+          image_url:
+            "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=1000&q=80",
+          is_published: true,
+          is_pinned: true,
+          author_id: 1,
+          created_at: new Date(
+            Date.now() - 10 * 24 * 60 * 60 * 1000,
+          ).toISOString(),
+          updated_at: new Date(
+            Date.now() - 10 * 24 * 60 * 60 * 1000,
+          ).toISOString(),
+        },
+      ];
+      setAnnouncementsList(initialAnn);
+      localStorage.setItem(
+        "surazense_mock_announcements",
+        JSON.stringify(initialAnn),
+      );
+    }
+
+    // Load Notifications (Mock Local Storage)
+    const localNotif = localStorage.getItem("surazense_mock_notifications");
+    if (localNotif) {
+      try {
+        setNotificationsList(JSON.parse(localNotif));
+      } catch (err) {
+        console.error("Failed to parse mock notifications:", err);
+      }
+    } else {
+      const initialNotif = [
+        {
+          id: 1,
+          user_id: null,
+          title: "System Update: SuraZense V2 API Released",
+          message:
+            "All endpoints have been updated to support high-throughput streaming.",
+          type: "system",
+          reference_id: null,
+          is_read: false,
+          created_at: new Date(Date.now() - 2 * 3600000).toISOString(),
+        },
+        {
+          id: 2,
+          user_id: 1,
+          title: "Order Processed #ORD-9821",
+          message: "Payment confirmed for QCM Gold Sensor Crystal.",
+          type: "order",
+          reference_id: 9821,
+          is_read: true,
+          created_at: new Date(Date.now() - 24 * 3600000).toISOString(),
+        },
+      ];
+      setNotificationsList(initialNotif);
+      localStorage.setItem(
+        "surazense_mock_notifications",
+        JSON.stringify(initialNotif),
+      );
+    }
   }, []);
 
   const handleVerifyPasscode = (e) => {
@@ -657,7 +821,10 @@ export default function Admin() {
     e.preventDefault();
     if (!newProdNameEn || !newProdPrice) return;
 
-    const nextId = productList.length > 0 ? Math.max(...productList.map((p) => p.id)) + 1 : 1;
+    const nextId =
+      productList.length > 0
+        ? Math.max(...productList.map((p) => p.id)) + 1
+        : 1;
     const newProduct = {
       id: nextId,
       name: {
@@ -672,7 +839,7 @@ export default function Admin() {
       },
       image: newProdImage || null,
       status: newProdStatus,
-      specs: {}
+      specs: {},
     };
 
     const updatedList = [...productList, newProduct];
@@ -695,7 +862,7 @@ export default function Admin() {
     const confirmDelete = window.confirm(
       language === "th"
         ? "คุณแน่ใจหรือไม่ว่าต้องการลบสินค้าชิ้นนี้?"
-        : "Are you sure you want to delete this product?"
+        : "Are you sure you want to delete this product?",
     );
     if (!confirmDelete) return;
 
@@ -820,6 +987,325 @@ export default function Admin() {
       localStorage.setItem("surazense_mock_runs", JSON.stringify(updated));
     }
   };
+
+  // Announcement Handlers & CRUD
+  const resetAnnForm = () => {
+    setAnnTitle("");
+    setAnnContent("");
+    setAnnSummary("");
+    setAnnCategory("general");
+    setAnnImageUrl("");
+    setAnnIsPublished(true);
+    setAnnIsPinned(false);
+  };
+
+  const handleCreateAnnouncementSubmit = async (e) => {
+    e.preventDefault();
+    if (!annTitle || !annContent) {
+      alert(
+        language === "th"
+          ? "กรุณากรอกหัวข้อและเนื้อหาประกาศ"
+          : "Title and content are required.",
+      );
+      return;
+    }
+    const payload = {
+      title: annTitle,
+      content: annContent,
+      summary: annSummary || null,
+      category: annCategory,
+      image_url: annImageUrl || null,
+      is_published: annIsPublished,
+      is_pinned: annIsPinned,
+      author_id: user?.id || 1,
+    };
+
+    if (isApiOnline) {
+      try {
+        const res = await fetch(`${API_URL}/api/announcements`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error("Failed to create announcement");
+        fetchDataFromApi();
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    } else {
+      const newAnn = {
+        id: Date.now(),
+        ...payload,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+      const updated = [newAnn, ...announcementsList];
+      setAnnouncementsList(updated);
+      localStorage.setItem(
+        "surazense_mock_announcements",
+        JSON.stringify(updated),
+      );
+    }
+    setShowCreateAnnouncementModal(false);
+    resetAnnForm();
+  };
+
+  const handleOpenEditAnnouncement = (ann) => {
+    setShowEditAnnouncementModal(ann);
+    setAnnTitle(ann.title || "");
+    setAnnContent(ann.content || "");
+    setAnnSummary(ann.summary || "");
+    setAnnCategory(ann.category || "general");
+    setAnnImageUrl(ann.image_url || "");
+    setAnnIsPublished(ann.is_published ?? true);
+    setAnnIsPinned(ann.is_pinned ?? false);
+  };
+
+  const handleUpdateAnnouncementSubmit = async (e) => {
+    e.preventDefault();
+    if (!showEditAnnouncementModal) return;
+
+    const payload = {
+      title: annTitle,
+      content: annContent,
+      summary: annSummary || null,
+      category: annCategory,
+      image_url: annImageUrl || null,
+      is_published: annIsPublished,
+      is_pinned: annIsPinned,
+    };
+
+    if (isApiOnline) {
+      try {
+        const res = await fetch(
+          `${API_URL}/api/announcements/${showEditAnnouncementModal.id}`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          },
+        );
+        if (!res.ok) throw new Error("Failed to update announcement");
+        fetchDataFromApi();
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    } else {
+      const updated = announcementsList.map((a) =>
+        a.id === showEditAnnouncementModal.id
+          ? { ...a, ...payload, updated_at: new Date().toISOString() }
+          : a,
+      );
+      setAnnouncementsList(updated);
+      localStorage.setItem(
+        "surazense_mock_announcements",
+        JSON.stringify(updated),
+      );
+    }
+    setShowEditAnnouncementModal(null);
+    resetAnnForm();
+  };
+
+  const handleTogglePublishAnnouncement = async (ann) => {
+    const newStatus = !ann.is_published;
+    if (isApiOnline) {
+      try {
+        const res = await fetch(`${API_URL}/api/announcements/${ann.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ is_published: newStatus }),
+        });
+        if (!res.ok) throw new Error("Failed to toggle status");
+        fetchDataFromApi();
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    } else {
+      const updated = announcementsList.map((a) =>
+        a.id === ann.id ? { ...a, is_published: newStatus } : a,
+      );
+      setAnnouncementsList(updated);
+      localStorage.setItem(
+        "surazense_mock_announcements",
+        JSON.stringify(updated),
+      );
+    }
+  };
+
+  const handleTogglePinAnnouncement = async (ann) => {
+    const newPin = !ann.is_pinned;
+    if (isApiOnline) {
+      try {
+        const res = await fetch(`${API_URL}/api/announcements/${ann.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ is_pinned: newPin }),
+        });
+        if (!res.ok) throw new Error("Failed to toggle pin");
+        fetchDataFromApi();
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    } else {
+      const updated = announcementsList.map((a) =>
+        a.id === ann.id ? { ...a, is_pinned: newPin } : a,
+      );
+      setAnnouncementsList(updated);
+      localStorage.setItem(
+        "surazense_mock_announcements",
+        JSON.stringify(updated),
+      );
+    }
+  };
+
+  const handleDeleteAnnouncement = async (id) => {
+    const check = window.confirm(
+      language === "th"
+        ? "คุณแน่ใจหรือไม่ที่จะลบประกาศข่าวสารนี้?"
+        : "Are you sure you want to delete this announcement?",
+    );
+    if (!check) return;
+
+    if (isApiOnline) {
+      try {
+        const res = await fetch(`${API_URL}/api/announcements/${id}`, {
+          method: "DELETE",
+        });
+        if (!res.ok) throw new Error("Failed to delete announcement");
+        fetchDataFromApi();
+      } catch (err) {
+        alert("Error deleting announcement: " + err.message);
+      }
+    } else {
+      const updated = announcementsList.filter((a) => a.id !== id);
+      setAnnouncementsList(updated);
+      localStorage.setItem(
+        "surazense_mock_announcements",
+        JSON.stringify(updated),
+      );
+    }
+  };
+
+  // Filtered Announcements
+  const filteredAnnouncementsList = announcementsList.filter((a) => {
+    const term = announcementSearch.toLowerCase();
+    const matchSearch =
+      (a.title || "").toLowerCase().includes(term) ||
+      (a.summary || "").toLowerCase().includes(term) ||
+      (a.content || "").toLowerCase().includes(term);
+    const matchCategory =
+      announcementCategoryFilter === "all" ||
+      a.category === announcementCategoryFilter;
+    const matchPublish =
+      announcementPublishFilter === "all"
+        ? true
+        : announcementPublishFilter === "published"
+          ? a.is_published
+          : !a.is_published;
+    return matchSearch && matchCategory && matchPublish;
+  });
+
+  // Notifications Handlers & CRUD
+  const resetNotifForm = () => {
+    setCreateNotifTitle("");
+    setCreateNotifMessage("");
+    setCreateNotifType("system");
+    setCreateNotifTargetUserId("broadcast");
+    setCreateNotifRefId("");
+  };
+
+  const handleCreateNotificationSubmit = async (e) => {
+    e.preventDefault();
+    if (!createNotifTitle || !createNotifMessage) {
+      alert(
+        language === "th"
+          ? "กรุณากรอกหัวข้อและข้อความการแจ้งเตือน"
+          : "Title and message are required.",
+      );
+      return;
+    }
+
+    const targetId =
+      createNotifTargetUserId === "broadcast"
+        ? null
+        : parseInt(createNotifTargetUserId);
+    const refId = createNotifRefId ? parseInt(createNotifRefId) : null;
+
+    const payload = {
+      user_id: targetId,
+      title: createNotifTitle,
+      message: createNotifMessage,
+      type: createNotifType,
+      reference_id: refId,
+      is_read: false,
+    };
+
+    if (isApiOnline) {
+      try {
+        const res = await fetch(`${API_URL}/api/notifications`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error("Failed to create notification");
+        fetchDataFromApi();
+      } catch (err) {
+        alert("Error creating notification: " + err.message);
+      }
+    } else {
+      const newNotif = {
+        id: Date.now(),
+        ...payload,
+        created_at: new Date().toISOString(),
+      };
+      const updated = [newNotif, ...notificationsList];
+      setNotificationsList(updated);
+      localStorage.setItem(
+        "surazense_mock_notifications",
+        JSON.stringify(updated),
+      );
+    }
+    setShowCreateNotifModal(false);
+    resetNotifForm();
+  };
+
+  const handleDeleteNotification = async (id) => {
+    const check = window.confirm(
+      language === "th"
+        ? "คุณแน่ใจหรือไม่ที่จะลบการแจ้งเตือนนี้?"
+        : "Are you sure you want to delete this notification?",
+    );
+    if (!check) return;
+
+    if (isApiOnline) {
+      try {
+        const res = await fetch(`${API_URL}/api/notifications/${id}`, {
+          method: "DELETE",
+        });
+        if (!res.ok) throw new Error("Failed to delete notification");
+        fetchDataFromApi();
+      } catch (err) {
+        alert("Error deleting notification: " + err.message);
+      }
+    } else {
+      const updated = notificationsList.filter((n) => n.id !== id);
+      setNotificationsList(updated);
+      localStorage.setItem(
+        "surazense_mock_notifications",
+        JSON.stringify(updated),
+      );
+    }
+  };
+
+  // Filtered Notifications List
+  const filteredNotificationsList = notificationsList.filter((n) => {
+    const term = notifSearch.toLowerCase();
+    const matchSearch =
+      (n.title || "").toLowerCase().includes(term) ||
+      (n.message || "").toLowerCase().includes(term);
+    const matchType = notifTypeFilter === "all" || n.type === notifTypeFilter;
+    return matchSearch && matchType;
+  });
 
   // Change Admin passcode
   const handleUpdatePasscode = (e) => {
@@ -1262,6 +1748,36 @@ export default function Admin() {
           </button>
 
           <button
+            onClick={() => setActiveTab("announcements")}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all border-none cursor-pointer outline-none ${
+              activeTab === "announcements"
+                ? "bg-sky-50 text-accent font-bold shadow-sm shadow-sky-500/5"
+                : "text-slate-655 hover:bg-slate-50 hover:text-accent"
+            }`}
+          >
+            <Megaphone className="w-4 h-4" />
+            <span>
+              {language === "th"
+                ? "จัดการข่าวสาร & ประกาศ"
+                : "News & Announcements"}
+            </span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("notifications")}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all border-none cursor-pointer outline-none ${
+              activeTab === "notifications"
+                ? "bg-sky-50 text-accent font-bold shadow-sm shadow-sky-500/5"
+                : "text-slate-655 hover:bg-slate-50 hover:text-accent"
+            }`}
+          >
+            <Bell className="w-4 h-4" />
+            <span>
+              {language === "th" ? "ระบบแจ้งเตือน" : "Notifications Center"}
+            </span>
+          </button>
+
+          <button
             onClick={() => setActiveTab("settings")}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all border-none cursor-pointer outline-none ${
               activeTab === "settings"
@@ -1357,6 +1873,14 @@ export default function Admin() {
                   (language === "th"
                     ? "การจัดการข้อมูลรายการสินค้า"
                     : "Catalog & Product Management")}
+                {activeTab === "announcements" &&
+                  (language === "th"
+                    ? "การจัดการข่าวสารและประกาศ"
+                    : "News & Announcements Management")}
+                {activeTab === "notifications" &&
+                  (language === "th"
+                    ? "ระบบจัดการการแจ้งเตือน"
+                    : "System Notifications Management")}
               </h1>
               <p className="text-xs text-slate-400 font-bold mt-1.5 leading-none">
                 {activeTab === "users" &&
@@ -1379,6 +1903,14 @@ export default function Admin() {
                   (language === "th"
                     ? "เพิ่ม ลบ หรือแก้ไขข้อมูลรายการสินค้าบนหน้าแคตตาล็อกหลัก"
                     : "Create, view, and remove items from the store directory.")}
+                {activeTab === "announcements" &&
+                  (language === "th"
+                    ? "สร้าง แก้ไข ปักหมุด และเผยแพร่ข่าวสารประชาสัมพันธ์"
+                    : "Create, edit, pin, publish, and delete official announcements.")}
+                {activeTab === "notifications" &&
+                  (language === "th"
+                    ? "ส่งข้อความแจ้งเตือนถึงผู้ใช้รายบุคคล หรือประกาศแจ้งเตือนทั้งระบบ"
+                    : "Broadcast system alerts or send targeted notifications to users.")}
               </p>
             </div>
           </div>
@@ -2375,7 +2907,9 @@ export default function Admin() {
               <div className="bg-white border border-slate-200/60 rounded-2xl p-6 flex flex-col sm:flex-row gap-4 items-center justify-between shadow-sm">
                 <div>
                   <h3 className="text-base font-bold text-slate-800">
-                    {language === "th" ? "จัดการรายการสินค้า" : "Catalog Management"}
+                    {language === "th"
+                      ? "จัดการรายการสินค้า"
+                      : "Catalog Management"}
                   </h3>
                   <p className="text-xs text-slate-400 mt-1">
                     {language === "th"
@@ -2441,7 +2975,9 @@ export default function Admin() {
                                 {product.image ? (
                                   <img
                                     src={product.image}
-                                    alt={product.name[language] || product.name.en}
+                                    alt={
+                                      product.name[language] || product.name.en
+                                    }
                                     className="w-full h-full object-contain"
                                   />
                                 ) : (
@@ -2456,7 +2992,8 @@ export default function Admin() {
                                 {product.name[language] || product.name.en}
                               </div>
                               <div className="text-[10px] text-slate-400 mt-1 max-w-sm truncate">
-                                {product.description[language] || product.description.en}
+                                {product.description[language] ||
+                                  product.description.en}
                               </div>
                             </td>
                             <td className="py-4 px-6">
@@ -2465,7 +3002,10 @@ export default function Admin() {
                               </span>
                             </td>
                             <td className="py-4 px-6 font-semibold text-slate-800">
-                              ฿{(product.price * 35).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                              ฿
+                              {(product.price * 35).toLocaleString(undefined, {
+                                minimumFractionDigits: 2,
+                              })}
                               <span className="text-[10px] text-slate-400 font-normal block mt-0.5">
                                 (${product.price.toFixed(2)})
                               </span>
@@ -2508,7 +3048,9 @@ export default function Admin() {
                   <div className="bg-white rounded-[2.5rem] border border-slate-200/80 shadow-2xl p-8 w-full max-w-xl max-h-[90vh] overflow-y-auto">
                     <div className="flex justify-between items-center mb-6">
                       <h2 className="text-xl font-black text-slate-800 tracking-tight">
-                        {language === "th" ? "เพิ่มสินค้าชิ้นใหม่" : "Add New Product"}
+                        {language === "th"
+                          ? "เพิ่มสินค้าชิ้นใหม่"
+                          : "Add New Product"}
                       </h2>
                       <button
                         onClick={() => setShowAddProductModal(false)}
@@ -2518,7 +3060,10 @@ export default function Admin() {
                       </button>
                     </div>
 
-                    <form onSubmit={handleAddProductSubmit} className="space-y-4">
+                    <form
+                      onSubmit={handleAddProductSubmit}
+                      className="space-y-4"
+                    >
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
@@ -2645,6 +3190,964 @@ export default function Admin() {
                           type="button"
                           onClick={() => setShowAddProductModal(false)}
                           className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl transition-all cursor-pointer border-none"
+                        >
+                          {language === "th" ? "ยกเลิก" : "Cancel"}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* TAB: ANNOUNCEMENTS MANAGEMENT */}
+          {activeTab === "announcements" && (
+            <div className="space-y-6">
+              {/* Stat Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-white rounded-3xl border border-slate-200/60 p-6 shadow-sm flex items-center gap-5">
+                  <div className="w-12 h-12 bg-sky-50 rounded-2xl flex items-center justify-center text-accent shrink-0">
+                    <Megaphone className="w-6 h-6 stroke-[2]" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                      {language === "th"
+                        ? "ประกาศทั้งหมด"
+                        : "Total Announcements"}
+                    </p>
+                    <h3 className="text-2xl font-black text-slate-800 mt-1">
+                      {announcementsList.length}
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-3xl border border-slate-200/60 p-6 shadow-sm flex items-center gap-5">
+                  <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 shrink-0">
+                    <Sparkles className="w-6 h-6 stroke-[2]" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                      {language === "th" ? "เผยแพร่แล้ว" : "Published"}
+                    </p>
+                    <h3 className="text-2xl font-black text-slate-800 mt-1">
+                      {announcementsList.filter((a) => a.is_published).length}
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-3xl border border-slate-200/60 p-6 shadow-sm flex items-center gap-5">
+                  <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-500 shrink-0">
+                    <Pin className="w-6 h-6 stroke-[2]" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                      {language === "th" ? "ปักหมุด" : "Pinned"}
+                    </p>
+                    <h3 className="text-2xl font-black text-slate-800 mt-1">
+                      {announcementsList.filter((a) => a.is_pinned).length}
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-3xl border border-slate-200/60 p-6 shadow-sm flex items-center gap-5">
+                  <div className="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600 shrink-0">
+                    <Newspaper className="w-6 h-6 stroke-[2]" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                      {language === "th" ? "ฉบับร่าง" : "Drafts"}
+                    </p>
+                    <h3 className="text-2xl font-black text-slate-800 mt-1">
+                      {announcementsList.filter((a) => !a.is_published).length}
+                    </h3>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Bar (Search & Filter + Add Announcement) */}
+              <div className="bg-white border border-slate-200/60 rounded-2xl p-6 flex flex-col md:flex-row gap-4 items-center justify-between shadow-sm">
+                <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto flex-1">
+                  <div className="relative flex-1 max-w-md">
+                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input
+                      type="text"
+                      value={announcementSearch}
+                      onChange={(e) => setAnnouncementSearch(e.target.value)}
+                      placeholder={
+                        language === "th"
+                          ? "ค้นหาประกาศ..."
+                          : "Search announcements..."
+                      }
+                      className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-accent bg-slate-50"
+                    />
+                  </div>
+
+                  <select
+                    value={announcementCategoryFilter}
+                    onChange={(e) =>
+                      setAnnouncementCategoryFilter(e.target.value)
+                    }
+                    className="px-3 py-2.5 rounded-xl border border-slate-200 text-xs bg-slate-50 font-medium focus:outline-none focus:border-accent"
+                  >
+                    <option value="all">
+                      {language === "th" ? "ทุกหมวดหมู่" : "All Categories"}
+                    </option>
+                    <option value="general">General (ทั่วไป)</option>
+                    <option value="news">News (ข่าวสาร)</option>
+                    <option value="promotion">Promotion (อบรม)</option>
+                    <option value="system">System (ระบบ)</option>
+                    <option value="medical">Medical (วิจัย/แพทย์)</option>
+                  </select>
+
+                  <select
+                    value={announcementPublishFilter}
+                    onChange={(e) =>
+                      setAnnouncementPublishFilter(e.target.value)
+                    }
+                    className="px-3 py-2.5 rounded-xl border border-slate-200 text-xs bg-slate-50 font-medium focus:outline-none focus:border-accent"
+                  >
+                    <option value="all">
+                      {language === "th" ? "สถานะทั้งหมด" : "All Status"}
+                    </option>
+                    <option value="published">
+                      {language === "th" ? "เผยแพร่แล้ว" : "Published"}
+                    </option>
+                    <option value="draft">
+                      {language === "th" ? "ฉบับร่าง" : "Draft"}
+                    </option>
+                  </select>
+                </div>
+
+                <button
+                  onClick={() => {
+                    resetAnnForm();
+                    setShowCreateAnnouncementModal(true);
+                  }}
+                  className="w-full md:w-auto flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-white font-bold px-5 py-2.5 rounded-xl transition-all shadow-sm text-xs cursor-pointer border-none"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>
+                    {language === "th"
+                      ? "สร้างประกาศใหม่"
+                      : "Create Announcement"}
+                  </span>
+                </button>
+              </div>
+
+              {/* Table List of Announcements */}
+              <div className="bg-white border border-slate-200/60 rounded-3xl overflow-hidden shadow-sm">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse text-xs">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-200/80 text-slate-400 uppercase font-extrabold tracking-wider">
+                        <th className="py-4 px-6">ID</th>
+                        <th className="py-4 px-6">
+                          {language === "th" ? "ประกาศ" : "Announcement"}
+                        </th>
+                        <th className="py-4 px-6">
+                          {language === "th" ? "หมวดหมู่" : "Category"}
+                        </th>
+                        <th className="py-4 px-6 text-center">
+                          {language === "th" ? "ปักหมุด" : "Pinned"}
+                        </th>
+                        <th className="py-4 px-6 text-center">
+                          {language === "th" ? "สถานะ" : "Status"}
+                        </th>
+                        <th className="py-4 px-6">
+                          {language === "th" ? "วันที่สร้าง" : "Created At"}
+                        </th>
+                        <th className="py-4 px-6 text-center">
+                          {language === "th" ? "จัดการ" : "Actions"}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {filteredAnnouncementsList.length === 0 ? (
+                        <tr>
+                          <td
+                            colSpan="7"
+                            className="py-12 text-center text-slate-400 font-semibold"
+                          >
+                            {language === "th"
+                              ? "ไม่พบรายการประกาศ"
+                              : "No announcements found."}
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredAnnouncementsList.map((ann) => (
+                          <tr
+                            key={ann.id}
+                            className="hover:bg-slate-50/80 transition-colors"
+                          >
+                            <td className="py-4 px-6 font-mono font-bold text-slate-400">
+                              #{ann.id}
+                            </td>
+                            <td className="py-4 px-6 max-w-xs">
+                              <div className="flex items-center gap-3">
+                                {ann.image_url ? (
+                                  <img
+                                    src={ann.image_url}
+                                    alt=""
+                                    className="w-10 h-10 rounded-lg object-cover border border-slate-200 shrink-0"
+                                  />
+                                ) : (
+                                  <div className="w-10 h-10 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 shrink-0">
+                                    <Newspaper className="w-5 h-5" />
+                                  </div>
+                                )}
+                                <div>
+                                  <h4 className="font-bold text-slate-800 text-xs line-clamp-1">
+                                    {ann.title}
+                                  </h4>
+                                  <p className="text-[10px] text-slate-400 line-clamp-1 mt-0.5">
+                                    {ann.summary || ann.content}
+                                  </p>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="py-4 px-6">
+                              <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200">
+                                {ann.category}
+                              </span>
+                            </td>
+                            <td className="py-4 px-6 text-center">
+                              <button
+                                onClick={() => handleTogglePinAnnouncement(ann)}
+                                className={`p-1.5 rounded-lg border text-xs transition-colors cursor-pointer ${
+                                  ann.is_pinned
+                                    ? "bg-amber-50 text-amber-600 border-amber-200 font-bold"
+                                    : "bg-slate-50 text-slate-400 border-slate-200 hover:text-amber-500"
+                                }`}
+                                title={
+                                  ann.is_pinned
+                                    ? "Unpin Announcement"
+                                    : "Pin Announcement"
+                                }
+                              >
+                                <Pin
+                                  className={`w-3.5 h-3.5 ${ann.is_pinned ? "fill-amber-500" : ""}`}
+                                />
+                              </button>
+                            </td>
+                            <td className="py-4 px-6 text-center">
+                              <button
+                                onClick={() =>
+                                  handleTogglePublishAnnouncement(ann)
+                                }
+                                className={`px-2.5 py-1 rounded-full text-[10px] font-bold border transition-colors cursor-pointer ${
+                                  ann.is_published
+                                    ? "bg-emerald-50 text-emerald-600 border-emerald-200"
+                                    : "bg-slate-100 text-slate-500 border-slate-200"
+                                }`}
+                              >
+                                {ann.is_published
+                                  ? language === "th"
+                                    ? "เผยแพร่แล้ว"
+                                    : "Published"
+                                  : language === "th"
+                                    ? "ฉบับร่าง"
+                                    : "Draft"}
+                              </button>
+                            </td>
+                            <td className="py-4 px-6 text-slate-400 text-[11px]">
+                              {ann.created_at
+                                ? new Date(ann.created_at).toLocaleDateString()
+                                : "-"}
+                            </td>
+                            <td className="py-4 px-6 text-center">
+                              <div className="flex items-center justify-center gap-1.5">
+                                <button
+                                  onClick={() =>
+                                    handleOpenEditAnnouncement(ann)
+                                  }
+                                  className="p-1.5 text-slate-500 hover:text-accent hover:bg-sky-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer"
+                                  title="Edit Announcement"
+                                >
+                                  <Edit3 className="w-4 h-4" />
+                                </button>
+                                <button
+                                  onClick={() =>
+                                    handleDeleteAnnouncement(ann.id)
+                                  }
+                                  className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer"
+                                  title="Delete Announcement"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Create Announcement Modal */}
+              {showCreateAnnouncementModal && (
+                <div className="fixed inset-0 z-[100] bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+                  <div className="bg-white rounded-[2.5rem] border border-slate-200/80 shadow-2xl p-8 w-full max-w-xl max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-center mb-6">
+                      <h2 className="text-xl font-black text-slate-800 tracking-tight">
+                        {language === "th"
+                          ? "สร้างประกาศข่าวสารใหม่"
+                          : "Create New Announcement"}
+                      </h2>
+                      <button
+                        onClick={() => setShowCreateAnnouncementModal(false)}
+                        className="p-2 text-slate-400 hover:text-slate-800 hover:bg-slate-100 rounded-full transition-colors bg-transparent border-none cursor-pointer outline-none"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
+
+                    <form
+                      onSubmit={handleCreateAnnouncementSubmit}
+                      className="space-y-4"
+                    >
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                          Title (หัวข้อประกาศ) *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={annTitle}
+                          onChange={(e) => setAnnTitle(e.target.value)}
+                          placeholder="e.g. SuraZense Announces Xzense-101 Release"
+                          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                            Category (หมวดหมู่) *
+                          </label>
+                          <select
+                            value={annCategory}
+                            onChange={(e) => setAnnCategory(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm bg-white"
+                          >
+                            <option value="general">General (ทั่วไป)</option>
+                            <option value="news">News (ข่าวสาร)</option>
+                            <option value="promotion">Promotion (อบรม)</option>
+                            <option value="system">System (ระบบ)</option>
+                            <option value="medical">
+                              Medical (วิจัย/แพทย์)
+                            </option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                            Cover Image URL (รูปภาพปก)
+                          </label>
+                          <input
+                            type="text"
+                            value={annImageUrl}
+                            onChange={(e) => setAnnImageUrl(e.target.value)}
+                            placeholder="https://images.unsplash.com/..."
+                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                          Short Summary (สรุปสั้นๆ สำหรับแสดงการ์ด)
+                        </label>
+                        <input
+                          type="text"
+                          value={annSummary}
+                          onChange={(e) => setAnnSummary(e.target.value)}
+                          placeholder="Brief snippet for preview cards..."
+                          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                          Content Body (รายละเอียดประกาศ) *
+                        </label>
+                        <textarea
+                          required
+                          rows="6"
+                          value={annContent}
+                          onChange={(e) => setAnnContent(e.target.value)}
+                          placeholder="Write the complete announcement content here..."
+                          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm resize-none"
+                        />
+                      </div>
+
+                      <div className="flex items-center gap-6 pt-2">
+                        <label className="flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={annIsPublished}
+                            onChange={(e) =>
+                              setAnnIsPublished(e.target.checked)
+                            }
+                            className="w-4 h-4 rounded text-accent"
+                          />
+                          <span>
+                            {language === "th"
+                              ? "เผยแพร่ทันที (Publish)"
+                              : "Publish immediately"}
+                          </span>
+                        </label>
+
+                        <label className="flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={annIsPinned}
+                            onChange={(e) => setAnnIsPinned(e.target.checked)}
+                            className="w-4 h-4 rounded text-amber-500"
+                          />
+                          <span>
+                            {language === "th"
+                              ? "ปักหมุดข่าวสำคัญ (Pin)"
+                              : "Pin as Featured"}
+                          </span>
+                        </label>
+                      </div>
+
+                      <div className="pt-4 flex gap-3">
+                        <button
+                          type="submit"
+                          className="flex-1 bg-accent hover:bg-accent-hover text-white font-bold py-3 rounded-xl transition-all cursor-pointer border-none shadow-sm text-xs"
+                        >
+                          {language === "th"
+                            ? "บันทึกสร้างประกาศ"
+                            : "Create Announcement"}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setShowCreateAnnouncementModal(false)}
+                          className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl transition-all cursor-pointer border-none text-xs"
+                        >
+                          {language === "th" ? "ยกเลิก" : "Cancel"}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
+
+              {/* Edit Announcement Modal */}
+              {showEditAnnouncementModal && (
+                <div className="fixed inset-0 z-[100] bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+                  <div className="bg-white rounded-[2.5rem] border border-slate-200/80 shadow-2xl p-8 w-full max-w-xl max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-center mb-6">
+                      <h2 className="text-xl font-black text-slate-800 tracking-tight">
+                        {language === "th"
+                          ? "แก้ไขประกาศข่าวสาร"
+                          : "Edit Announcement"}{" "}
+                        #{showEditAnnouncementModal.id}
+                      </h2>
+                      <button
+                        onClick={() => setShowEditAnnouncementModal(null)}
+                        className="p-2 text-slate-400 hover:text-slate-800 hover:bg-slate-100 rounded-full transition-colors bg-transparent border-none cursor-pointer outline-none"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
+
+                    <form
+                      onSubmit={handleUpdateAnnouncementSubmit}
+                      className="space-y-4"
+                    >
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                          Title (หัวข้อประกาศ) *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={annTitle}
+                          onChange={(e) => setAnnTitle(e.target.value)}
+                          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                            Category (หมวดหมู่) *
+                          </label>
+                          <select
+                            value={annCategory}
+                            onChange={(e) => setAnnCategory(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm bg-white"
+                          >
+                            <option value="general">General (ทั่วไป)</option>
+                            <option value="news">News (ข่าวสาร)</option>
+                            <option value="promotion">Promotion (อบรม)</option>
+                            <option value="system">System (ระบบ)</option>
+                            <option value="medical">
+                              Medical (วิจัย/แพทย์)
+                            </option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                            Cover Image URL (รูปภาพปก)
+                          </label>
+                          <input
+                            type="text"
+                            value={annImageUrl}
+                            onChange={(e) => setAnnImageUrl(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                          Short Summary (สรุปสั้นๆ)
+                        </label>
+                        <input
+                          type="text"
+                          value={annSummary}
+                          onChange={(e) => setAnnSummary(e.target.value)}
+                          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                          Content Body (รายละเอียดประกาศ) *
+                        </label>
+                        <textarea
+                          required
+                          rows="6"
+                          value={annContent}
+                          onChange={(e) => setAnnContent(e.target.value)}
+                          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm resize-none"
+                        />
+                      </div>
+
+                      <div className="flex items-center gap-6 pt-2">
+                        <label className="flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={annIsPublished}
+                            onChange={(e) =>
+                              setAnnIsPublished(e.target.checked)
+                            }
+                            className="w-4 h-4 rounded text-accent"
+                          />
+                          <span>
+                            {language === "th"
+                              ? "เผยแพร่ (Published)"
+                              : "Is Published"}
+                          </span>
+                        </label>
+
+                        <label className="flex items-center gap-2 text-xs font-bold text-slate-700 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={annIsPinned}
+                            onChange={(e) => setAnnIsPinned(e.target.checked)}
+                            className="w-4 h-4 rounded text-amber-500"
+                          />
+                          <span>
+                            {language === "th"
+                              ? "ปักหมุดข่าว (Pinned)"
+                              : "Is Pinned"}
+                          </span>
+                        </label>
+                      </div>
+
+                      <div className="pt-4 flex gap-3">
+                        <button
+                          type="submit"
+                          className="flex-1 bg-accent hover:bg-accent-hover text-white font-bold py-3 rounded-xl transition-all cursor-pointer border-none shadow-sm text-xs"
+                        >
+                          {language === "th"
+                            ? "บันทึกการแก้ไข"
+                            : "Save Changes"}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setShowEditAnnouncementModal(null)}
+                          className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl transition-all cursor-pointer border-none text-xs"
+                        >
+                          {language === "th" ? "ยกเลิก" : "Cancel"}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* TAB: NOTIFICATIONS MANAGEMENT */}
+          {activeTab === "notifications" && (
+            <div className="space-y-6">
+              {/* Stat Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="bg-white rounded-3xl border border-slate-200/60 p-6 shadow-sm flex items-center gap-5">
+                  <div className="w-12 h-12 bg-sky-50 rounded-2xl flex items-center justify-center text-accent shrink-0">
+                    <Bell className="w-6 h-6 stroke-[2]" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                      {language === "th"
+                        ? "การแจ้งเตือนทั้งหมด"
+                        : "Total Notifications"}
+                    </p>
+                    <h3 className="text-2xl font-black text-slate-800 mt-1">
+                      {notificationsList.length}
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-3xl border border-slate-200/60 p-6 shadow-sm flex items-center gap-5">
+                  <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-amber-500 shrink-0">
+                    <AlertCircle className="w-6 h-6 stroke-[2]" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                      {language === "th" ? "ยังไม่อ่าน" : "Unread"}
+                    </p>
+                    <h3 className="text-2xl font-black text-slate-800 mt-1">
+                      {notificationsList.filter((n) => !n.is_read).length}
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-3xl border border-slate-200/60 p-6 shadow-sm flex items-center gap-5">
+                  <div className="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600 shrink-0">
+                    <Megaphone className="w-6 h-6 stroke-[2]" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                      {language === "th"
+                        ? "ประกาศทั้งระบบ (Broadcast)"
+                        : "Broadcast Alerts"}
+                    </p>
+                    <h3 className="text-2xl font-black text-slate-800 mt-1">
+                      {
+                        notificationsList.filter((n) => n.user_id === null)
+                          .length
+                      }
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-3xl border border-slate-200/60 p-6 shadow-sm flex items-center gap-5">
+                  <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 shrink-0">
+                    <Users className="w-6 h-6 stroke-[2]" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                      {language === "th"
+                        ? "ระบุรายบุคคล (Direct)"
+                        : "Targeted User Alerts"}
+                    </p>
+                    <h3 className="text-2xl font-black text-slate-800 mt-1">
+                      {
+                        notificationsList.filter((n) => n.user_id !== null)
+                          .length
+                      }
+                    </h3>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Bar (Search & Filter + Add Notification) */}
+              <div className="bg-white border border-slate-200/60 rounded-2xl p-6 flex flex-col md:flex-row gap-4 items-center justify-between shadow-sm">
+                <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto flex-1">
+                  <div className="relative flex-1 max-w-md">
+                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input
+                      type="text"
+                      value={notifSearch}
+                      onChange={(e) => setNotifSearch(e.target.value)}
+                      placeholder={
+                        language === "th"
+                          ? "ค้นหาการแจ้งเตือน..."
+                          : "Search notifications..."
+                      }
+                      className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-accent bg-slate-50"
+                    />
+                  </div>
+
+                  <select
+                    value={notifTypeFilter}
+                    onChange={(e) => setNotifTypeFilter(e.target.value)}
+                    className="px-3 py-2.5 rounded-xl border border-slate-200 text-xs bg-slate-50 font-medium focus:outline-none focus:border-accent"
+                  >
+                    <option value="all">
+                      {language === "th" ? "ทุกประเภท" : "All Types"}
+                    </option>
+                    <option value="system">System (ระบบ)</option>
+                    <option value="order">Order (คำสั่งซื้อ)</option>
+                    <option value="announcement">Announcement (ประกาศ)</option>
+                    <option value="report">Report (รายงาน)</option>
+                  </select>
+                </div>
+
+                <button
+                  onClick={() => {
+                    resetNotifForm();
+                    setShowCreateNotifModal(true);
+                  }}
+                  className="w-full md:w-auto flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-white font-bold px-5 py-2.5 rounded-xl transition-all shadow-sm text-xs cursor-pointer border-none"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>
+                    {language === "th"
+                      ? "ส่งการแจ้งเตือนใหม่"
+                      : "Create Notification"}
+                  </span>
+                </button>
+              </div>
+
+              {/* Table List of Notifications */}
+              <div className="bg-white border border-slate-200/60 rounded-3xl overflow-hidden shadow-sm">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse text-xs">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-200/80 text-slate-400 uppercase font-extrabold tracking-wider">
+                        <th className="py-4 px-6">ID</th>
+                        <th className="py-4 px-6">
+                          {language === "th" ? "ผู้รับ" : "Target User"}
+                        </th>
+                        <th className="py-4 px-6">
+                          {language === "th"
+                            ? "หัวข้อ & ข้อความ"
+                            : "Title & Message"}
+                        </th>
+                        <th className="py-4 px-6 text-center">
+                          {language === "th" ? "ประเภท" : "Type"}
+                        </th>
+                        <th className="py-4 px-6 text-center">
+                          {language === "th" ? "อ่านแล้ว" : "Status"}
+                        </th>
+                        <th className="py-4 px-6">
+                          {language === "th" ? "วันที่สร้าง" : "Created At"}
+                        </th>
+                        <th className="py-4 px-6 text-center">
+                          {language === "th" ? "จัดการ" : "Actions"}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {filteredNotificationsList.length === 0 ? (
+                        <tr>
+                          <td
+                            colSpan="7"
+                            className="py-12 text-center text-slate-400 font-semibold"
+                          >
+                            {language === "th"
+                              ? "ไม่พบรายการแจ้งเตือน"
+                              : "No notifications found."}
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredNotificationsList.map((n) => (
+                          <tr
+                            key={n.id}
+                            className="hover:bg-slate-50/80 transition-colors"
+                          >
+                            <td className="py-4 px-6 font-mono font-bold text-slate-400">
+                              #{n.id}
+                            </td>
+                            <td className="py-4 px-6">
+                              {n.user_id === null ? (
+                                <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase bg-purple-50 text-purple-600 border border-purple-100">
+                                  Broadcast (All Users)
+                                </span>
+                              ) : (
+                                <span className="font-mono font-semibold text-slate-700">
+                                  User #{n.user_id}
+                                </span>
+                              )}
+                            </td>
+                            <td className="py-4 px-6 max-w-sm">
+                              <h4 className="font-bold text-slate-800 text-xs line-clamp-1">
+                                {n.title}
+                              </h4>
+                              <p className="text-[10px] text-slate-400 line-clamp-1 mt-0.5">
+                                {n.message}
+                              </p>
+                            </td>
+                            <td className="py-4 px-6 text-center">
+                              <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase bg-slate-100 text-slate-600 border border-slate-200">
+                                {n.type}
+                              </span>
+                            </td>
+                            <td className="py-4 px-6 text-center">
+                              <span
+                                className={`px-2.5 py-1 rounded-full text-[10px] font-bold border ${
+                                  n.is_read
+                                    ? "bg-slate-100 text-slate-500 border-slate-200"
+                                    : "bg-amber-50 text-amber-600 border-amber-200"
+                                }`}
+                              >
+                                {n.is_read
+                                  ? language === "th"
+                                    ? "อ่านแล้ว"
+                                    : "Read"
+                                  : language === "th"
+                                    ? "ยังไม่อ่าน"
+                                    : "Unread"}
+                              </span>
+                            </td>
+                            <td className="py-4 px-6 text-slate-400 text-[11px]">
+                              {n.created_at
+                                ? new Date(n.created_at).toLocaleString()
+                                : "-"}
+                            </td>
+                            <td className="py-4 px-6 text-center">
+                              <button
+                                onClick={() => handleDeleteNotification(n.id)}
+                                className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer"
+                                title="Delete Notification"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Create Notification Modal */}
+              {showCreateNotifModal && (
+                <div className="fixed inset-0 z-[100] bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+                  <div className="bg-white rounded-[2.5rem] border border-slate-200/80 shadow-2xl p-8 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-center mb-6">
+                      <h2 className="text-xl font-black text-slate-800 tracking-tight">
+                        {language === "th"
+                          ? "สร้างการแจ้งเตือนใหม่"
+                          : "Send New Notification"}
+                      </h2>
+                      <button
+                        onClick={() => setShowCreateNotifModal(false)}
+                        className="p-2 text-slate-400 hover:text-slate-800 hover:bg-slate-100 rounded-full transition-colors bg-transparent border-none cursor-pointer outline-none"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
+
+                    <form
+                      onSubmit={handleCreateNotificationSubmit}
+                      className="space-y-4"
+                    >
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                          Target Recipient (ผู้รับการแจ้งเตือน) *
+                        </label>
+                        <select
+                          value={createNotifTargetUserId}
+                          onChange={(e) =>
+                            setCreateNotifTargetUserId(e.target.value)
+                          }
+                          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm bg-white"
+                        >
+                          <option value="broadcast">
+                            📢 All Users (Broadcast ถึงผู้ใช้งานทุกคน)
+                          </option>
+                          {usersList.map((u) => (
+                            <option key={u.id} value={u.id}>
+                              👤 User #{u.id} - {u.email} (
+                              {u.first_name || u.username || "User"})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                          Title (หัวข้อการแจ้งเตือน) *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={createNotifTitle}
+                          onChange={(e) => setCreateNotifTitle(e.target.value)}
+                          placeholder="e.g. Order Status Update / System Announcement"
+                          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                            Type (ประเภท) *
+                          </label>
+                          <select
+                            value={createNotifType}
+                            onChange={(e) => setCreateNotifType(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm bg-white"
+                          >
+                            <option value="system">System (ระบบ)</option>
+                            <option value="order">Order (คำสั่งซื้อ)</option>
+                            <option value="announcement">
+                              Announcement (ข่าวสาร)
+                            </option>
+                            <option value="report">Report (รายงาน)</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                            Reference ID (ID อ้างอิง เช่น ID คำสั่งซื้อ)
+                          </label>
+                          <input
+                            type="number"
+                            value={createNotifRefId}
+                            onChange={(e) =>
+                              setCreateNotifRefId(e.target.value)
+                            }
+                            placeholder="Optional ID"
+                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                          Message Body (ข้อความการแจ้งเตือน) *
+                        </label>
+                        <textarea
+                          required
+                          rows="4"
+                          value={createNotifMessage}
+                          onChange={(e) =>
+                            setCreateNotifMessage(e.target.value)
+                          }
+                          placeholder="Write the notification message details..."
+                          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm resize-none"
+                        />
+                      </div>
+
+                      <div className="pt-4 flex gap-3">
+                        <button
+                          type="submit"
+                          className="flex-1 bg-accent hover:bg-accent-hover text-white font-bold py-3 rounded-xl transition-all cursor-pointer border-none shadow-sm text-xs flex items-center justify-center gap-2"
+                        >
+                          <Send className="w-4 h-4" />
+                          <span>
+                            {language === "th"
+                              ? "ส่งการแจ้งเตือน"
+                              : "Send Notification"}
+                          </span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setShowCreateNotifModal(false)}
+                          className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl transition-all cursor-pointer border-none text-xs"
                         >
                           {language === "th" ? "ยกเลิก" : "Cancel"}
                         </button>

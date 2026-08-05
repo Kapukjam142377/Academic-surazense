@@ -484,7 +484,10 @@ const MOCK_PRODUCTS_RAW = [
 ];
 
 // Initialize local storage if not exists
-if (typeof window !== "undefined" && !localStorage.getItem("surazense_products")) {
+if (
+  typeof window !== "undefined" &&
+  !localStorage.getItem("surazense_products")
+) {
   localStorage.setItem("surazense_products", JSON.stringify(MOCK_PRODUCTS_RAW));
 }
 
@@ -501,13 +504,16 @@ export const refreshMockProducts = () => {
         products = MOCK_PRODUCTS_RAW;
       }
     } else {
-      localStorage.setItem("surazense_products", JSON.stringify(MOCK_PRODUCTS_RAW));
+      localStorage.setItem(
+        "surazense_products",
+        JSON.stringify(MOCK_PRODUCTS_RAW),
+      );
       products = MOCK_PRODUCTS_RAW;
     }
   } else {
     products = MOCK_PRODUCTS_RAW;
   }
-  
+
   MOCK_PRODUCTS.length = 0;
   MOCK_PRODUCTS.push(...products);
 };

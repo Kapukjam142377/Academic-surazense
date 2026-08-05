@@ -37,11 +37,26 @@ const Toast = ({ message, type, onClose }) => (
 );
 
 // ── Input Field ───────────────────────────────────────────────────────────────
-const InputField = ({ icon: Icon, label, id, type = "text", value, onChange, required, placeholder, rightAddon, disabled }) => (
+const InputField = ({
+  icon: Icon,
+  label,
+  id,
+  type = "text",
+  value,
+  onChange,
+  required,
+  placeholder,
+  rightAddon,
+  disabled,
+}) => (
   <div className="rp-field">
-    <label htmlFor={id} className="rp-field__label">{label}</label>
+    <label htmlFor={id} className="rp-field__label">
+      {label}
+    </label>
     <div className="rp-field__wrap">
-      <span className="rp-field__icon"><Icon size={16} /></span>
+      <span className="rp-field__icon">
+        <Icon size={16} />
+      </span>
       <input
         id={id}
         type={type}
@@ -91,7 +106,9 @@ export default function ResetPassword() {
     ? ["", "อ่อนมาก", "อ่อน", "ปานกลาง", "แข็งแกร่ง"][strength]
     : ["", "Very weak", "Weak", "Fair", "Strong"][strength];
 
-  const strengthColor = ["", "#ef4444", "#f97316", "#eab308", "#22c55e"][strength];
+  const strengthColor = ["", "#ef4444", "#f97316", "#eab308", "#22c55e"][
+    strength
+  ];
 
   const showToast = (message, type = "error") => {
     setToast({ message, type });
@@ -118,7 +135,11 @@ export default function ResetPassword() {
       return;
     }
     if (newPassword.length < 8) {
-      showToast(th ? "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร" : "Password must be at least 8 characters");
+      showToast(
+        th
+          ? "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร"
+          : "Password must be at least 8 characters",
+      );
       return;
     }
     setIsSubmitting(true);
@@ -127,7 +148,12 @@ export default function ResetPassword() {
     if (res.success) {
       setPageState("success");
     } else {
-      showToast(res.message || (th ? "เกิดข้อผิดพลาด กรุณาลองใหม่" : "Something went wrong. Please try again."));
+      showToast(
+        res.message ||
+          (th
+            ? "เกิดข้อผิดพลาด กรุณาลองใหม่"
+            : "Something went wrong. Please try again."),
+      );
     }
   };
 
@@ -254,11 +280,14 @@ export default function ResetPassword() {
         <BlobBackground />
 
         {toast && (
-          <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast(null)}
+          />
         )}
 
         <div className="rp-card">
-
           {/* ── VERIFYING TOKEN ── */}
           {pageState === "verifying" && (
             <div className="rp-state">
@@ -282,7 +311,11 @@ export default function ResetPassword() {
                   ? "ลิงก์รีเซ็ตรหัสผ่านนี้หมดอายุหรือไม่ถูกต้อง กรุณาขอลิงก์ใหม่อีกครั้ง"
                   : "This password reset link has expired or is invalid. Please request a new one."}
               </p>
-              <Link to="/login" className="rp-btn-outline" id="btn-rp-request-new">
+              <Link
+                to="/login"
+                className="rp-btn-outline"
+                id="btn-rp-request-new"
+              >
                 {th ? "ขอลิงก์ใหม่" : "Request a new link"}
               </Link>
             </div>
@@ -300,7 +333,11 @@ export default function ResetPassword() {
                   ? "รหัสผ่านของคุณถูกเปลี่ยนเรียบร้อยแล้ว คุณสามารถเข้าสู่ระบบได้ทันที"
                   : "Your password has been successfully updated. You can now sign in with your new password."}
               </p>
-              <Link to="/login" className="rp-btn-primary" id="btn-rp-goto-login">
+              <Link
+                to="/login"
+                className="rp-btn-primary"
+                id="btn-rp-goto-login"
+              >
                 {th ? "เข้าสู่ระบบ" : "Sign in"} <ArrowRight size={16} />
               </Link>
             </div>
@@ -338,9 +375,15 @@ export default function ResetPassword() {
                         <button
                           type="button"
                           onClick={() => setShowPassword((p) => !p)}
-                          aria-label={showPassword ? "Hide password" : "Show password"}
+                          aria-label={
+                            showPassword ? "Hide password" : "Show password"
+                          }
                         >
-                          {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                          {showPassword ? (
+                            <EyeOff size={16} />
+                          ) : (
+                            <Eye size={16} />
+                          )}
                         </button>
                       }
                     />
@@ -350,10 +393,16 @@ export default function ResetPassword() {
                         <div className="rp-strength__bar">
                           <div
                             className="rp-strength__fill"
-                            style={{ width: `${(strength / 4) * 100}%`, background: strengthColor }}
+                            style={{
+                              width: `${(strength / 4) * 100}%`,
+                              background: strengthColor,
+                            }}
                           />
                         </div>
-                        <p className="rp-strength__label" style={{ color: strengthColor }}>
+                        <p
+                          className="rp-strength__label"
+                          style={{ color: strengthColor }}
+                        >
                           {strengthLabel}
                         </p>
                       </div>
@@ -406,7 +455,6 @@ export default function ResetPassword() {
               </div>
             </>
           )}
-
         </div>
       </div>
     </>

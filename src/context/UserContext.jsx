@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 
 const UserContext = createContext();
 
@@ -11,7 +17,7 @@ function decodeJwtPayload(token) {
       atob(base64)
         .split("")
         .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join("")
+        .join(""),
     );
     return JSON.parse(jsonPayload);
   } catch {
@@ -33,7 +39,7 @@ export function UserProvider({ children }) {
   const [loading, setLoading] = useState(true);
   // 'local' = persist across browser sessions (localStorage)
   // 'session' = clear on browser close (sessionStorage)
-  const [storageType, setStorageType] = useState('local');
+  const [storageType, setStorageType] = useState("local");
 
   const API_URL = import.meta.env.PROD
     ? ""
@@ -46,7 +52,7 @@ export function UserProvider({ children }) {
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...extra,
     }),
-    [token]
+    [token],
   );
 
   // ── Restore session from localStorage or sessionStorage on mount ──
@@ -54,10 +60,12 @@ export function UserProvider({ children }) {
     const localToken = localStorage.getItem("surazense_token");
     const sessionToken = sessionStorage.getItem("surazense_token");
     const savedToken = localToken || sessionToken;
-    const savedUser = localStorage.getItem("surazense_user") || sessionStorage.getItem("surazense_user");
+    const savedUser =
+      localStorage.getItem("surazense_user") ||
+      sessionStorage.getItem("surazense_user");
 
     // Determine storage type from where the token was found
-    if (sessionToken && !localToken) setStorageType('session');
+    if (sessionToken && !localToken) setStorageType("session");
 
     if (savedToken) {
       if (isTokenExpired(savedToken)) {
@@ -82,8 +90,8 @@ export function UserProvider({ children }) {
 
   // ── Persist token changes (respects storageType) ──
   useEffect(() => {
-    const primary = storageType === 'session' ? sessionStorage : localStorage;
-    const secondary = storageType === 'session' ? localStorage : sessionStorage;
+    const primary = storageType === "session" ? sessionStorage : localStorage;
+    const secondary = storageType === "session" ? localStorage : sessionStorage;
     if (token) {
       primary.setItem("surazense_token", token);
       secondary.removeItem("surazense_token");
@@ -95,8 +103,8 @@ export function UserProvider({ children }) {
 
   // ── Persist user changes (respects storageType) ──
   useEffect(() => {
-    const primary = storageType === 'session' ? sessionStorage : localStorage;
-    const secondary = storageType === 'session' ? localStorage : sessionStorage;
+    const primary = storageType === "session" ? sessionStorage : localStorage;
+    const secondary = storageType === "session" ? localStorage : sessionStorage;
     if (user) {
       primary.setItem("surazense_user", JSON.stringify(user));
       secondary.removeItem("surazense_user");
@@ -129,7 +137,7 @@ export function UserProvider({ children }) {
   function _clearSession() {
     setUser(null);
     setToken(null);
-    setStorageType('local');
+    setStorageType("local");
     localStorage.removeItem("surazense_token");
     localStorage.removeItem("surazense_user");
     sessionStorage.removeItem("surazense_token");
@@ -151,7 +159,7 @@ export function UserProvider({ children }) {
         phone: "081-234-5678",
         role: "admin",
       };
-      setStorageType(rememberMe ? 'local' : 'session');
+      setStorageType(rememberMe ? "local" : "session");
       setUser(adminUser);
       // No real token for mock admin — store a fake one that won't expire
       const fakeToken = `mock.${btoa(JSON.stringify({ sub: "mock-admin-1", exp: Math.floor(Date.now() / 1000) + 86400 * 365 }))}.sig`;
@@ -160,20 +168,15 @@ export function UserProvider({ children }) {
     }
 
     try {
-      // FastAPI OAuth2 token endpoint expects form data
-      const formData = new URLSearchParams();
-      formData.append("username", email);
-      formData.append("password", password);
-
       const res = await fetch(`${API_URL}/api/users/login`, {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: formData.toString(),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
 
       // ── Rate limit handling ──
       if (res.status === 429) {
-        const retryAfter = parseInt(res.headers.get('Retry-After') || '30', 10);
+        const retryAfter = parseInt(res.headers.get("Retry-After") || "30", 10);
         return {
           success: false,
           rateLimited: true,
@@ -187,7 +190,9 @@ export function UserProvider({ children }) {
         try {
           const errData = await res.json();
           errMsg = errData.detail || errMsg;
-        } catch { /* ignore */ }
+        } catch {
+          /* ignore */
+        }
         return { success: false, message: errMsg };
       }
 
@@ -199,7 +204,7 @@ export function UserProvider({ children }) {
       }
 
       // Apply remember-me preference BEFORE setting token so the persist effect fires correctly
-      setStorageType(rememberMe ? 'local' : 'session');
+      setStorageType(rememberMe ? "local" : "session");
       setToken(accessToken);
 
       // Try to fetch full user profile using token
@@ -211,7 +216,9 @@ export function UserProvider({ children }) {
         if (profileRes.ok) {
           userData = await profileRes.json();
         }
-      } catch { /* ignore */ }
+      } catch {
+        /* ignore */
+      }
 
       // Fallback: decode user info from JWT payload
       if (!userData) {
@@ -236,8 +243,11 @@ export function UserProvider({ children }) {
       const mockUsers = mockUsersStr ? JSON.parse(mockUsersStr) : [];
       const localUser = mockUsers.find((u) => u.email === email);
 
-      if (localUser && (password === "admin123" || password === localUser.password)) {
-        setStorageType(rememberMe ? 'local' : 'session');
+      if (
+        localUser &&
+        (password === "admin123" || password === localUser.password)
+      ) {
+        setStorageType(rememberMe ? "local" : "session");
         setUser(localUser);
         const fakeToken = `mock.${btoa(JSON.stringify({ sub: localUser.id, exp: Math.floor(Date.now() / 1000) + 86400 }))}.sig`;
         setToken(fakeToken);
@@ -254,7 +264,15 @@ export function UserProvider({ children }) {
   // ─────────────────────────────────────────────────────────────────────────
   // REGISTER
   // ─────────────────────────────────────────────────────────────────────────
-  const register = async ({ email, password, username, first_name, last_name, phone, role = "customer" }) => {
+  const register = async ({
+    email,
+    password,
+    username,
+    first_name,
+    last_name,
+    phone,
+    role = "customer",
+  }) => {
     const payload = {
       email,
       password,
@@ -274,7 +292,7 @@ export function UserProvider({ children }) {
 
       // ── Rate limit handling ──
       if (res.status === 429) {
-        const retryAfter = parseInt(res.headers.get('Retry-After') || '60', 10);
+        const retryAfter = parseInt(res.headers.get("Retry-After") || "60", 10);
         return {
           success: false,
           rateLimited: true,
@@ -294,7 +312,13 @@ export function UserProvider({ children }) {
       if (data.access_token || data.token) {
         const accessToken = data.access_token || data.token;
         setToken(accessToken);
-        const userData = data.user || { email, username, first_name, last_name, role };
+        const userData = data.user || {
+          email,
+          username,
+          first_name,
+          last_name,
+          role,
+        };
         setUser(userData);
         return { success: true };
       }
@@ -365,17 +389,25 @@ export function UserProvider({ children }) {
       const mockUsersStr = localStorage.getItem("surazense_mock_users");
       const mockUsers = mockUsersStr ? JSON.parse(mockUsersStr) : [];
       const userIdx = mockUsers.findIndex(
-        (u) => u.id === userId || u.email === profileData.email
+        (u) => u.id === userId || u.email === profileData.email,
       );
 
       if (userIdx !== -1) {
-        const updatedUser = { ...mockUsers[userIdx], ...profileData, updated_at: new Date().toISOString() };
+        const updatedUser = {
+          ...mockUsers[userIdx],
+          ...profileData,
+          updated_at: new Date().toISOString(),
+        };
         mockUsers[userIdx] = updatedUser;
         localStorage.setItem("surazense_mock_users", JSON.stringify(mockUsers));
         setUser(updatedUser);
         return { success: true };
       } else {
-        const updatedUser = { ...user, ...profileData, updated_at: new Date().toISOString() };
+        const updatedUser = {
+          ...user,
+          ...profileData,
+          updated_at: new Date().toISOString(),
+        };
         setUser(updatedUser);
         return { success: true };
       }
@@ -434,7 +466,9 @@ export function UserProvider({ children }) {
         try {
           const errData = await res.json();
           errMsg = errData.detail || errMsg;
-        } catch { /* ignore */ }
+        } catch {
+          /* ignore */
+        }
         return { success: false, message: errMsg };
       }
       return { success: true };
@@ -485,7 +519,9 @@ export function UserProvider({ children }) {
         try {
           const errData = await res.json();
           errMsg = errData.detail || errMsg;
-        } catch { /* ignore */ }
+        } catch {
+          /* ignore */
+        }
         return { success: false, message: errMsg };
       }
       return { success: true };
@@ -503,17 +539,24 @@ export function UserProvider({ children }) {
     if (!user) return;
     if (window.location.pathname === "/admin") return;
 
-    const timeoutEnabled = localStorage.getItem("surazense_timeout_enabled") !== "false";
+    const timeoutEnabled =
+      localStorage.getItem("surazense_timeout_enabled") !== "false";
     if (!timeoutEnabled) return;
 
-    const durationMin = parseInt(localStorage.getItem("surazense_timeout_duration") || "15", 10);
+    const durationMin = parseInt(
+      localStorage.getItem("surazense_timeout_duration") || "15",
+      10,
+    );
     const durationMs = durationMin * 60 * 1000;
 
     let timeoutId = null;
 
     const resetTimer = () => {
       if (window.location.pathname === "/admin") {
-        if (timeoutId) { clearTimeout(timeoutId); timeoutId = null; }
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+          timeoutId = null;
+        }
         return;
       }
       if (timeoutId) clearTimeout(timeoutId);
@@ -524,7 +567,13 @@ export function UserProvider({ children }) {
       }, durationMs);
     };
 
-    const events = ["mousedown", "mousemove", "keypress", "scroll", "touchstart"];
+    const events = [
+      "mousedown",
+      "mousemove",
+      "keypress",
+      "scroll",
+      "touchstart",
+    ];
     resetTimer();
     events.forEach((e) => window.addEventListener(e, resetTimer));
 
@@ -545,10 +594,18 @@ export function UserProvider({ children }) {
   return (
     <UserContext.Provider
       value={{
-        user, token, loading,
-        login, register, logout, updateProfile,
-        forgotPassword, verifyResetToken, resetPassword,
-        verifyEmail, resendVerification,
+        user,
+        token,
+        loading,
+        login,
+        register,
+        logout,
+        updateProfile,
+        forgotPassword,
+        verifyResetToken,
+        resetPassword,
+        verifyEmail,
+        resendVerification,
         authHeaders,
       }}
     >

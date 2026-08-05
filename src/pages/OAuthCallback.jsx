@@ -40,8 +40,11 @@ export default function OAuthCallback() {
   const error = searchParams.get("error");
   const errorDescription = searchParams.get("error_description");
   const redirectPath = (() => {
-    try { return state ? JSON.parse(atob(state)).redirect || "/" : "/"; }
-    catch { return "/"; }
+    try {
+      return state ? JSON.parse(atob(state)).redirect || "/" : "/";
+    } catch {
+      return "/";
+    }
   })();
 
   // States: 'processing' | 'success' | 'error'
@@ -57,15 +60,24 @@ export default function OAuthCallback() {
     if (error) {
       setErrorMsg(
         error === "access_denied"
-          ? (th ? "คุณยกเลิกการเข้าสู่ระบบด้วย " + PROVIDER_LABELS[provider] : "You cancelled the " + PROVIDER_LABELS[provider] + " sign-in.")
-          : (errorDescription || (th ? "เกิดข้อผิดพลาดจาก " + PROVIDER_LABELS[provider] : "An error occurred with " + PROVIDER_LABELS[provider]))
+          ? th
+            ? "คุณยกเลิกการเข้าสู่ระบบด้วย " + PROVIDER_LABELS[provider]
+            : "You cancelled the " + PROVIDER_LABELS[provider] + " sign-in."
+          : errorDescription ||
+              (th
+                ? "เกิดข้อผิดพลาดจาก " + PROVIDER_LABELS[provider]
+                : "An error occurred with " + PROVIDER_LABELS[provider]),
       );
       setPageState("error");
       return;
     }
 
     if (!code) {
-      setErrorMsg(th ? "ไม่พบรหัส authorization กรุณาลองใหม่" : "Missing authorization code. Please try again.");
+      setErrorMsg(
+        th
+          ? "ไม่พบรหัส authorization กรุณาลองใหม่"
+          : "Missing authorization code. Please try again.",
+      );
       setPageState("error");
       return;
     }
@@ -84,7 +96,9 @@ export default function OAuthCallback() {
           try {
             const errData = await res.json();
             errMsg = errData.detail || errMsg;
-          } catch { /* ignore */ }
+          } catch {
+            /* ignore */
+          }
           setErrorMsg(errMsg);
           setPageState("error");
           return;
@@ -98,7 +112,11 @@ export default function OAuthCallback() {
           setPageState("success");
           setTimeout(() => navigate(redirectPath, { replace: true }), 1800);
         } else {
-          setErrorMsg(th ? "ไม่ได้รับ token จาก server" : "No token returned from server.");
+          setErrorMsg(
+            th
+              ? "ไม่ได้รับ token จาก server"
+              : "No token returned from server.",
+          );
           setPageState("error");
         }
       } catch (err) {
@@ -106,7 +124,7 @@ export default function OAuthCallback() {
         setErrorMsg(
           th
             ? `ไม่สามารถเชื่อมต่อ server ได้ กรุณาตั้งค่า ${PROVIDER_LABELS[provider]} OAuth ใน backend ก่อน`
-            : `Cannot connect to server. Please configure ${PROVIDER_LABELS[provider]} OAuth in the backend first.`
+            : `Cannot connect to server. Please configure ${PROVIDER_LABELS[provider]} OAuth in the backend first.`,
         );
         setPageState("error");
       }
@@ -226,7 +244,10 @@ export default function OAuthCallback() {
         <div className="oc-card">
           {/* Provider badge */}
           <div className="oc-provider-badge">
-            <span className="oc-provider-dot" style={{ background: providerColor }} />
+            <span
+              className="oc-provider-dot"
+              style={{ background: providerColor }}
+            />
             {providerLabel}
           </div>
 
@@ -237,13 +258,22 @@ export default function OAuthCallback() {
                 <div className="oc-spinner" />
               </div>
               <h1 className="oc-title">
-                {th ? `กำลังเข้าสู่ระบบด้วย ${providerLabel}...` : `Signing in with ${providerLabel}...`}
+                {th
+                  ? `กำลังเข้าสู่ระบบด้วย ${providerLabel}...`
+                  : `Signing in with ${providerLabel}...`}
               </h1>
               <p className="oc-subtitle">
-                {th ? "กำลังตรวจสอบตัวตน กรุณารอสักครู่" : "Verifying your identity, please wait a moment."}
+                {th
+                  ? "กำลังตรวจสอบตัวตน กรุณารอสักครู่"
+                  : "Verifying your identity, please wait a moment."}
               </p>
               <div className="oc-progress">
-                <div className="oc-progress-bar" style={{ background: `linear-gradient(90deg, ${providerColor}88, ${providerColor})` }} />
+                <div
+                  className="oc-progress-bar"
+                  style={{
+                    background: `linear-gradient(90deg, ${providerColor}88, ${providerColor})`,
+                  }}
+                />
               </div>
             </>
           )}
@@ -258,10 +288,17 @@ export default function OAuthCallback() {
                 {th ? "เข้าสู่ระบบสำเร็จ!" : "Signed in successfully!"}
               </h1>
               <p className="oc-subtitle">
-                {th ? `เข้าสู่ระบบด้วย ${providerLabel} สำเร็จ กำลังพาคุณไปหน้าถัดไป...` : `Signed in with ${providerLabel}. Redirecting you now...`}
+                {th
+                  ? `เข้าสู่ระบบด้วย ${providerLabel} สำเร็จ กำลังพาคุณไปหน้าถัดไป...`
+                  : `Signed in with ${providerLabel}. Redirecting you now...`}
               </p>
               <div className="oc-progress">
-                <div className="oc-progress-bar" style={{ background: "linear-gradient(90deg, #22c55e, #16a34a)" }} />
+                <div
+                  className="oc-progress-bar"
+                  style={{
+                    background: "linear-gradient(90deg, #22c55e, #16a34a)",
+                  }}
+                />
               </div>
             </>
           )}
@@ -275,11 +312,10 @@ export default function OAuthCallback() {
               <h1 className="oc-title">
                 {th ? "เข้าสู่ระบบไม่สำเร็จ" : "Sign-in failed"}
               </h1>
-              {errorMsg && (
-                <div className="oc-error-box">{errorMsg}</div>
-              )}
+              {errorMsg && <div className="oc-error-box">{errorMsg}</div>}
               <Link to="/login" className="oc-btn-primary" id="btn-oc-retry">
-                {th ? "กลับไปหน้าเข้าสู่ระบบ" : "Back to Sign In"} <ArrowRight size={16} />
+                {th ? "กลับไปหน้าเข้าสู่ระบบ" : "Back to Sign In"}{" "}
+                <ArrowRight size={16} />
               </Link>
               <Link to="/" className="oc-btn-outline" id="btn-oc-home">
                 {th ? "หน้าหลัก" : "Go to Home"}

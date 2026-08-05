@@ -38,11 +38,25 @@ const Toast = ({ message, type, onClose }) => (
 );
 
 // ── Input Field ───────────────────────────────────────────────────────────────
-const InputField = ({ icon: Icon, label, id, type = "text", value, onChange, required, placeholder, rightAddon }) => (
+const InputField = ({
+  icon: Icon,
+  label,
+  id,
+  type = "text",
+  value,
+  onChange,
+  required,
+  placeholder,
+  rightAddon,
+}) => (
   <div className="login-field">
-    <label htmlFor={id} className="login-field__label">{label}</label>
+    <label htmlFor={id} className="login-field__label">
+      {label}
+    </label>
     <div className="login-field__wrap">
-      <span className="login-field__icon"><Icon size={16} /></span>
+      <span className="login-field__icon">
+        <Icon size={16} />
+      </span>
       <input
         id={id}
         type={type}
@@ -51,7 +65,13 @@ const InputField = ({ icon: Icon, label, id, type = "text", value, onChange, req
         required={required}
         placeholder={placeholder}
         className="login-field__input"
-        autoComplete={type === "password" ? "current-password" : type === "email" ? "email" : "off"}
+        autoComplete={
+          type === "password"
+            ? "current-password"
+            : type === "email"
+              ? "email"
+              : "off"
+        }
       />
       {rightAddon && <span className="login-field__addon">{rightAddon}</span>}
     </div>
@@ -59,7 +79,15 @@ const InputField = ({ icon: Icon, label, id, type = "text", value, onChange, req
 );
 
 // ── Social Login Button ──────────────────────────────────────────────────────
-const SocialButton = ({ provider, label, logo, color, hoverColor, textColor = "white", onClick }) => (
+const SocialButton = ({
+  provider,
+  label,
+  logo,
+  color,
+  hoverColor,
+  textColor = "white",
+  onClick,
+}) => (
   <button
     type="button"
     onClick={onClick}
@@ -67,12 +95,15 @@ const SocialButton = ({ provider, label, logo, color, hoverColor, textColor = "w
     style={{
       background: color,
       color: textColor,
-      '--hover-bg': hoverColor,
+      "--hover-bg": hoverColor,
     }}
     id={`btn-social-${provider}`}
     aria-label={`Sign in with ${label}`}
   >
-    <span className="social-btn__logo" dangerouslySetInnerHTML={{ __html: logo }} />
+    <span
+      className="social-btn__logo"
+      dangerouslySetInnerHTML={{ __html: logo }}
+    />
     <span className="social-btn__label">{label}</span>
   </button>
 );
@@ -88,7 +119,7 @@ export default function Login() {
   // Read tab from URL param (?tab=forgot | ?tab=signup)
   const initialTab = (() => {
     const p = searchParams.get("tab");
-    return (p === "forgot" || p === "signup") ? p : "login";
+    return p === "forgot" || p === "signup" ? p : "login";
   })();
   const [tab, setTab] = useState(initialTab); // 'login' | 'signup' | 'forgot'
   const [prevTab, setPrevTab] = useState(null);
@@ -118,23 +149,24 @@ export default function Login() {
     const apiUrl = import.meta.env.VITE_API_URL || "";
     if (!apiUrl) {
       showToast(
-        provider === 'google'
-          ? '🔧 Google Login: กรุณาตั้งค่า VITE_API_URL และ Google OAuth Client ID ใน .env'
-          : provider === 'facebook'
-          ? '🔧 Facebook Login: กรุณาตั้งค่า VITE_API_URL และ Facebook App ID ใน .env'
-          : '🔧 LINE Login: กรุณาตั้งค่า VITE_API_URL และ LINE Channel ID ใน .env',
-        'error'
+        provider === "google"
+          ? "🔧 Google Login: กรุณาตั้งค่า VITE_API_URL และ Google OAuth Client ID ใน .env"
+          : provider === "facebook"
+            ? "🔧 Facebook Login: กรุณาตั้งค่า VITE_API_URL และ Facebook App ID ใน .env"
+            : "🔧 LINE Login: กรุณาตั้งค่า VITE_API_URL และ LINE Channel ID ใน .env",
+        "error",
       );
       return;
     }
     setSocialLoading(provider);
     // Encode redirect destination into state so OAuthCallback can redirect correctly
-    const statePayload = btoa(JSON.stringify({ redirect: redirectPath, provider }));
+    const statePayload = btoa(
+      JSON.stringify({ redirect: redirectPath, provider }),
+    );
     const callbackUrl = `${window.location.origin}/auth/callback?provider=${provider}`;
     // Redirect to backend OAuth initiation endpoint
     window.location.href = `${apiUrl}/api/auth/${provider}?redirect_uri=${encodeURIComponent(callbackUrl)}&state=${encodeURIComponent(statePayload)}`;
   };
-
 
   // If already logged in, redirect immediately
   useEffect(() => {
@@ -168,7 +200,7 @@ export default function Login() {
           language === "th"
             ? `ส่งลิงก์รีเซ็ตรหัสผ่านไปที่ ${email} แล้ว`
             : `Reset link sent to ${email}`,
-          "success"
+          "success",
         );
         setTimeout(() => switchTab("login"), 2500);
       } else {
@@ -190,7 +222,10 @@ export default function Login() {
         if (rateLimitRef.current) clearInterval(rateLimitRef.current);
         rateLimitRef.current = setInterval(() => {
           setRateLimitCountdown((c) => {
-            if (c <= 1) { clearInterval(rateLimitRef.current); return 0; }
+            if (c <= 1) {
+              clearInterval(rateLimitRef.current);
+              return 0;
+            }
             return c - 1;
           });
         }, 1000);
@@ -202,15 +237,28 @@ export default function Login() {
       // signup
       if (password !== confirmPassword) {
         setIsSubmitting(false);
-        showToast(language === "th" ? "รหัสผ่านไม่ตรงกัน" : "Passwords do not match");
+        showToast(
+          language === "th" ? "รหัสผ่านไม่ตรงกัน" : "Passwords do not match",
+        );
         return;
       }
       if (password.length < 8) {
         setIsSubmitting(false);
-        showToast(language === "th" ? "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร" : "Password must be at least 8 characters");
+        showToast(
+          language === "th"
+            ? "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร"
+            : "Password must be at least 8 characters",
+        );
         return;
       }
-      const res = await register({ email, password, username, first_name: firstName, last_name: lastName, phone });
+      const res = await register({
+        email,
+        password,
+        username,
+        first_name: firstName,
+        last_name: lastName,
+        phone,
+      });
       setIsSubmitting(false);
       if (res.success) {
         sessionStorage.removeItem("surazense_session_expired");
@@ -556,30 +604,57 @@ export default function Login() {
           />
         )}
 
-
         <div className="login-card">
           {/* ── Form Panel ── */}
           <div className="login-panel-right">
             {/* Session expired notice */}
             {sessionStorage.getItem("surazense_session_expired") && (
               <div className="login-expired-banner" role="alert">
-                ⏰&nbsp;{th ? "เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่" : "Session expired. Please log in again."}
+                ⏰&nbsp;
+                {th
+                  ? "เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่"
+                  : "Session expired. Please log in again."}
               </div>
             )}
 
             {/* Email verification pending notice */}
             {verifyEmailPending && (
-              <div className="login-expired-banner" role="alert" style={{
-                background: "linear-gradient(135deg, #f0fdf4, #dcfce7)",
-                border: "1px solid #86efac",
-                color: "#15803d",
-              }}>
+              <div
+                className="login-expired-banner"
+                role="alert"
+                style={{
+                  background: "linear-gradient(135deg, #f0fdf4, #dcfce7)",
+                  border: "1px solid #86efac",
+                  color: "#15803d",
+                }}
+              >
                 <span>✉️</span>&nbsp;
                 <span>
-                  {th
-                    ? <>{`สมัครสมาชิกสำเร็จ! กรุณาตรวจสอบอีเมล `}<strong>{verifyEmailPending}</strong>{` เพื่อยืนยันบัญชี`}&nbsp;<Link to={`/verify-email?email=${encodeURIComponent(verifyEmailPending)}`} style={{ color: "#15803d", fontWeight: 700 }}>ยืนยันอีเมล →</Link></>
-                    : <>{`Account created! Please check `}<strong>{verifyEmailPending}</strong>{` to verify your account.`}&nbsp;<Link to={`/verify-email?email=${encodeURIComponent(verifyEmailPending)}`} style={{ color: "#15803d", fontWeight: 700 }}>Verify email →</Link></>
-                  }
+                  {th ? (
+                    <>
+                      {`สมัครสมาชิกสำเร็จ! กรุณาตรวจสอบอีเมล `}
+                      <strong>{verifyEmailPending}</strong>
+                      {` เพื่อยืนยันบัญชี`}&nbsp;
+                      <Link
+                        to={`/verify-email?email=${encodeURIComponent(verifyEmailPending)}`}
+                        style={{ color: "#15803d", fontWeight: 700 }}
+                      >
+                        ยืนยันอีเมล →
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      {`Account created! Please check `}
+                      <strong>{verifyEmailPending}</strong>
+                      {` to verify your account.`}&nbsp;
+                      <Link
+                        to={`/verify-email?email=${encodeURIComponent(verifyEmailPending)}`}
+                        style={{ color: "#15803d", fontWeight: 700 }}
+                      >
+                        Verify email →
+                      </Link>
+                    </>
+                  )}
                 </span>
               </div>
             )}
@@ -614,7 +689,11 @@ export default function Login() {
                 <>
                   <div className="login-heading">
                     <h1>{th ? "ยินดีต้อนรับกลับ" : "Welcome back"}</h1>
-                    <p>{th ? "กรุณากรอกอีเมลและรหัสผ่านของคุณ" : "Enter your email and password to continue"}</p>
+                    <p>
+                      {th
+                        ? "กรุณากรอกอีเมลและรหัสผ่านของคุณ"
+                        : "Enter your email and password to continue"}
+                    </p>
                   </div>
                   <div className="login-fields">
                     <InputField
@@ -640,9 +719,15 @@ export default function Login() {
                         <button
                           type="button"
                           onClick={() => setShowPassword((p) => !p)}
-                          aria-label={showPassword ? "Hide password" : "Show password"}
+                          aria-label={
+                            showPassword ? "Hide password" : "Show password"
+                          }
                         >
-                          {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                          {showPassword ? (
+                            <EyeOff size={16} />
+                          ) : (
+                            <Eye size={16} />
+                          )}
                         </button>
                       }
                     />
@@ -654,38 +739,73 @@ export default function Login() {
                   </div>
 
                   {/* Remember Me */}
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginTop: "-0.1rem" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.6rem",
+                      marginTop: "-0.1rem",
+                    }}
+                  >
                     <input
                       id="login-remember-me"
                       type="checkbox"
                       checked={rememberMe}
                       onChange={(e) => setRememberMe(e.target.checked)}
                       style={{
-                        width: 16, height: 16, accentColor: "#0284c7",
-                        cursor: "pointer", borderRadius: 4, flexShrink: 0,
+                        width: 16,
+                        height: 16,
+                        accentColor: "#0284c7",
+                        cursor: "pointer",
+                        borderRadius: 4,
+                        flexShrink: 0,
                       }}
                     />
                     <label
                       htmlFor="login-remember-me"
-                      style={{ fontSize: "0.8rem", fontWeight: 600, color: "#475569", cursor: "pointer", userSelect: "none" }}
+                      style={{
+                        fontSize: "0.8rem",
+                        fontWeight: 600,
+                        color: "#475569",
+                        cursor: "pointer",
+                        userSelect: "none",
+                      }}
                     >
-                      {th ? "จดจำฉันไว้ในอุปกรณ์นี้" : "Remember me on this device"}
+                      {th
+                        ? "จดจำฉันไว้ในอุปกรณ์นี้"
+                        : "Remember me on this device"}
                     </label>
                     {!rememberMe && (
-                      <span style={{ fontSize: "0.72rem", color: "#94a3b8", marginLeft: "auto" }}>
-                        {th ? "(สิ้นสุดเมื่อปิด Browser)" : "(ends on browser close)"}
+                      <span
+                        style={{
+                          fontSize: "0.72rem",
+                          color: "#94a3b8",
+                          marginLeft: "auto",
+                        }}
+                      >
+                        {th
+                          ? "(สิ้นสุดเมื่อปิด Browser)"
+                          : "(ends on browser close)"}
                       </span>
                     )}
                   </div>
 
                   {/* Rate limit warning banner */}
                   {rateLimitCountdown > 0 && (
-                    <div style={{
-                      background: "#fff7ed", border: "1px solid #fed7aa",
-                      borderRadius: 10, padding: "0.6rem 0.9rem",
-                      fontSize: "0.8rem", color: "#c2410c", fontWeight: 600,
-                      display: "flex", alignItems: "center", gap: "0.5rem",
-                    }}>
+                    <div
+                      style={{
+                        background: "#fff7ed",
+                        border: "1px solid #fed7aa",
+                        borderRadius: 10,
+                        padding: "0.6rem 0.9rem",
+                        fontSize: "0.8rem",
+                        color: "#c2410c",
+                        fontWeight: 600,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                      }}
+                    >
                       ⏳&nbsp;
                       {th
                         ? `ต้องรอ ${rateLimitCountdown} วินาทีก่อนลองใหม่`
@@ -721,32 +841,45 @@ export default function Login() {
                       {/* Google */}
                       <SocialButton
                         provider="google"
-                        label={th ? "เข้าสู่ระบบด้วย Google" : "Continue with Google"}
+                        label={
+                          th ? "เข้าสู่ระบบด้วย Google" : "Continue with Google"
+                        }
                         color="#ffffff"
                         hoverColor="#f1f5f9"
                         textColor="#1e293b"
-                        onClick={() => handleSocialLogin('google')}
+                        onClick={() => handleSocialLogin("google")}
                         logo={`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>`}
                       />
-                      {socialLoading === 'google' && <div className="social-btn__spinner" style={{ position: 'static', marginLeft: 'auto' }} />}
+                      {socialLoading === "google" && (
+                        <div
+                          className="social-btn__spinner"
+                          style={{ position: "static", marginLeft: "auto" }}
+                        />
+                      )}
 
                       {/* Facebook */}
                       <SocialButton
                         provider="facebook"
-                        label={th ? "เข้าสู่ระบบด้วย Facebook" : "Continue with Facebook"}
+                        label={
+                          th
+                            ? "เข้าสู่ระบบด้วย Facebook"
+                            : "Continue with Facebook"
+                        }
                         color="#1877F2"
                         hoverColor="#166fe5"
-                        onClick={() => handleSocialLogin('facebook')}
+                        onClick={() => handleSocialLogin("facebook")}
                         logo={`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>`}
                       />
 
                       {/* LINE */}
                       <SocialButton
                         provider="line"
-                        label={th ? "เข้าสู่ระบบด้วย LINE" : "Continue with LINE"}
+                        label={
+                          th ? "เข้าสู่ระบบด้วย LINE" : "Continue with LINE"
+                        }
                         color="#06C755"
                         hoverColor="#05b34c"
-                        onClick={() => handleSocialLogin('line')}
+                        onClick={() => handleSocialLogin("line")}
                         logo={`<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="white"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.627.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.105.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>`}
                       />
                     </div>
@@ -765,7 +898,11 @@ export default function Login() {
                 <>
                   <div className="login-heading">
                     <h1>{th ? "สร้างบัญชีใหม่" : "Create account"}</h1>
-                    <p>{th ? "กรอกข้อมูลด้านล่างเพื่อสมัครสมาชิก" : "Fill in your details to get started"}</p>
+                    <p>
+                      {th
+                        ? "กรอกข้อมูลด้านล่างเพื่อสมัครสมาชิก"
+                        : "Fill in your details to get started"}
+                    </p>
                   </div>
                   <div className="login-fields">
                     <InputField
@@ -779,7 +916,10 @@ export default function Login() {
                     />
                     <div className="login-fields-grid">
                       <div className="login-field">
-                        <label htmlFor="signup-first" className="login-field__label">
+                        <label
+                          htmlFor="signup-first"
+                          className="login-field__label"
+                        >
                           {th ? "ชื่อจริง" : "First Name"}
                         </label>
                         <div className="login-field__wrap">
@@ -795,7 +935,10 @@ export default function Login() {
                         </div>
                       </div>
                       <div className="login-field">
-                        <label htmlFor="signup-last" className="login-field__label">
+                        <label
+                          htmlFor="signup-last"
+                          className="login-field__label"
+                        >
                           {th ? "นามสกุล" : "Last Name"}
                         </label>
                         <div className="login-field__wrap">
@@ -833,7 +976,11 @@ export default function Login() {
                     <InputField
                       id="signup-password"
                       icon={Lock}
-                      label={th ? "รหัสผ่าน (อย่างน้อย 8 ตัว)" : "Password (min 8 chars)"}
+                      label={
+                        th
+                          ? "รหัสผ่าน (อย่างน้อย 8 ตัว)"
+                          : "Password (min 8 chars)"
+                      }
                       type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
@@ -845,7 +992,11 @@ export default function Login() {
                           onClick={() => setShowPassword((p) => !p)}
                           aria-label="Toggle password"
                         >
-                          {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                          {showPassword ? (
+                            <EyeOff size={16} />
+                          ) : (
+                            <Eye size={16} />
+                          )}
                         </button>
                       }
                     />
@@ -864,7 +1015,11 @@ export default function Login() {
                           onClick={() => setShowConfirmPassword((p) => !p)}
                           aria-label="Toggle confirm password"
                         >
-                          {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                          {showConfirmPassword ? (
+                            <EyeOff size={16} />
+                          ) : (
+                            <Eye size={16} />
+                          )}
                         </button>
                       }
                     />
@@ -914,7 +1069,9 @@ export default function Login() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      placeholder={th ? "อีเมลที่ลงทะเบียนไว้" : "registered@email.com"}
+                      placeholder={
+                        th ? "อีเมลที่ลงทะเบียนไว้" : "registered@email.com"
+                      }
                     />
                   </div>
                   <button
