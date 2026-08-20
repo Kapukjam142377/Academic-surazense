@@ -415,63 +415,44 @@ const CONTESTS = [
     titleKey: "academic.contest9Title",
     image: "/Submissions9.jpg",
   },
-];
-
-const EVENTS = [
   {
-    id: 1,
+    id: 10,
     titleKey: "academic.event1Title",
-    descKey: "academic.event1Desc",
-    dateKey: "academic.event1Date",
     image: "/activity1.webp",
   },
   {
-    id: 2,
+    id: 11,
     titleKey: "academic.event2Title",
-    descKey: "academic.event2Desc",
-    dateKey: "academic.event2Date",
     image: "/activity2.png",
   },
   {
-    id: 3,
+    id: 12,
     titleKey: "academic.event3Title",
-    descKey: "academic.event3Desc",
-    dateKey: "academic.event3Date",
     image: "/activity3.png",
   },
   {
-    id: 4,
+    id: 13,
     titleKey: "academic.event4Title",
-    descKey: "academic.event4Desc",
-    dateKey: "academic.event4Date",
     image: "/activity4.png",
   },
   {
-    id: 5,
+    id: 14,
     titleKey: "academic.event5Title",
-    descKey: "academic.event5Desc",
-    dateKey: "academic.event5Date",
     image: "/activity5.avif",
   },
   {
-    id: 6,
+    id: 15,
     titleKey: "academic.event6Title",
-    descKey: "academic.event6Desc",
-    dateKey: "academic.event6Date",
     image: "/activity6.png",
   },
   {
-    id: 7,
+    id: 16,
     titleKey: "academic.event7Title",
-    descKey: "academic.event7Desc",
-    dateKey: "academic.event7Date",
     image: "/activity7.png",
   },
   {
-    id: 8,
+    id: 17,
     titleKey: "academic.event8Title",
-    descKey: "academic.event8Desc",
-    dateKey: "academic.event8Date",
     image: "/activity8.png",
   },
 ];
@@ -1820,57 +1801,7 @@ export default function AcademicTraining() {
         </motion.div>
       </section>
 
-      {/* Upcoming Events Section */}
-      <section className="max-w-7xl mx-auto px-6 mb-28 relative z-10 scroll-mt-24">
-        <div className="text-center mb-12">
-          <motion.h2
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight"
-          >
-            {t("academic.eventsTitle")}
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-base text-slate-500 font-medium max-w-2xl mx-auto mt-3"
-          >
-            {t("academic.eventsDesc")}
-          </motion.p>
-        </div>
-
-        {/* Events Flex Container */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.15 }}
-          className="flex flex-wrap justify-center gap-8 max-w-5xl mx-auto items-center"
-        >
-          {EVENTS.map((event) => (
-            <motion.div
-              key={event.id}
-              variants={itemVariants}
-              whileHover={{ scale: 1.08 }}
-              className="flex items-center justify-center cursor-pointer w-[calc(50%-1rem)] sm:w-[calc(33.33%-1.33rem)] lg:w-[calc(25%-1.5rem)]"
-            >
-              <div className="w-36 h-36 md:w-48 md:h-48 flex items-center justify-center p-2 relative overflow-hidden">
-                <img
-                  src={event.image}
-                  alt=""
-                  className="max-w-full max-h-full object-contain filter transition-all duration-300"
-                />
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </section>
-
-      {/* Cooperating Schools Section */}
+      {/* Students from Various Schools Section */}
       <section className="max-w-7xl mx-auto px-6 mb-24 relative z-10 scroll-mt-24">
         <div className="text-center mb-16">
           <motion.h2

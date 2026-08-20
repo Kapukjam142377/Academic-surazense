@@ -345,9 +345,9 @@ export const translations = {
         "Conducting diagnostic tool training seminars for medical professionals and researchers.",
       event8Date: "To be announced",
 
-      schoolsTitle: "Cooperating Schools & Partners",
+      schoolsTitle: "Students from Various Schools Joined Our Project",
       schoolsDesc:
-        "We proudly collaborate with leading science academies, high schools, and academic departments to foster biosensor innovations.",
+        "School students from various schools participated in our project, gaining hands-on experience and exploring the fundamentals of biology, biosensors, and innovative healthcare technology.",
       school1: "Kamnoetvidya Science Academy (KVIS)",
       school2: "Mahidol Wittayanusorn School (MWIT)",
       school3: "Suranaree University of Technology (SUT)",
@@ -1014,9 +1014,9 @@ export const translations = {
         "จัดสัมมนาฝึกอบรมการใช้งานอุปกรณ์ตรวจวัดแก่ผู้เชี่ยวชาญทางการแพทย์และนักวิจัย",
       event8Date: "จะประกาศให้ทราบภายหลัง",
 
-      schoolsTitle: "โรงเรียนและสถาบันเครือข่ายความร่วมมือ",
+      schoolsTitle: "นักเรียนจากหลากหลายโรงเรียนเข้าร่วมโครงการของเรา",
       schoolsDesc:
-        "เรามีความภูมิใจเป็นอย่างยิ่งที่ได้ร่วมมือกับสถาบันวิทยาศาสตร์ โรงเรียนมัธยมชั้นนำ และภาควิชาการต่าง ๆ เพื่อขับเคลื่อนนวัตกรรมร่วมกัน",
+        "นักเรียนจากหลากหลายโรงเรียนได้เข้าร่วมในโครงการของเรา ได้รับประสบการณ์ตรงและสำรวจพื้นฐานทางชีววิทยา ไบโอเซนเซอร์ และเทคโนโลยีทางการแพทย์นวัตกรรมใหม่",
       school1: "โรงเรียนกำเนิดวิทย์ (KVIS)",
       school2: "โรงเรียนมหิดลวิทยานุสรณ์ (MWIT)",
       school3: "มหาวิทยาลัยเทคโนโลยีสุรนารี (มทส.)",
