@@ -21,121 +21,132 @@ import {
   Layers,
   FlaskConical,
   Wrench,
+  Waves,
+  BatteryCharging,
+  Dna,
+  Box,
+  Sparkles,
+  HeartPulse,
+  Footprints,
+  Shield,
+  TestTube,
+  Microscope,
+  Stethoscope,
+  Search,
+  FileText,
+  Code,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 import { useUser } from "../context/UserContext";
 import { useCart } from "../context/CartContext";
 import { MOCK_PRODUCTS } from "../data/mockProducts";
+import { KTS_LABS, KTS_COURSES } from "../data/ktsProgramme";
 
-const LABS = [
-  {
-    id: "lab-qcm",
-    titleKey: "academic.lab1Title",
-    subtitleKey: "academic.lab1Subtitle",
-    descKey: "academic.lab1Desc",
-    icon: <Cpu className="w-6 h-6" />,
-    durationKey: "academic.lab1Duration",
-    topicsKey: "academic.lab1Topics",
-  },
-  {
-    id: "lab-biomarker",
-    titleKey: "academic.lab2Title",
-    subtitleKey: "academic.lab2Subtitle",
-    descKey: "academic.lab2Desc",
-    icon: <Beaker className="w-6 h-6" />,
-    durationKey: "academic.lab2Duration",
-    topicsKey: "academic.lab2Topics",
-  },
-  {
-    id: "lab-signal",
-    titleKey: "academic.lab3Title",
-    subtitleKey: "academic.lab3Subtitle",
-    descKey: "academic.lab3Desc",
-    icon: <Activity className="w-6 h-6" />,
-    durationKey: "academic.lab3Duration",
-    topicsKey: "academic.lab3Topics",
-  },
-];
+const KTS_ICONS = {
+  Activity,
+  Waves,
+  Cpu,
+  BatteryCharging,
+  Dna,
+  Box,
+  Sparkles,
+  HeartPulse,
+  Footprints,
+  Shield,
+  FlaskConical,
+  TestTube,
+  Microscope,
+  BookOpen,
+  Stethoscope,
+  Search,
+  FileText,
+  Code,
+  Beaker,
+};
+import {
+  KtsOverviewSection,
+  KtsCompareSection,
+  KtsHeroOrnaments,
+} from "../components/KtsProgrammeSections";
 
-const COURSES = [
-  {
-    id: "course-intro",
-    levelKey: "academic.levelBeginner",
-    levelColor: "bg-emerald-100 text-emerald-700 border-emerald-200/50",
-    titleKey: "academic.course1Title",
-    durationKey: "academic.course1Duration",
-    descKey: "academic.course1Desc",
-    skillsKey: "academic.course1Skills",
-  },
-  {
-    id: "course-instrument",
-    levelKey: "academic.levelIntermediate",
-    levelColor: "bg-blue-100 text-blue-700 border-blue-200/50",
-    titleKey: "academic.course2Title",
-    durationKey: "academic.course2Duration",
-    descKey: "academic.course2Desc",
-    skillsKey: "academic.course2Skills",
-  },
-  {
-    id: "course-data",
-    levelKey: "academic.levelAdvanced",
-    levelColor: "bg-purple-100 text-purple-700 border-purple-200/50",
-    titleKey: "academic.course3Title",
-    durationKey: "academic.course3Duration",
-    descKey: "academic.course3Desc",
-    skillsKey: "academic.course3Skills",
-  },
-];
+const LABS = KTS_LABS;
+const COURSES = KTS_COURSES;
 
 const BACKGROUNDS = [
   {
     id: "biology",
     labelKey: "academic.biologyLabel",
-    recommend: "lab-biomarker",
-    course: "course-intro",
+    recommend: "lab-12",
+    course: "course-2",
   },
   {
     id: "engineering",
     labelKey: "academic.engineeringLabel",
-    recommend: "lab-qcm",
-    course: "course-instrument",
+    recommend: "lab-1",
+    course: "course-1",
   },
   {
     id: "maths",
     labelKey: "academic.mathsLabel",
-    recommend: "lab-signal",
-    course: "course-data",
+    recommend: "lab-6",
+    course: "course-7",
   },
 ];
+
+function ktsText(item, field, language) {
+  const value = item[field];
+  if (value && typeof value === "object") {
+    return language === "th" ? value.th : value.en;
+  }
+  return value;
+}
+
+function ktsHours(item, language) {
+  return language === "th" ? item.hoursTh : item.hours;
+}
 
 const teamMembers = [
   {
     name: "Dr.Thita",
+    nameTh: "ดร.ฐิตา",
     role: "Director\nPhD-Material Engineering\nB. Eng.(Hons) Ceramic Engineering",
+    roleTh:
+      "ผู้อำนวยการ\nปริญญาเอก วิศวกรรมวัสดุ\nวศ.บ. (เกียรตินิยม) วิศวกรรมเซรามิก",
     image: "/member12.png",
   },
   {
     name: "Weerasak",
+    nameTh: "วีรศักดิ์",
     role: "Operation manager",
+    roleTh: "ผู้จัดการฝ่ายปฏิบัติการ",
     image: "/member.png",
     position: "object-[center_35%]",
   },
   {
     name: "Adisak",
+    nameTh: "อดิศักดิ์",
     role: "Engineering manager\nB. Eng. (Hons) & M Eng.\nElectronic engineering",
+    roleTh:
+      "ผู้จัดการฝ่ายวิศวกรรม\nวศ.บ. (เกียรตินิยม) & วศ.ม.\nวิศวกรรมอิเล็กทรอนิกส์",
     image: "/member5.png",
     scaleClass: "scale-110",
     hoverScaleClass: "group-hover:scale-[1.15]",
   },
   {
     name: "Dr. Soodkhet",
+    nameTh: "ดร.สุดเขตต์",
     role: "Advisor\nPhD - MaterialScience & Engineering,\nM. Eng. Nuclear Technology,\nB. Eng. Industrial Engineering",
+    roleTh:
+      "ที่ปรึกษา\nปริญญาเอก วิทยาศาสตร์และวิศวกรรมวัสดุ\nวศ.ม. เทคโนโลยีนิวเคลียร์\nวศ.บ. วิศวกรรมอุตสาหการ",
     image: "/member11.png",
   },
   {
     name: "Dr. Sanong",
+    nameTh: "ดร.สนอง",
     role: "Advisor\nPhD - Pathobiology, Cert. Molecular Diagnosis\n(Automatic in situ and Immunostaining)",
+    roleTh:
+      "ที่ปรึกษา\nปริญญาเอก พยาธิชีววิทยา, ประกาศนียบัตรการวินิจฉัยระดับโมเลกุล\n(Automatic in situ and Immunostaining)",
     image: "/member6.png",
     scaleClass: "scale-110",
     hoverScaleClass: "group-hover:scale-[1.15]",
@@ -460,45 +471,66 @@ const CONTESTS = [
 const PAST_RESEARCH = [
   {
     id: 1,
-    title:
-      "A study of probes on the surface of QCM for possible diagnostic test reuse",
+    title: {
+      en: "A study of probes on the surface of QCM for possible diagnostic test reuse",
+      th: "การศึกษาโพรบบนพื้นผิว QCM เพื่อความเป็นไปได้ในการนำชุดตรวจวินิจฉัยกลับมาใช้ซ้ำ",
+    },
   },
   {
     id: 2,
-    title: "Piezoelectric-based biosensor for the detection of cell-free RNAs",
+    title: {
+      en: "Piezoelectric-based biosensor for the detection of cell-free RNAs",
+      th: "ไบโอเซนเซอร์เพียโซอิเล็กทริกสำหรับการตรวจหา cell-free RNA",
+    },
   },
   {
     id: 3,
-    title:
-      "COMSOL Simulation Study of Multi-Channel QCM for Multi-DNA Binding in Biosensing Applications",
+    title: {
+      en: "COMSOL Simulation Study of Multi-Channel QCM for Multi-DNA Binding in Biosensing Applications",
+      th: "การศึกษาการจำลองด้วย COMSOL ของ QCM หลายช่องสัญญาณสำหรับการจับคู่ DNA หลายชนิด",
+    },
   },
   {
     id: 4,
-    title: "Biosensor for human papillomavirus (HPV) detection",
+    title: {
+      en: "Biosensor for human papillomavirus (HPV) detection",
+      th: "ไบโอเซนเซอร์สำหรับการตรวจหาเชื้อไวรัสแพปพิลโลมาในมนุษย์ (HPV)",
+    },
   },
   {
     id: 5,
-    title:
-      "Label-Free Detection of HbA1c Using a Graphene Oxide-Modified Piezoelectric Acoustic Biosensor",
+    title: {
+      en: "Label-Free Detection of HbA1c Using a Graphene Oxide-Modified Piezoelectric Acoustic Biosensor",
+      th: "การตรวจวัด HbA1c โดยไม่ใช้สารติดฉลากด้วยไบโอเซนเซอร์เพียโซอิเล็กทริกดัดแปรด้วยกราฟีนออกไซด์",
+    },
   },
   {
     id: 6,
-    title:
-      "A Preliminary Study of EGFR Testing in Patient Samples Using a Surface Acoustic Wave (SAW) Biosensor for Lung Cancer Mutation Detection",
+    title: {
+      en: "A Preliminary Study of EGFR Testing in Patient Samples Using a Surface Acoustic Wave (SAW) Biosensor for Lung Cancer Mutation Detection",
+      th: "การศึกษาเบื้องต้นของการทดสอบ EGFR ในตัวอย่างผู้ป่วยด้วยไบโอเซนเซอร์ SAW เพื่อตรวจการกลายพันธุ์ของมะเร็งปอด",
+    },
   },
   {
     id: 7,
-    title:
-      "Mechano-Responsive Gold Nanospike Nano-Architectures for Antibacterial Surface Applications: A Preliminary Study",
+    title: {
+      en: "Mechano-Responsive Gold Nanospike Nano-Architectures for Antibacterial Surface Applications: A Preliminary Study",
+      th: "สถาปัตยกรรมนาโนโครงสร้างหนามทองคำตอบสนองเชิงกลสำหรับพื้นผิวต้านแบคทีเรีย: การศึกษาเบื้องต้น",
+    },
   },
   {
     id: 8,
-    title:
-      "A Potential Study of a Quartz Crystal Microbalance Biosensor for Rapid Detection of Human Papillomavirus-16",
+    title: {
+      en: "A Potential Study of a Quartz Crystal Microbalance Biosensor for Rapid Detection of Human Papillomavirus-16",
+      th: "การศึกษาศักยภาพของไบโอเซนเซอร์ QCM สำหรับการตรวจหาเชื้อ Human Papillomavirus-16 แบบรวดเร็ว",
+    },
   },
   {
     id: 9,
-    title: "Vibration sensor project",
+    title: {
+      en: "Vibration sensor project",
+      th: "โครงการเซนเซอร์ตรวจวัดความสั่นสะเทือน",
+    },
   },
 ];
 
@@ -1051,9 +1083,19 @@ export default function AcademicTraining() {
 
   const activeRec = BACKGROUNDS.find((bg) => bg.id === selectedBackground);
   const labTrainingText = t("academic.labTraining");
-  const [labPart1, labPart2] = labTrainingText.includes("&")
-    ? labTrainingText.split("&")
-    : [labTrainingText, ""];
+  let labPart1 = labTrainingText;
+  let labPart2 = "";
+  let separator = "&";
+  if (labTrainingText.includes("&")) {
+    [labPart1, labPart2] = labTrainingText.split("&");
+    separator = "&";
+  } else if (language === "th" && labTrainingText.includes("และ")) {
+    [labPart1, labPart2] = labTrainingText.split("และ");
+    separator = "และ";
+  } else if (labTrainingText.includes(" and ")) {
+    [labPart1, labPart2] = labTrainingText.split(" and ");
+    separator = "&";
+  }
 
   return (
     <div
@@ -1142,30 +1184,33 @@ export default function AcademicTraining() {
       </AnimatePresence>
 
       {/* Hero Section */}
-      <div className="relative pt-24 pb-20 md:pb-28 z-10">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          {/* Knowledge is Endless Pill */}
-          <motion.div
-            initial={{ opacity: 0, y: -15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.0, ease: "easeOut" }}
-            className="inline-flex items-center gap-2.5 px-6 py-3 bg-gradient-to-r from-blue-50 to-indigo-50/80 border border-blue-100/80 rounded-full text-xs font-black uppercase tracking-[0.2em] mb-8 shadow-md shadow-blue-500/5 cursor-default hover:scale-[1.02] transition-transform duration-300"
-          >
-            <GraduationCap
-              className="w-5 h-5 text-blue-600 animate-bounce"
-              style={{ animationDuration: "3s" }}
-            />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
-              {t("academic.endlessKnowledge")}
-            </span>
-          </motion.div>
+      <div className="relative min-h-[calc(100vh-80px)] flex items-center justify-center py-16 md:py-24 z-10 overflow-hidden">
+        {/* Hero Background Image with Smooth Gradient Fade-out */}
+        <div
+          className="absolute inset-0 -z-10 pointer-events-none select-none overflow-hidden"
+          style={{
+            maskImage:
+              "linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.05) 80%, transparent 100%)",
+            WebkitMaskImage:
+              "linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.05) 80%, transparent 100%)",
+          }}
+        >
+          <img
+            src="/lab-gallery-1.jpg"
+            alt="Hero Background"
+            className="w-full h-full object-cover object-center scale-105"
+          />
+          {/* Bottom Gradient blending smoothly into the page background */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#f8fafc]" />
+        </div>
 
-          {/* Surazense Training Program */}
+        <div className="w-full max-w-7xl mx-auto px-6 text-center relative z-10">
+          {/* Surazense Academic Training */}
           <motion.h1
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: "easeOut", delay: 0.1 }}
-            className="text-5xl md:text-7xl lg:text-8xl font-black text-slate-900 mb-4 tracking-[-0.03em] leading-[1.05] uppercase max-w-5xl mx-auto drop-shadow-sm"
+            className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-4 tracking-tight leading-tight uppercase max-w-none md:whitespace-nowrap mx-auto drop-shadow-sm"
           >
             Surazense{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-sky-500 to-indigo-600">
@@ -1178,12 +1223,13 @@ export default function AcademicTraining() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
-            className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-800 tracking-tight mb-8 leading-snug max-w-4xl mx-auto uppercase"
+            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-800 tracking-tight mb-8 leading-snug max-w-none md:whitespace-nowrap mx-auto uppercase"
           >
-            {labPart1}{" "}
+            {labPart1.trim()}{" "}
             {labPart2 && (
               <>
-                <span className="text-blue-600 font-black">&</span> {labPart2}
+                <span className="text-blue-600 font-black">{separator}</span>{" "}
+                {labPart2.trim()}
               </>
             )}
           </motion.h2>
@@ -1193,7 +1239,7 @@ export default function AcademicTraining() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.0, ease: "easeOut", delay: 0.3 }}
-            className="flex flex-wrap justify-center items-center gap-4 mb-10"
+            className="flex flex-wrap justify-center items-center gap-3 sm:gap-4 mb-10 text-sm md:text-base font-bold text-slate-600"
           >
             {[
               t("academic.biotech"),
@@ -1201,13 +1247,9 @@ export default function AcademicTraining() {
               t("academic.engineering"),
             ].map((field, idx) => (
               <React.Fragment key={field}>
-                <span className="text-xs md:text-sm font-extrabold text-slate-700 bg-white border border-slate-200/60 px-5 py-2.5 rounded-2xl shadow-sm hover:border-blue-500 hover:text-blue-600 hover:-translate-y-0.5 transition-all duration-300 cursor-default">
-                  {field}
-                </span>
+                <span>{field}</span>
                 {idx < 2 && (
-                  <span className="hidden sm:inline text-slate-300 text-lg font-light">
-                    •
-                  </span>
+                  <span className="text-slate-300 text-lg font-light">•</span>
                 )}
               </React.Fragment>
             ))}
@@ -1309,15 +1351,15 @@ export default function AcademicTraining() {
                   "0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
               }}
               onClick={() => handleCategoryClick(item.id)}
-              className="bg-white rounded-[2rem] p-8 border border-slate-100 flex flex-col justify-between items-center text-center cursor-pointer transition-all duration-300 group hover:border-blue-200/50 hover:shadow-xl hover:shadow-blue-950/5 relative overflow-hidden"
+              className="bg-white p-8 border border-sky-200/90 hover:border-sky-400/90 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-sky-500/10 flex flex-col justify-between items-center text-center cursor-pointer relative overflow-hidden group hover:-translate-y-1"
             >
               {/* Subtle top indicator bar */}
               <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-blue-600 to-sky-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
               <div className="flex flex-col items-center">
-                {/* Circle Icon Box */}
+                {/* Icon Box */}
                 <div
-                  className={`w-16 h-16 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 ${item.bgIcon}`}
+                  className={`w-16 h-16 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 ${item.bgIcon}`}
                 >
                   {item.icon}
                 </div>
@@ -1331,7 +1373,7 @@ export default function AcademicTraining() {
                 </p>
               </div>
 
-              <button className="mt-6 text-xs font-bold text-blue-600 bg-transparent border-none cursor-pointer flex items-center gap-1 group-hover:text-blue-700 select-none uppercase tracking-widest">
+              <button className="mt-6 text-xs font-bold text-sky-600 bg-transparent border-none cursor-pointer flex items-center gap-1 group-hover:text-blue-600 select-none uppercase tracking-widest">
                 {t("products.categoryGrids.exploreMore")}
                 <span className="group-hover:translate-x-0.5 transition-transform">
                   →
@@ -1363,91 +1405,96 @@ export default function AcademicTraining() {
           viewport={{ once: true, amount: 0.15 }}
           className="grid grid-cols-1 lg:grid-cols-3 gap-8"
         >
-          {LABS.map((lab) => (
-            <motion.div
-              key={lab.id}
-              variants={itemVariants}
-              whileHover={{
-                y: -6,
-                boxShadow: "0 20px 40px -10px rgba(0,0,0,0.06)",
-              }}
-              className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-sm flex flex-col justify-between transition-all duration-300 relative group"
-            >
-              <div>
-                {/* Accent border on top hover */}
-                <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          {LABS.map((lab) => {
+            const LabIcon = KTS_ICONS[lab.icon] || Beaker;
+            return (
+              <motion.div
+                key={lab.id}
+                variants={itemVariants}
+                whileHover={{
+                  y: -6,
+                  boxShadow: "0 20px 40px -10px rgba(0,0,0,0.06)",
+                }}
+                className="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-sm flex flex-col justify-between transition-all duration-300 relative group"
+              >
+                <div>
+                  {/* Accent border on top hover */}
+                  <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-                <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-105 group-hover:bg-blue-100 transition-all duration-300">
-                  {lab.icon}
-                </div>
+                  <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-105 group-hover:bg-blue-100 transition-all duration-300">
+                    <LabIcon className="w-6 h-6" />
+                  </div>
 
-                <h3 className="text-xl font-bold text-slate-800 mb-1 leading-snug group-hover:text-blue-600 transition-colors">
-                  {t(lab.titleKey)}
-                </h3>
-                <span className="text-[13px] font-bold text-slate-400 block mb-4">
-                  {t(lab.subtitleKey)}
-                </span>
-
-                <p className="text-sm text-slate-500 mb-6 leading-relaxed">
-                  {t(lab.descKey)}
-                </p>
-
-                <div className="border-t border-slate-100 pt-5 mb-6">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-3">
-                    {t("academic.keySkills")}
+                  <h3 className="text-xl font-bold text-slate-800 mb-1 leading-snug group-hover:text-blue-600 transition-colors">
+                    {ktsText(lab, "title", language)}
+                  </h3>
+                  <span className="text-[13px] font-bold text-slate-400 block mb-4">
+                    {ktsText(lab, "subtitle", language)}
                   </span>
-                  <ul className="space-y-2">
-                    {t(lab.topicsKey).map((topicItem, idx) => (
-                      <li
-                        key={idx}
-                        className="flex items-center gap-2.5 text-slate-700 text-sm font-medium"
-                      >
-                        <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-xs shrink-0">
-                          ✓
-                        </span>
-                        {topicItem}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
 
-              <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100/50 mb-4">
-                <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">
-                  {t("academic.duration")}
-                </span>
-                <span className="text-sm font-bold text-blue-600 bg-blue-50/60 px-3 py-1 rounded-full">
-                  {t(lab.durationKey)}
-                </span>
-              </div>
-              <div className="flex gap-3 mt-4">
-                <button
-                  onClick={() => handleEnroll(lab.id)}
-                  className={`flex-1 font-bold py-2.5 rounded-xl transition-all text-xs border border-slate-200 cursor-pointer text-center ${
-                    getEnrollmentStatus(lab.id)
-                      ? "bg-emerald-50 text-emerald-600 cursor-default border-emerald-100 font-bold"
-                      : "bg-white text-slate-700 hover:bg-slate-50 shadow-sm"
-                  }`}
-                  disabled={!!getEnrollmentStatus(lab.id)}
-                >
-                  {getEnrollmentStatus(lab.id)
-                    ? language === "th"
-                      ? `ลงทะเบียนแล้ว`
-                      : `Enrolled`
-                    : language === "th"
-                      ? "ขอรับโควตาเรียน"
-                      : "Request Seat"}
-                </button>
-                <button
-                  onClick={(e) => handleBuyCourse(lab.id, e)}
-                  className="flex-1 font-black py-2.5 rounded-xl bg-blue-600 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-sky-500 hover:shadow-lg hover:shadow-blue-500/20 transition-all text-xs border-none cursor-pointer flex items-center justify-center gap-1.5"
-                >
-                  <ShoppingCart className="w-3.5 h-3.5" />
-                  {language === "th" ? "ซื้อหลักสูตร" : "Buy Course"}
-                </button>
-              </div>
-            </motion.div>
-          ))}
+                  <p className="text-sm text-slate-500 mb-6 leading-relaxed">
+                    {ktsText(lab, "desc", language)}
+                  </p>
+
+                  <div className="border-t border-slate-100 pt-5 mb-6">
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-3">
+                      {t("academic.keySkills")}
+                    </span>
+                    <ul className="space-y-2">
+                      {(ktsText(lab, "skills", language) || []).map(
+                        (topicItem, idx) => (
+                          <li
+                            key={idx}
+                            className="flex items-center gap-2.5 text-slate-700 text-sm font-medium"
+                          >
+                            <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-xs shrink-0">
+                              ✓
+                            </span>
+                            {topicItem}
+                          </li>
+                        ),
+                      )}
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100/50 mb-4">
+                  <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">
+                    {t("academic.duration")}
+                  </span>
+                  <span className="text-sm font-bold text-blue-600 bg-blue-50/60 px-3 py-1 rounded-full">
+                    {ktsHours(lab, language)}
+                  </span>
+                </div>
+                <div className="flex gap-3 mt-4">
+                  <button
+                    onClick={() => handleEnroll(lab.id)}
+                    className={`flex-1 font-bold py-2.5 rounded-xl transition-all text-xs border border-slate-200 cursor-pointer text-center ${
+                      getEnrollmentStatus(lab.id)
+                        ? "bg-emerald-50 text-emerald-600 cursor-default border-emerald-100 font-bold"
+                        : "bg-white text-slate-700 hover:bg-slate-50 shadow-sm"
+                    }`}
+                    disabled={!!getEnrollmentStatus(lab.id)}
+                  >
+                    {getEnrollmentStatus(lab.id)
+                      ? language === "th"
+                        ? `ลงทะเบียนแล้ว`
+                        : `Enrolled`
+                      : language === "th"
+                        ? "ขอรับโควตาเรียน"
+                        : "Request Seat"}
+                  </button>
+                  <button
+                    onClick={(e) => handleBuyCourse(lab.id, e)}
+                    className="flex-1 font-black py-2.5 rounded-xl bg-blue-600 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-sky-500 hover:shadow-lg hover:shadow-blue-500/20 transition-all text-xs border-none cursor-pointer flex items-center justify-center gap-1.5"
+                  >
+                    <ShoppingCart className="w-3.5 h-3.5" />
+                    {language === "th" ? "ซื้อหลักสูตร" : "Buy Course"}
+                  </button>
+                </div>
+              </motion.div>
+            );
+          })}
         </motion.div>
       </section>
 
@@ -1484,22 +1531,20 @@ export default function AcademicTraining() {
             >
               <div>
                 <div className="flex justify-between items-center mb-6">
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-bold border ${course.levelColor}`}
-                  >
-                    {t(course.levelKey)}
+                  <span className="px-3 py-1 rounded-full text-xs font-bold border bg-blue-50 text-blue-700 border-blue-200/50">
+                    {course.code}
                   </span>
                   <span className="text-xs text-slate-400 font-semibold">
-                    {t(course.durationKey)}
+                    {ktsHours(course, language)}
                   </span>
                 </div>
 
                 <h3 className="text-xl font-bold text-slate-800 mb-4 leading-snug">
-                  {t(course.titleKey)}
+                  {ktsText(course, "title", language)}
                 </h3>
 
                 <p className="text-sm text-slate-500 mb-6 leading-relaxed font-light">
-                  {t(course.descKey)}
+                  {ktsText(course, "desc", language)}
                 </p>
 
                 <div className="border-t border-slate-100 pt-5">
@@ -1507,14 +1552,16 @@ export default function AcademicTraining() {
                     {t("academic.syllabusCompetencies")}
                   </span>
                   <div className="flex flex-wrap gap-2">
-                    {t(course.skillsKey).map((s, idx) => (
-                      <span
-                        key={idx}
-                        className="bg-slate-100 text-slate-600 text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-200/30"
-                      >
-                        {s}
-                      </span>
-                    ))}
+                    {(ktsText(course, "skills", language) || []).map(
+                      (s, idx) => (
+                        <span
+                          key={idx}
+                          className="bg-slate-100 text-slate-600 text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-200/30"
+                        >
+                          {s}
+                        </span>
+                      ),
+                    )}
                   </div>
                 </div>
               </div>
@@ -1606,10 +1653,18 @@ export default function AcademicTraining() {
                   </span>
                 </div>
                 <h3 className="text-lg font-bold text-slate-800 mb-2">
-                  {t(LABS.find((l) => l.id === activeRec?.recommend)?.titleKey)}
+                  {ktsText(
+                    LABS.find((l) => l.id === activeRec?.recommend),
+                    "title",
+                    language,
+                  )}
                 </h3>
                 <p className="text-sm text-slate-500 leading-relaxed">
-                  {t(LABS.find((l) => l.id === activeRec?.recommend)?.descKey)}
+                  {ktsText(
+                    LABS.find((l) => l.id === activeRec?.recommend),
+                    "desc",
+                    language,
+                  )}
                 </p>
               </div>
 
@@ -1624,13 +1679,17 @@ export default function AcademicTraining() {
                     </span>
                   </div>
                   <h4 className="text-lg font-bold text-slate-800 mb-2">
-                    {t(
-                      COURSES.find((c) => c.id === activeRec?.course)?.titleKey,
+                    {ktsText(
+                      COURSES.find((c) => c.id === activeRec?.course),
+                      "title",
+                      language,
                     )}
                   </h4>
                   <p className="text-sm text-slate-500 leading-relaxed mb-4">
-                    {t(
-                      COURSES.find((c) => c.id === activeRec?.course)?.descKey,
+                    {ktsText(
+                      COURSES.find((c) => c.id === activeRec?.course),
+                      "desc",
+                      language,
                     )}
                   </p>
                 </div>
@@ -1788,13 +1847,19 @@ export default function AcademicTraining() {
 
               <div>
                 <h3 className="text-[15px] font-bold text-slate-800 leading-snug group-hover:text-blue-600 transition-colors duration-300 z-10 relative mb-4">
-                  {project.title}
+                  {typeof project.title === "object"
+                    ? project.title[language] || project.title.en
+                    : project.title}
                 </h3>
               </div>
 
               {/* A subtle link visual at the bottom */}
               <div className="mt-4 pt-4 border-t border-slate-100/50 flex items-center gap-1.5 text-xs font-bold text-slate-400 group-hover:text-blue-500 transition-colors duration-300">
-                <span>Surasense Supported Research</span>
+                <span>
+                  {language === "th"
+                    ? "งานวิจัยที่สนับสนุนโดย Surazense"
+                    : "Surasense Supported Research"}
+                </span>
               </div>
             </motion.div>
           ))}
@@ -1882,7 +1947,15 @@ export default function AcademicTraining() {
             variants={containerVariants}
           >
             {teamMembers.map((member, index) => {
-              const roleLines = member.role.split("\n");
+              const currentName =
+                language === "th" && member.nameTh
+                  ? member.nameTh
+                  : member.name;
+              const currentRole =
+                language === "th" && member.roleTh
+                  ? member.roleTh
+                  : member.role;
+              const roleLines = currentRole.split("\n");
               const mainRole = roleLines[0];
               const subRoles = roleLines.slice(1);
               return (
@@ -1895,12 +1968,12 @@ export default function AcademicTraining() {
                     <div className="absolute inset-0 bg-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity z-10 rounded-full"></div>
                     <img
                       src={member.image}
-                      alt={member.name}
+                      alt={currentName}
                       className={`w-full h-full object-cover transition-transform duration-500 ${member.scaleClass || "scale-100"} ${member.hoverScaleClass || "group-hover:scale-105"} ${member.position || "object-top"}`}
                     />
                   </div>
                   <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
-                    {member.name}
+                    {currentName}
                   </h3>
                   <h4 className="text-blue-600 text-xs font-bold mt-1.5 uppercase tracking-wider">
                     {mainRole}

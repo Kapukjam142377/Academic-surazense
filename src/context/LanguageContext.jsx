@@ -23,6 +23,7 @@ export function LanguageProvider({ children }) {
   };
 
   const t = (keyPath) => {
+    if (!keyPath || typeof keyPath !== "string") return keyPath || "";
     const keys = keyPath.split(".");
     let result = translations[language];
     for (const key of keys) {

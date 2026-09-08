@@ -563,7 +563,11 @@ export default function Layout({ children }) {
                               : item.name}
                           </p>
                           <p className="text-xs text-slate-500">
-                            {item.quantity} x ${item.price.toFixed(2)}
+                            {item.quantity} x ฿
+                            {Number(item.price).toLocaleString("th-TH", {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}
                           </p>
                         </div>
                         <button
@@ -582,7 +586,11 @@ export default function Layout({ children }) {
                     {t("nav.subtotal")}
                   </span>
                   <span className="text-lg font-bold text-slate-900">
-                    ${cartTotal.toFixed(2)}
+                    ฿
+                    {Number(cartTotal).toLocaleString("th-TH", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
                   </span>
                 </div>
 

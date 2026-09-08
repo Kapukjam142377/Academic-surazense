@@ -7,19 +7,22 @@ export function CartProvider({ children }) {
 
   // Load from localStorage on mount
   useEffect(() => {
-    const savedCart = localStorage.getItem("surazense_cart");
+    const savedCart = localStorage.getItem("surazense_cart_v2");
     if (savedCart) {
       try {
         setCartItems(JSON.parse(savedCart));
       } catch (e) {
         console.error("Failed to parse cart from local storage", e);
       }
+    } else {
+      // Clear legacy USD cart if present
+      localStorage.removeItem("surazense_cart");
     }
   }, []);
 
   // Save to localStorage when cart changes
   useEffect(() => {
-    localStorage.setItem("surazense_cart", JSON.stringify(cartItems));
+    localStorage.setItem("surazense_cart_v2", JSON.stringify(cartItems));
   }, [cartItems]);
 
   const addToCart = (product) => {

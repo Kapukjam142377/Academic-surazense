@@ -244,7 +244,11 @@ export default function Checkout() {
                   <span className="text-slate-400">x{item.quantity}</span>
                 </span>
                 <span className="font-bold">
-                  ${(item.price * item.quantity).toFixed(2)}
+                  ฿
+                  {Number(item.price * item.quantity).toLocaleString("th-TH", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </span>
               </div>
             ))}
@@ -253,7 +257,13 @@ export default function Checkout() {
               <span>
                 {language === "th" ? "ยอดรวมทั้งสิ้น" : "Total Amount"}
               </span>
-              <span>${completedOrder.total_amount.toFixed(2)}</span>
+              <span>
+                ฿
+                {Number(completedOrder.total_amount).toLocaleString("th-TH", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </span>
             </div>
           </div>
 
@@ -468,11 +478,22 @@ export default function Checkout() {
                         : item.name}
                     </p>
                     <p className="text-xs text-slate-400 font-medium">
-                      Qty: {item.quantity} x ${item.price.toFixed(2)}
+                      Qty: {item.quantity} x ฿
+                      {Number(item.price).toLocaleString("th-TH", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
                     </p>
                   </div>
                   <span className="text-sm font-bold text-slate-900 shrink-0">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    ฿
+                    {Number(item.price * item.quantity).toLocaleString(
+                      "th-TH",
+                      {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      },
+                    )}
                   </span>
                 </div>
               ))}
@@ -482,7 +503,11 @@ export default function Checkout() {
               <div className="flex justify-between text-sm text-slate-500">
                 <span>Subtotal</span>
                 <span className="font-bold text-slate-700">
-                  ${cartTotal.toFixed(2)}
+                  ฿
+                  {Number(cartTotal).toLocaleString("th-TH", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
                 </span>
               </div>
               <div className="flex justify-between text-sm text-slate-500">
@@ -491,7 +516,13 @@ export default function Checkout() {
               </div>
               <div className="border-t border-slate-100 my-2 pt-2 flex justify-between text-base font-black text-slate-900">
                 <span>Total</span>
-                <span>${cartTotal.toFixed(2)}</span>
+                <span>
+                  ฿
+                  {Number(cartTotal).toLocaleString("th-TH", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </span>
               </div>
             </div>
           </div>

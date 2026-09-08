@@ -19,7 +19,7 @@ export default function ProductImagePanel({ product, language }) {
             className="w-full h-full object-contain"
           />
         ) : (
-          <div className="w-full h-full bg-slate-50 flex items-center justify-center rounded-2xl text-slate-400">
+          <div className="w-full h-full bg-slate-50 flex items-center justify-center text-slate-400">
             {language === "th" ? "ไม่มีรูปภาพสินค้า" : "No Image Available"}
           </div>
         )}

@@ -6,7 +6,7 @@ const MOCK_PRODUCTS_RAW = [
       th: "X-ZENSE 101",
     },
     category: "Biosensors",
-    price: 150.0,
+    price: 5250.0,
     description: {
       en: "Our Real-Time Analysis QCM Device is a compact and versatile solution designed for precise and efficient monitoring. At its core is a piezoelectric QCM chip securely mounted in a detachable holder, enabling easy handling and the convenient application of liquid media during measurements. The chip connects to a circuit board via a pogo-pin connector, ensuring reliable signal transfer. Paired with intuitive software, the device provides real-time signal measurement and data visualization, making it ideal for applications in biosensing, environmental monitoring, and material analysis. Designed for portability and ease of use.",
       th: "อุปกรณ์วิเคราะห์แบบเรียลไทม์ QCM ของเราคือโซลูชันขนาดกะทัดรัดและใช้งานได้หลากหลาย ออกแบบมาเพื่อการตรวจสอบที่แม่นยำและมีประสิทธิภาพ หัวใจหลักคือชิป QCM เพียโซอิเล็กทริกที่ยึดติดในแท่นยึดที่ถอดออกได้ ช่วยให้จัดการและหยดของเหลวระหว่างวัดได้ง่าย ชิปเชื่อมต่อกับแผงวงจรด้วยพินขั้วต่อแบบสปริง (pogo-pin) ให้การรับส่งสัญญาณที่มีความเสถียร เมื่อใช้คู่กับซอฟต์แวร์ที่เข้าใจง่าย อุปกรณ์นี้สามารถแสดงกราฟและวัดสัญญาณแบบเรียลไทม์ เหมาะสำหรับการประยุกต์ใช้ในระบบไบโอเซนเซอร์ การตรวจสอบสิ่งแวดล้อม และการวิเคราะห์วัสดุ ออกแบบมาเพื่อการพกพาและใช้งานง่าย",
@@ -49,7 +49,7 @@ const MOCK_PRODUCTS_RAW = [
       th: "ชิปเซนเซอร์ QCM 5MHz",
     },
     category: "Biosensors",
-    price: 135.0,
+    price: 4725.0,
     description: {
       en: "Standard 5MHz quartz crystal for broader mass detection range applications.",
       th: "แผ่นผลึกควอตซ์มาตรฐาน 5MHz สำหรับงานวิเคราะห์ที่ต้องการขอบเขตการตรวจวัดมวลที่กว้างขึ้น",
@@ -95,7 +95,7 @@ const MOCK_PRODUCTS_RAW = [
       th: "โฟลว์เซลล์มาตรฐาน",
     },
     category: "Modules",
-    price: 450.0,
+    price: 15750.0,
     description: {
       en: "Acrylic flow cell optimized for uniform liquid flow over the sensor surface.",
       th: "โฟลว์เซลล์อะคริลิกที่ปรับแต่งให้เหมาะสมเพื่อให้ของเหลวไหลผ่านหน้าสัมผัสเซนเซอร์ได้อย่างสม่ำเสมอ",
@@ -135,7 +135,7 @@ const MOCK_PRODUCTS_RAW = [
       th: "ฮับรับข้อมูลขั้นสูง",
     },
     category: "Modules",
-    price: 1200.0,
+    price: 42000.0,
     description: {
       en: "Real-time frequency and dissipation monitoring unit with USB interface.",
       th: "ชุดอุปกรณ์ตรวจวัดความถี่และการสลายพลังงานแบบเรียลไทม์ พร้อมอินเทอร์เฟซเชื่อมต่อ USB",
@@ -181,7 +181,7 @@ const MOCK_PRODUCTS_RAW = [
       th: "ชุดท่อเทฟลอน",
     },
     category: "Accessories",
-    price: 45.0,
+    price: 1575.0,
     description: {
       en: "Chemical-resistant teflon tubing with standardized connectors (2 meters).",
       th: "ท่อเทฟลอนทนสารเคมี พร้อมข้อต่อเชื่อมมาตรฐาน (ความยาว 2 เมตร)",
@@ -196,7 +196,7 @@ const MOCK_PRODUCTS_RAW = [
       th: "ชุดโอริงสำรอง",
     },
     category: "Accessories",
-    price: 25.0,
+    price: 875.0,
     description: {
       en: "Pack of 10 viton O-rings for sealing the flow cell module.",
       th: "ชุดแหวนยางไวตัน (Viton O-rings) จำนวน 10 ชิ้น สำหรับซีลผนึกโมดูลโฟลว์เซลล์",
@@ -211,7 +211,7 @@ const MOCK_PRODUCTS_RAW = [
       th: "ชุดสารเคมีเตรียมพื้นผิวเซนเซอร์ทอง (SAM Kit)",
     },
     category: "Chemicals",
-    price: 125.0,
+    price: 4375.0,
     description: {
       en: "All-in-one chemical kit for establishing a carboxyl-terminated Self-Assembled Monolayer (SAM) on gold QCM sensors. Perfect for covalent immobilization of target DNA or antibody markers.",
       th: "ชุดสารเคมีครบวงจรสำหรับสร้างชั้นฟิล์มเดี่ยวจัดระเบียบตัวเอง (SAM) บนแผ่นชิปเซนเซอร์ทอง QCM เหมาะอย่างยิ่งสำหรับการตรึงโควาเลนต์ของตัวรับ DNA หรือแอนติบอดีที่ต้องการตรวจจับ",
@@ -243,7 +243,7 @@ const MOCK_PRODUCTS_RAW = [
       th: "สารควบคุมแอนติบอดี EGFR เข้มข้น",
     },
     category: "Chemicals",
-    price: 280.0,
+    price: 9800.0,
     description: {
       en: "Highly purified monoclonal antibody conjugate designed specifically for targeting epidermal growth factor receptors (EGFR). Provides a robust binding control for biosensor validation.",
       th: "แอนติบอดีคอนจูเกตโมโนโคลนอลบริสุทธิ์สูง ออกแบบมาเฉพาะเพื่อเข้าจับกับตัวรับการเจริญเติบโตของผิวหนัง (EGFR) ใช้เป็นสารควบคุมปฏิกิริยาเพื่อสอบเทียบเซนเซอร์",
@@ -272,7 +272,7 @@ const MOCK_PRODUCTS_RAW = [
       th: "สารยึดเกาะทอง MUA (11-Mercaptoundecanoic Acid)",
     },
     category: "Chemicals",
-    price: 48.0,
+    price: 1680.0,
     description: {
       en: "Thiol-alkane carboxyl molecule used to form high density self-assembled monolayers (SAMs) on clean gold substrates, enabling coupling reactions through EDC/NHS pathways.",
       th: "โมเลกุลไธออล-อัลเคนคาร์บอกซิล ใช้ในการเตรียมชั้นโมโนเลเยอร์ที่มีความหนาแน่นสูงบนแผ่นทองคำเหนี่ยวนำ เพื่อการเกาะจับพันธะโควาเลนต์ผ่านปฏิกิริยา EDC/NHS",
@@ -301,7 +301,7 @@ const MOCK_PRODUCTS_RAW = [
       th: "ผงเกลือบัฟเฟอร์ PBS (pH 7.4)",
     },
     category: "Chemicals",
-    price: 18.5,
+    price: 650.0,
     description: {
       en: "DNase, RNase, and Protease-free standard buffer pouches. Maintains pH 7.4 at room temperature, providing stable ionic conditions for microfluidic biosensor measurement channels.",
       th: "ผงเตรียมบัฟเฟอร์มาตรฐานปราศจากสารทำลายดีเอ็นเอและอาร์เอ็นเอ รักษาค่าความเป็นกรดด่างที่ pH 7.4 ให้สภาวะไอออนที่เสถียรสำหรับการวัดสัญญาณในไมโครฟลูอิดิกเซนเซอร์",
@@ -333,7 +333,7 @@ const MOCK_PRODUCTS_RAW = [
       th: "ชุดสกัดคัดแยกสารพันธุกรรม cfDNA มะเร็ง",
     },
     category: "Chemicals",
-    price: 350.0,
+    price: 12250.0,
     description: {
       en: "Magnetic bead-based extraction kit optimized for isolating low concentration cell-free DNA (cfDNA) from plasma or serum samples. Specially matched with SuraZense immunoassay diagnostic protocols.",
       th: "ชุดสกัดระดับโมเลกุลโดยใช้บีดแม่เหล็ก ปรับแต่งเป็นพิเศษเพื่อเก็บกู้สารพันธุกรรมอิสระในกระแสเลือด (cfDNA) ที่มีความเข้มข้นต่ำ เหมาะสำหรับการทดสอบคัดกรองมะเร็งร่วมกับซอฟต์แวร์ Xzense",
@@ -365,7 +365,7 @@ const MOCK_PRODUCTS_RAW = [
       th: "หลักสูตรเวิร์กช็อปสอบเทียบ QCM ภาคปฏิบัติ",
     },
     category: "Courses",
-    price: 199.0,
+    price: 6965.0,
     description: {
       en: "Interactive laboratory session on ESP32-based frequency sweeps, noise reduction filters, and piezoelectric sensor characterization. Guided directly by SuraZense engineering instructors. Certificate included.",
       th: "หลักสูตรฝึกปฏิบัติในห้องแล็บเกี่ยวกับการกวาดความถี่ด้วย ESP32, ตัวกรองลดสัญญาณรบกวน และคุณลักษณะเซนเซอร์เพียโซอิเล็กทริก สอนโดยวิศวกร SuraZense โดยตรง พร้อมใบรับรองสำเร็จหลักสูตร",
@@ -404,7 +404,7 @@ const MOCK_PRODUCTS_RAW = [
       th: "หลักสูตรแล็บจลนศาสตร์การเกาะจับสารบ่งชี้มะเร็ง",
     },
     category: "Courses",
-    price: 299.0,
+    price: 10465.0,
     description: {
       en: "Hands-on practice covers building carboxyl self-assembled monolayers, activating them with EDC/NHS, conjugating tumor antibodies, and monitoring binding kinetics curves in real time. Great for life scientists.",
       th: "ฝึกฝนการเตรียมชั้นฟิล์มเดี่ยว MUA ตรึงด้วย EDC/NHS, การสร้างพันธะแอนติบอดีจำเพาะต่อมะเร็ง และเฝ้าสังเกตกราฟแสดงจลนศาสตร์การเกาะจับแบบเรียลไทม์ เหมาะอย่างยิ่งสำหรับนักวิจัยชีววิทยา",
@@ -443,7 +443,7 @@ const MOCK_PRODUCTS_RAW = [
       th: "หลักสูตรออนไลน์คณิตศาสตร์การประมวลสัญญาณชีวภาพ",
     },
     category: "Courses",
-    price: 149.0,
+    price: 5215.0,
     description: {
       en: "Advanced online theory course focusing on digital signal processing filters. Covers Savitzky-Golay regression smoothing, polynomial baseline drift correction, and Univariate Splines for peak frequency upsampling.",
       th: "วิชาทฤษฎีและปฏิบัติการออนไลน์ขั้นสูง มุ่งเน้นไปที่การประมวลผลสัญญาณตัวบ่งชี้การแพทย์ การใช้ตัวกรอง Savitzky-Golay, การดริฟต์เส้นฐาน และ Univariate Splines เพื่อการค้นหาตำแหน่งความถี่สูงสุดอย่างแม่นยำ",
@@ -483,12 +483,14 @@ const MOCK_PRODUCTS_RAW = [
   },
 ];
 
+const STORAGE_KEY = "surazense_products_v2";
+
 // Initialize local storage if not exists
-if (
-  typeof window !== "undefined" &&
-  !localStorage.getItem("surazense_products")
-) {
-  localStorage.setItem("surazense_products", JSON.stringify(MOCK_PRODUCTS_RAW));
+if (typeof window !== "undefined") {
+  if (!localStorage.getItem(STORAGE_KEY)) {
+    localStorage.removeItem("surazense_products");
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(MOCK_PRODUCTS_RAW));
+  }
 }
 
 export const MOCK_PRODUCTS = [];
@@ -496,7 +498,7 @@ export const MOCK_PRODUCTS = [];
 export const refreshMockProducts = () => {
   let products = [];
   if (typeof window !== "undefined") {
-    const local = localStorage.getItem("surazense_products");
+    const local = localStorage.getItem(STORAGE_KEY);
     if (local) {
       try {
         products = JSON.parse(local);
@@ -504,10 +506,7 @@ export const refreshMockProducts = () => {
         products = MOCK_PRODUCTS_RAW;
       }
     } else {
-      localStorage.setItem(
-        "surazense_products",
-        JSON.stringify(MOCK_PRODUCTS_RAW),
-      );
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(MOCK_PRODUCTS_RAW));
       products = MOCK_PRODUCTS_RAW;
     }
   } else {
@@ -523,7 +522,7 @@ refreshMockProducts();
 
 export const saveProducts = (newProducts) => {
   if (typeof window !== "undefined") {
-    localStorage.setItem("surazense_products", JSON.stringify(newProducts));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newProducts));
     refreshMockProducts();
   }
 };

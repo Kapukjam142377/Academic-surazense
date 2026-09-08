@@ -1,0 +1,272 @@
+﻿Knowledge Transfering Section (KTS)
+Programme Catalogue — Hands-on Laboratories and Academic Courses
+Sensor Technology Training Program at SuraZense
+The training programme is delivered in two forms. Hands-on Experimental Laboratories put high-school students at a working bench at Surazense Laboratory. Academic Courses build the reasoning around the bench and can be run at your school, on tour, or online.
+How the two parts differ
+
+Hands-on Laboratories
+Academic Courses
+Format
+Bench work with instruments
+Seminar and computer-based
+Venue
+Surazense Laboratory
+At your school, on tour, or online
+Topics
+13 laboratories
+9 courses
+Length
+40 hours (Labs 1–9), 20 hours (Labs 10–13)
+3–4 hours each
+Group size
+Up to 12 students
+Up to 40 students
+
+PART 1
+Hands-on Experimental Laboratories
+Students work at a real bench with real instruments, on the same sensor platforms Surazense uses for its own research. Every lab ends with data the student acquired themselves.
+Topic list
+Code
+Title
+Hours
+Lab 1
+QCM Biosensor & Biomarker Detection
+40 hours
+Lab 2
+SAW Biosensor & Biomarker Detection
+40 hours
+Lab 3
+FET Biosensor & Biomarker Detection
+40 hours
+Lab 4
+Portable Electrochemical Sensor & Biomarker Detection
+40 hours
+Lab 5
+Sensor Regeneration, Reuse & DNA Dehybridization
+40 hours
+Lab 6
+Biosensor Modeling & Simulation with CAD
+40 hours
+Lab 7
+Bio-Design Website with AI
+40 hours
+Lab 8
+Wearable Vital-Sign Sensing
+40 hours
+Lab 9
+Smart Insole & Fall Detection
+40 hours
+Lab 10
+Lab Safety, Pipetting & Solution Prep
+20 hours
+Lab 11
+PCR & Gel Electrophoresis
+20 hours
+Lab 12
+Protein Quantification & ELISA
+20 hours
+Lab 13
+Microscopy & Cell Viability
+20 hours
+
+GROUP 1 · MEDICAL TECHNOLOGY
+Biosensor Engineering & Device Prototyping
+Four sensing platforms, one biomarker. Students detect the same target four different ways, then take the best platform through reuse testing, CAD design, a live web readout, and two wearable devices.
+Lab 1  QCM Biosensor & Biomarker Detection   (40 hours)
+Mass-Sensitive Detection on a Quartz Crystal
+Start with the platform Surazense built its research on. Students calibrate a Quartz Crystal Microbalance, sweep 8–12 MHz through an ESP32 readout, functionalize the gold surface, then watch a biomarker bind in real time and decide whether the target is present.
+Key skills taught:
+Frequency sweep & resonance tracking
+Gold surface functionalization
+Reading a real binding curve
+Lab 2  SAW Biosensor & Biomarker Detection   (40 hours)
+Surface Acoustic Wave Sensing
+Same biomarker, different physics. Here the wave travels across the surface instead of through the bulk crystal. Students drive a SAW device, record phase and amplitude as the target binds, and compare sensitivity directly against their Lab 1 result.
+Key skills taught:
+SAW device operation
+Phase vs amplitude readout
+Cross-platform sensitivity comparison
+Lab 3  FET Biosensor & Biomarker Detection   (40 hours)
+Charge-Based Detection & Screening Effects
+Detect a molecule by the charge it carries rather than the mass it adds. Students bias a field-effect transistor biosensor, track how the transfer curve shifts as the target binds, and test how buffer ionic strength changes what the sensor can still see.
+Key skills taught:
+FET transfer-curve measurement
+Gate bias & threshold shift
+Ionic strength (Debye) effects
+Lab 4  Portable Electrochemical Sensor & Biomarker Detection   (40 hours)
+Resistance Readout on Screen-Printed Electrodes
+Build a detector that fits in a pocket. Students assemble a screen-printed electrode cell and read one quantity only — electrical resistance — as the biomarker binds to the electrode surface. Rising resistance means more target captured, and their own calibration curve turns ohms into a concentration.
+Key skills taught:
+Screen-printed electrode setup
+Resistance readout & baseline stability
+Calibration curve & detection limit
+Lab 5  Sensor Regeneration, Reuse & DNA Dehybridization   (40 hours)
+How Many Times Can One Chip Be Used?
+Ask the question that decides whether a test kit is disposable or reusable. Students hybridize DNA onto the sensor, strip it off again by raising temperature and changing buffer, then repeat the cycle and measure how much signal survives each round.
+Key skills taught:
+DNA hybridization & dehybridization
+Temperature and buffer control
+Cycle reproducibility (%CV)
+Lab 6  Biosensor Modeling & Simulation with CAD   (40 hours)
+Engineering Design Before Fabrication
+Design the sensor before building it. Students draw electrode and flow-cell geometry in CAD, simulate how mass loading and liquid flow affect the signal, sweep dimensions to find what improves sensitivity, and export a file ready for 3D printing.
+Key skills taught:
+CAD electrode & flow-cell design
+Mass-loading and flow simulation
+Parameter sweep & design optimization
+Lab 7  Bio-Design Website with AI   (40 hours)
+Publishing Live Sensor Data
+Turn a working sensor into something other people can use. Students build a web dashboard that receives live readings from their device, connect an AI assistant that explains a result in plain language, and publish the page for their school to try.
+Key skills taught:
+Live data dashboard build
+AI assistant integration via API
+Publishing & user testing
+Lab 8  Wearable Vital-Sign Sensing   (40 hours)
+PPG, Sampling Rate & Motion Artifacts
+Build a working heart-rate monitor, then find out why it fails. Students wire a PPG sensor to an ESP32, choose a sampling rate, and separate a real pulse from the artifacts that appear the moment the wearer moves.
+Key skills taught:
+PPG signal acquisition
+Sampling rate selection
+Motion artifact rejection
+Lab 9  Smart Insole & Fall Detection   (40 hours)
+Fall Detection & Gait Analysis Technology
+Learn the technology behind fall detection and pressure-based gait analysis. Students read pressure distribution across the foot from a sensing insole, follow how an accelerometer signal separates a real fall from ordinary movement, and interpret gait from their own recorded walks — stride timing, weight transfer, and left–right balance.
+Key skills taught:
+Reading a foot pressure map
+Fall detection from accelerometer signals
+Gait pattern & balance interpretation
+GROUP 2 · MEDICAL & BIOMEDICAL SCIENCES
+Wet Lab Foundations
+The bench skills every research project assumes. Start here if students have never worked in a controlled laboratory.
+Lab 10  Lab Safety, Pipetting & Solution Prep   (20 hours)
+Prerequisite for All Wet Labs
+Enter the lab safely and measure accurately. Students cover BSL-1/2 practice and waste handling, verify micropipette accuracy by mass, and prepare buffers from molarity calculations and serial dilutions.
+Key skills taught:
+PPE and waste protocols
+Micropipette accuracy checks
+Molarity & serial dilution
+Lab 11  PCR & Gel Electrophoresis   (20 hours)
+Amplify, Separate, Interpret
+Amplify a target sequence and read the result. Students set up reactions and thermal cycling, cast and run an agarose gel, then size bands against a ladder and judge whether the result is trustworthy.
+Key skills taught:
+Reaction setup & thermal cycling
+Agarose gel casting and running
+Band sizing & contamination controls
+Lab 12  Protein Quantification & ELISA   (20 hours)
+Standard Curves & Detection Limits
+Turn color into a number. Students build a protein standard curve, run a sandwich ELISA on a microplate, read absorbance, and calculate the assay's limit of detection from their own blanks.
+Key skills taught:
+Standard curve construction
+Sandwich ELISA workflow
+Limit of detection calculation
+Lab 13  Microscopy & Cell Viability   (20 hours)
+Counting, Staining, Judging Health
+See the sample instead of only measuring it. Students prepare stained slides, count cells on a hemocytometer, and use trypan blue exclusion to report viability with a defensible number.
+Key skills taught:
+Slide preparation & staining
+Hemocytometer counting
+Trypan blue viability assay
+PART 2
+Academic Courses
+Seminar and computer-based sessions that supply the theory, clinical context and research methodology a bench result needs in order to become a research output. No laboratory facilities required.
+Topic list
+Code
+Title
+Hours
+Course 1
+Principles of Biosensing & Transduction
+3 hours
+Course 2
+Molecular Diagnostics Fundamentals
+3 hours
+Course 3
+Basic Translational Medicine
+3 hours
+Course 4
+Liquid Biopsy & Cancer Screening
+3 hours
+Course 5
+Literature Search & Screening
+3 hours
+Course 6
+Research Question & Proposal Design
+3 hours
+Course 7
+Research Data Analysis in Python
+4 hours
+Course 8
+AI for Research Projects
+4 hours
+Course 9
+Gait Analysis & Pressure Sensor Technology
+3 hours
+
+THEORY · CLINICAL CONTEXT · METHODOLOGY
+Scientific Foundations & Research Methodology
+Courses 1–4 explain why the instruments in Part 1 work and what clinical question they answer. Courses 5–8 turn a student's measurements into a defensible piece of research, and Course 9 is delivered by the Suratec engineering team.
+Course 1  Principles of Biosensing & Transduction   (3 hours)
+Acoustic, FET & Electrochemical Platforms
+Understand how a molecular event becomes an electrical signal — across all four platforms used in Labs 1 to 4. Covers the Sauerbrey relation, charge screening in solution, charge-transfer resistance, and how sensitivity, selectivity and limit of detection are defined and compared.
+Key skills taught:
+Four transduction families compared
+Sauerbrey relation & Debye length
+Sensitivity, selectivity & LOD
+Course 2  Molecular Diagnostics Fundamentals   (3 hours)
+Biomarkers, Targets & Test Performance
+Learn what a diagnostic test actually claims. Students work through biomarker classes — protein, nucleic acid, metabolite — how a target and sample type are chosen, and how sensitivity, specificity and predictive value are calculated from a real 2×2 result table.
+Key skills taught:
+Biomarker classes & sample types
+Target selection criteria
+Sensitivity, specificity & predictive value
+Course 3  Basic Translational Medicine   (3 hours)
+From Bench to Bedside
+Follow an idea through the stages that decide whether it ever reaches a patient: preclinical evidence, prototype validation, clinical study phases, regulatory approval and cost. Case studies show where promising sensors stop, and why that is usually not a science problem.
+Key skills taught:
+Translational stages T0–T4
+Prototype validation requirements
+Regulatory, cost & adoption barriers
+Course 4  Liquid Biopsy & Cancer Screening   (3 hours)
+Cell-Free DNA, RNA & Population Screening
+The clinical case behind Labs 1 to 5. Covers cell-free DNA and RNA in circulation, why a single blood draw can carry tumour information, HPV and cervical cancer screening as a worked example, and what a screening programme must prove before a country adopts it.
+Key skills taught:
+cfDNA/cfRNA biology
+HPV screening case study
+Evaluating a screening programme
+Course 5  Literature Search & Screening   (3 hours)
+PubMed, Scopus & Reference Management
+Find out what is already known before spending a single reagent. Students build Boolean queries in PubMed and Scopus, screen abstracts against their own inclusion criteria, and keep a citation library that stays clean to the end of the project.
+Key skills taught:
+Boolean & MeSH search strategy
+Abstract screening criteria
+Reference manager workflow
+Course 6  Research Question & Proposal Design   (3 hours)
+Hypothesis, Variables, Controls
+Turn curiosity into a workable plan. Students narrow a broad interest into a testable hypothesis, define variables and the controls that make a result believable, and write a one-page proposal with a realistic timeline and materials list.
+Key skills taught:
+Framing a testable hypothesis
+Variable & control definition
+One-page proposal writing
+Course 7  Research Data Analysis in Python   (4 hours)
+From Raw Sensor Log to Reportable Figure
+Take the sensor logs recorded in Part 1 and analyze them properly. Students clean data with pandas, apply baseline correction and smoothing, fit curves, add error bars, and produce figures that hold up in a competition or a manuscript.
+Key skills taught:
+Data cleaning with pandas
+Baseline correction, smoothing & curve fitting
+Error bars & publication-quality plots
+Course 8  AI for Research Projects   (4 hours)
+Using AI Honestly and Effectively
+Learn where AI genuinely helps a student research project and where it produces confident errors. Students use AI for literature triage, code assistance and figure drafting, verify every claim against a real source, and follow the disclosure rules competitions and journals now expect.
+Key skills taught:
+Prompting for research tasks
+Verifying AI output against sources
+Disclosure & academic integrity rules
+Course 9  Gait Analysis & Pressure Sensor Technology   (3 hours)
+Delivered by the Suratec Engineering Team
+The engineers who build Suratec's pressure-sensing products explain how a measurement of walking becomes clinical information. Covers pressure sensor types and how they are calibrated, the phases of the gait cycle, what a pressure map reveals about fall risk and diabetic foot risk, and how the data reaches a clinician.
+Key skills taught:
+Pressure sensor types & calibration
+Gait cycle phases & pressure maps
+Clinical use in fall and diabetic foot risk
+Contact
+Dr. Yanwarut Chiraatthakit — Promotion of Education Department, Surazense Co., Ltd.
+

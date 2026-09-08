@@ -193,7 +193,7 @@ export default function Products() {
             duration: 1.0,
             ease: [0.32, 0.72, 0, 1], // Elegant ease-out curve
           }}
-          className="fixed z-[100] w-[60px] h-[60px] rounded-full border-2 border-white shadow-2xl overflow-hidden bg-white pointer-events-none flex items-center justify-center"
+          className="fixed z-[100] w-[60px] h-[60px] border-2 border-white shadow-2xl overflow-hidden bg-white pointer-events-none flex items-center justify-center"
           style={{ top: 0, left: 0 }}
         >
           {flyingItem.image ? (
@@ -221,7 +221,7 @@ export default function Products() {
               <h2 className="text-2xl md:text-3xl font-black text-slate-800 tracking-tight leading-snug">
                 {t("products.categoryGrids.title")}
               </h2>
-              <div className="w-20 h-1 bg-gradient-to-r from-blue-600 to-sky-500 mx-auto mt-4 rounded-full"></div>
+              <div className="w-20 h-1 bg-gradient-to-r from-blue-600 to-sky-500 mx-auto mt-4"></div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
@@ -234,15 +234,15 @@ export default function Products() {
                       "0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
                   }}
                   onClick={() => handleCategoryClick(item.id)}
-                  className="bg-white rounded-[2rem] p-8 border border-slate-100 flex flex-col justify-between items-center text-center cursor-pointer transition-all duration-300 group hover:border-blue-200/50 hover:shadow-xl hover:shadow-blue-950/5 relative overflow-hidden"
+                  className="bg-white p-8 border border-sky-200/90 hover:border-sky-400/90 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-sky-500/10 flex flex-col justify-between items-center text-center cursor-pointer relative overflow-hidden group hover:-translate-y-1"
                 >
                   {/* Subtle top indicator bar */}
                   <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-blue-600 to-sky-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                   <div className="flex flex-col items-center">
-                    {/* Circle Icon Box */}
+                    {/* Icon Box */}
                     <div
-                      className={`w-16 h-16 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 ${item.bgIcon}`}
+                      className={`w-16 h-16 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 ${item.bgIcon}`}
                     >
                       {item.icon}
                     </div>
@@ -256,7 +256,7 @@ export default function Products() {
                     </p>
                   </div>
 
-                  <button className="mt-6 text-xs font-bold text-blue-600 bg-transparent border-none cursor-pointer flex items-center gap-1 group-hover:text-blue-700 select-none uppercase tracking-widest">
+                  <button className="mt-6 text-xs font-bold text-sky-600 bg-transparent border-none cursor-pointer flex items-center gap-1 group-hover:text-blue-600 select-none uppercase tracking-widest">
                     {t("products.categoryGrids.exploreMore")}
                     <span className="group-hover:translate-x-0.5 transition-transform">
                       →
@@ -299,14 +299,14 @@ export default function Products() {
             id="product-catalog-section"
             className="max-w-7xl mx-auto px-6 mb-10 sticky top-[80px] z-30"
           >
-            <div className="bg-white/80 backdrop-blur-xl p-4 rounded-3xl shadow-sm shadow-blue-900/5 border border-slate-200/60 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="bg-white/80 backdrop-blur-xl p-4 shadow-sm shadow-blue-900/5 border border-slate-200/60 flex flex-col md:flex-row justify-between items-center gap-4">
               {/* Categories */}
               <div className="flex overflow-x-auto w-full md:w-auto pb-2 md:pb-0 hide-scrollbar gap-2">
                 {CATEGORIES.map((category) => (
                   <button
                     key={category}
                     onClick={() => setActiveCategory(category)}
-                    className={`px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all ${
+                    className={`px-5 py-2.5 text-sm font-bold whitespace-nowrap transition-all ${
                       activeCategory === category
                         ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
                         : "bg-slate-100 text-slate-600 hover:bg-slate-200"
@@ -325,7 +325,7 @@ export default function Products() {
                   placeholder={t("products.searchPlaceholder")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 bg-slate-100 border border-transparent rounded-full text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-blue-500 transition-all outline-none text-slate-900"
+                  className="w-full pl-11 pr-4 py-3 bg-slate-100 border border-transparent text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white focus:border-blue-500 transition-all outline-none text-slate-900"
                 />
               </div>
             </div>
@@ -334,7 +334,7 @@ export default function Products() {
           {/* Product Grid */}
           <div className="max-w-7xl mx-auto px-6">
             {filteredProducts.length === 0 ? (
-              <div className="text-center py-20 bg-white rounded-3xl border border-slate-100 shadow-sm">
+              <div className="text-center py-20 bg-white border border-slate-100 shadow-sm">
                 <Filter className="w-12 h-12 text-slate-300 mx-auto mb-4" />
                 <h3 className="text-xl font-bold text-slate-800 mb-2">
                   {t("products.noProducts")}
@@ -345,7 +345,7 @@ export default function Products() {
                     setActiveCategory("All");
                     setSearchQuery("");
                   }}
-                  className="mt-6 px-6 py-2.5 bg-blue-50 text-blue-600 font-bold rounded-full hover:bg-blue-100 transition-colors"
+                  className="mt-6 px-6 py-2.5 bg-blue-50 text-blue-600 font-bold hover:bg-blue-100 transition-colors"
                 >
                   {t("products.clearFilters")}
                 </button>
@@ -364,7 +364,7 @@ export default function Products() {
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.2 }}
                       key={product.id}
-                      className="bg-white rounded-[2rem] border border-slate-100 overflow-hidden group hover:shadow-2xl hover:shadow-blue-900/10 hover:-translate-y-1 transition-all duration-300 flex flex-col"
+                      className="bg-white border border-slate-100 overflow-hidden group hover:shadow-2xl hover:shadow-blue-900/10 hover:-translate-y-1 transition-all duration-300 flex flex-col"
                     >
                       {/* Clickable Area for Detail Page */}
                       <Link
@@ -381,7 +381,7 @@ export default function Products() {
                           ) : (
                             <div className="flex flex-col items-center justify-center text-slate-400 group-hover:scale-105 transition-transform duration-500">
                               <ImageIcon className="w-12 h-12 mb-3 opacity-50 stroke-[1.5px]" />
-                              <span className="text-[10px] font-bold uppercase tracking-widest bg-slate-200/50 px-3 py-1 rounded-full">
+                              <span className="text-[10px] font-bold uppercase tracking-widest bg-slate-200/50 px-3 py-1">
                                 Add Image Later
                               </span>
                             </div>
@@ -390,7 +390,7 @@ export default function Products() {
                           {/* Status Badge */}
                           <div className="absolute top-4 left-4 z-10">
                             <span
-                              className={`px-3 py-1 rounded-full text-xs font-bold backdrop-blur-md ${
+                              className={`px-3 py-1 text-xs font-bold backdrop-blur-md ${
                                 product.status === "In Stock"
                                   ? "bg-green-100/80 text-green-700 border border-green-200/50"
                                   : "bg-orange-100/80 text-orange-700 border border-orange-200/50"
@@ -410,13 +410,13 @@ export default function Products() {
                           </span>
                           {product.category === "Chemicals" &&
                             product.chemicalSpecs?.purity && (
-                              <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                              <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 border border-emerald-100">
                                 {product.chemicalSpecs.purity}
                               </span>
                             )}
                           {product.category === "Courses" &&
                             product.courseSpecs?.level && (
-                              <span className="text-[10px] font-semibold text-purple-600 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-100">
+                              <span className="text-[10px] font-semibold text-purple-600 bg-purple-50 px-2 py-0.5 border border-purple-100">
                                 {product.courseSpecs.level[language] ||
                                   product.courseSpecs.level.en}
                               </span>
@@ -434,7 +434,7 @@ export default function Products() {
                         {/* Specialized visual metadata */}
                         {product.category === "Chemicals" &&
                           product.chemicalSpecs?.formula && (
-                            <div className="mb-3 font-mono text-[11px] bg-slate-50 text-slate-600 px-2.5 py-1 rounded-md border border-slate-200/60 inline-block w-fit">
+                            <div className="mb-3 font-mono text-[11px] bg-slate-50 text-slate-600 px-2.5 py-1 border border-slate-200/60 inline-block w-fit">
                               {product.chemicalSpecs.formula}
                             </div>
                           )}
@@ -462,7 +462,7 @@ export default function Products() {
 
                         {/* Price & Action */}
                         {product.id === 1 ? (
-                          <div className="mt-auto bg-amber-50 border border-amber-200/60 rounded-2xl p-4 text-[12px] text-amber-800 leading-relaxed flex items-start gap-2.5 shadow-sm">
+                          <div className="mt-auto bg-amber-50 border border-amber-200/60 p-4 text-[12px] text-amber-800 leading-relaxed flex items-start gap-2.5 shadow-sm">
                             <AlertCircle className="w-4.5 h-4.5 text-amber-600 shrink-0 mt-0.5" />
                             <span>
                               Currently under development for research and
@@ -478,12 +478,16 @@ export default function Products() {
                                 {t("products.priceLabel")}
                               </span>
                               <span className="text-2xl font-black text-slate-900">
-                                ${product.price.toFixed(2)}
+                                ฿
+                                {Number(product.price).toLocaleString("th-TH", {
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2,
+                                })}
                               </span>
                             </div>
                             <button
                               onClick={(e) => handleAddToCart(product, e)}
-                              className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center hover:bg-gradient-to-r hover:from-blue-600 hover:to-sky-500 hover:border-transparent hover:text-white hover:shadow-lg hover:shadow-blue-500/30 transition-all group/btn"
+                              className="w-14 h-14 bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center hover:bg-gradient-to-r hover:from-blue-600 hover:to-sky-500 hover:border-transparent hover:text-white hover:shadow-lg hover:shadow-blue-500/30 transition-all group/btn"
                               title={t("products.addToCart")}
                             >
                               <ShoppingCart className="w-6 h-6 stroke-[2px] group-hover/btn:scale-110 group-hover/btn:-rotate-6 transition-all duration-300" />

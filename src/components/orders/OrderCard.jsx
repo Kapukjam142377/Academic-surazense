@@ -88,7 +88,11 @@ export default function OrderCard({ order, language }) {
         {/* Right: amount + status + toggle */}
         <div className="flex items-center gap-3 shrink-0 flex-wrap sm:flex-nowrap">
           <span className="text-base font-black text-slate-900">
-            ${Number(order.total_amount ?? 0).toFixed(2)}
+            ฿
+            {Number(order.total_amount ?? 0).toLocaleString("th-TH", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
           </span>
           <OrderStatusBadge
             status={order.status ?? "pending"}
@@ -161,7 +165,14 @@ export default function OrderCard({ order, language }) {
                     </span>
                   </div>
                   <span className="text-sm font-bold text-slate-800 shrink-0">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    ฿
+                    {Number(item.price * item.quantity).toLocaleString(
+                      "th-TH",
+                      {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      },
+                    )}
                   </span>
                 </div>
               ))}
@@ -169,7 +180,13 @@ export default function OrderCard({ order, language }) {
               {/* Subtotals */}
               <div className="pt-2 border-t border-slate-200/60 flex justify-between text-sm font-black text-slate-900">
                 <span>{language === "th" ? "รวมทั้งสิ้น" : "Total"}</span>
-                <span>${Number(order.total_amount ?? 0).toFixed(2)}</span>
+                <span>
+                  ฿
+                  {Number(order.total_amount ?? 0).toLocaleString("th-TH", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </span>
               </div>
 
               {/* Actions: Request Receipt / Invoice */}

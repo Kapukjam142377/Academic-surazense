@@ -3003,12 +3003,10 @@ export default function Admin() {
                             </td>
                             <td className="py-4 px-6 font-semibold text-slate-800">
                               ฿
-                              {(product.price * 35).toLocaleString(undefined, {
+                              {Number(product.price).toLocaleString("th-TH", {
                                 minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
                               })}
-                              <span className="text-[10px] text-slate-400 font-normal block mt-0.5">
-                                (${product.price.toFixed(2)})
-                              </span>
                             </td>
                             <td className="py-4 px-6">
                               <span
@@ -3111,7 +3109,9 @@ export default function Admin() {
                         </div>
                         <div>
                           <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-                            Price ($ USD) *
+                            {language === "th"
+                              ? "ราคา (บาท / THB) *"
+                              : "Price (฿ THB) *"}
                           </label>
                           <input
                             type="number"
@@ -3119,7 +3119,7 @@ export default function Admin() {
                             required
                             value={newProdPrice}
                             onChange={(e) => setNewProdPrice(e.target.value)}
-                            placeholder="e.g. 150.00"
+                            placeholder="e.g. 5250.00"
                             className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm"
                           />
                         </div>

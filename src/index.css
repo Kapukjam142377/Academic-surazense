@@ -171,15 +171,6 @@ h6 {
   box-shadow: 0 2px 8px rgba(2, 132, 199, 0.05);
 }
 
-h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  color: var(--text-main);
-  letter-spacing: -0.5px;
-}
-
 .status-indicator {
   display: inline-flex;
   align-items: center;

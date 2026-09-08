@@ -268,36 +268,30 @@ export default function News() {
   const getCategoryColor = (cat) => {
     switch (cat) {
       case "news":
-        return "bg-sky-500/10 text-sky-400 border-sky-500/20";
+        return "bg-sky-50 text-sky-700 border-sky-200/80";
       case "promotion":
-        return "bg-amber-500/10 text-amber-400 border-amber-500/20";
+        return "bg-amber-50 text-amber-700 border-amber-200/80";
       case "system":
-        return "bg-rose-500/10 text-rose-400 border-rose-500/20";
+        return "bg-rose-50 text-rose-700 border-rose-200/80";
       case "medical":
-        return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
+        return "bg-emerald-50 text-emerald-700 border-emerald-200/80";
       default:
-        return "bg-purple-500/10 text-purple-400 border-purple-500/20";
+        return "bg-purple-50 text-purple-700 border-purple-200/80";
     }
   };
 
   return (
     <div className="min-h-screen pb-20 pt-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       {/* Header Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-sky-900/40 via-purple-900/30 to-slate-900/80 border border-slate-700/50 p-8 sm:p-12 mb-12 shadow-2xl backdrop-blur-xl">
-        <div className="absolute top-0 right-0 -mt-12 -mr-12 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="relative overflow-hidden bg-gradient-to-br from-white via-sky-50/60 to-blue-50/30 border border-sky-100/80 p-8 sm:p-12 mb-12 shadow-sm backdrop-blur-xl">
+        <div className="absolute top-0 right-0 -mt-12 -mr-12 w-96 h-96 bg-sky-200/30 blur-3xl pointer-events-none" />
         <div className="relative z-10 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-400 text-xs font-semibold uppercase tracking-widest mb-4">
-            <Sparkles className="w-4 h-4 animate-pulse" />
-            {language === "th"
-              ? "ข่าวสาร & ประกาศสถาบัน"
-              : "Official News & Announcements"}
-          </div>
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
             {language === "th"
               ? "ข่าวสาร อัปเดต และงานวิจัย SuraZense"
               : "SuraZense News & Insights"}
           </h1>
-          <p className="text-slate-300 text-base sm:text-lg leading-relaxed mb-8">
+          <p className="text-slate-600 text-base sm:text-lg leading-relaxed mb-8">
             {language === "th"
               ? "ติดตามข่าวสารการพัฒนาเทคโนโลยีไบโอเซนเซอร์ งานวิจัยตีพิมพ์ รางวัลนวัตกรรม และการอัปเดตระบบวิเคราะห์ QCM"
               : "Discover our latest achievements, research publications, product releases, and platform system announcements."}
@@ -315,12 +309,12 @@ export default function News() {
                   ? "ค้นหาข่าวสาร เช่น Xzense-101, งานวิจัย, รางวัล..."
                   : "Search news by keyword..."
               }
-              className="w-full pl-12 pr-10 py-3.5 bg-slate-900/80 text-white placeholder-slate-400 border border-slate-700/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent text-sm transition-all shadow-inner"
+              className="w-full pl-12 pr-10 py-3.5 bg-white text-slate-900 placeholder-slate-400 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent text-sm transition-all shadow-sm"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-1 cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -338,10 +332,10 @@ export default function News() {
             <button
               key={cat.id}
               onClick={() => setSelectedCategory(cat.id)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all whitespace-nowrap border ${
+              className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all whitespace-nowrap border cursor-pointer ${
                 isActive
-                  ? "bg-sky-500 text-white border-sky-400 shadow-lg shadow-sky-500/20 scale-[1.02]"
-                  : "bg-slate-800/60 text-slate-300 border-slate-700/60 hover:bg-slate-800 hover:text-white"
+                  ? "bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/20 scale-[1.02]"
+                  : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-slate-900 shadow-sm"
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -357,14 +351,14 @@ export default function News() {
           {[1, 2, 3, 4, 5, 6].map((n) => (
             <div
               key={n}
-              className="h-80 rounded-2xl bg-slate-800/40 border border-slate-700/40 animate-pulse p-6 flex flex-col justify-between"
+              className="h-80 bg-white border border-slate-100 shadow-sm animate-pulse p-6 flex flex-col justify-between"
             >
               <div>
-                <div className="h-6 w-24 bg-slate-700/50 rounded-lg mb-4" />
-                <div className="h-6 w-full bg-slate-700/50 rounded-lg mb-2" />
-                <div className="h-4 w-3/4 bg-slate-700/30 rounded-lg mb-4" />
+                <div className="h-6 w-24 bg-slate-200 mb-4" />
+                <div className="h-6 w-full bg-slate-200 mb-2" />
+                <div className="h-4 w-3/4 bg-slate-100 mb-4" />
               </div>
-              <div className="h-4 w-1/3 bg-slate-700/40 rounded-lg" />
+              <div className="h-4 w-1/3 bg-slate-200" />
             </div>
           ))}
         </div>
@@ -372,14 +366,14 @@ export default function News() {
 
       {/* Empty State */}
       {!loading && filteredAnnouncements.length === 0 && (
-        <div className="text-center py-16 bg-slate-900/40 rounded-2xl border border-slate-800 p-8">
-          <Newspaper className="w-12 h-12 text-slate-500 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-white mb-2">
+        <div className="text-center py-16 bg-white border border-slate-200/80 p-8 shadow-sm">
+          <Newspaper className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+          <h3 className="text-lg font-bold text-slate-900 mb-2">
             {language === "th"
               ? "ไม่พบข่าวสารที่ค้นหา"
               : "No announcements found"}
           </h3>
-          <p className="text-slate-400 text-sm max-w-md mx-auto mb-6">
+          <p className="text-slate-500 text-sm max-w-md mx-auto mb-6">
             {language === "th"
               ? "ลองเปลี่ยนคำค้นหาหรือเลือกหมวดหมู่อื่นเพื่อดูประกาศเพิ่มเติม"
               : "Try adjusting your search criteria or selecting a different category."}
@@ -389,7 +383,7 @@ export default function News() {
               setSelectedCategory("all");
               setSearchQuery("");
             }}
-            className="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-sm font-medium transition"
+            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition cursor-pointer shadow-sm"
           >
             {language === "th" ? "รีเซ็ตการค้นหา" : "Clear filters"}
           </button>
@@ -399,9 +393,8 @@ export default function News() {
       {/* Pinned Announcements Section */}
       {!loading && pinnedItems.length > 0 && (
         <div className="mb-12">
-          <div className="flex items-center gap-2 mb-6">
-            <Pin className="w-5 h-5 text-amber-400 fill-amber-400/20" />
-            <h2 className="text-xl font-bold text-white tracking-wide">
+          <div className="mb-6">
+            <h2 className="text-xl font-bold text-slate-900 tracking-wide">
               {language === "th"
                 ? "ประกาศสำคัญปักหมุด"
                 : "Featured & Pinned Announcements"}
@@ -413,10 +406,10 @@ export default function News() {
               <div
                 key={item.id}
                 onClick={() => handleOpenDetail(item)}
-                className="group relative cursor-pointer overflow-hidden rounded-2xl bg-slate-800/80 border border-amber-500/30 hover:border-amber-400/60 transition-all duration-300 shadow-xl hover:shadow-amber-500/10 flex flex-col sm:flex-row"
+                className="group relative cursor-pointer overflow-hidden bg-white border border-amber-200/90 hover:border-amber-400/90 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-amber-500/10 flex flex-col sm:flex-row hover:-translate-y-0.5"
               >
                 {/* Banner / Cover */}
-                <div className="sm:w-2/5 h-48 sm:h-auto relative overflow-hidden bg-slate-900">
+                <div className="sm:w-2/5 h-48 sm:h-auto relative overflow-hidden bg-slate-100">
                   <img
                     src={
                       item.image_url ||
@@ -425,8 +418,8 @@ export default function News() {
                     alt={item.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute top-3 left-3 bg-amber-500/90 text-slate-950 font-bold text-[11px] px-2.5 py-1 rounded-md uppercase tracking-wider flex items-center gap-1 shadow-md">
-                    <Pin className="w-3 h-3 fill-slate-950" />
+                  <div className="absolute top-3 left-3 bg-amber-500 text-white font-bold text-[11px] px-2.5 py-1 uppercase tracking-wider flex items-center gap-1 shadow-md">
+                    <Pin className="w-3 h-3 fill-white" />
                     {language === "th" ? "ปักหมุด" : "Pinned"}
                   </div>
                 </div>
@@ -436,7 +429,7 @@ export default function News() {
                   <div>
                     <div className="flex items-center gap-2 mb-3">
                       <span
-                        className={`text-xs px-2.5 py-1 rounded-full font-semibold border ${getCategoryColor(
+                        className={`text-xs px-2.5 py-1 font-semibold border ${getCategoryColor(
                           item.category,
                         )}`}
                       >
@@ -448,15 +441,15 @@ export default function News() {
                       </span>
                     </div>
 
-                    <h3 className="text-lg font-bold text-white group-hover:text-sky-400 transition-colors line-clamp-2 mb-2">
+                    <h3 className="text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2 mb-2">
                       {item.title}
                     </h3>
-                    <p className="text-slate-300 text-sm line-clamp-3 leading-relaxed mb-4">
+                    <p className="text-slate-600 text-sm line-clamp-3 leading-relaxed mb-4">
                       {item.summary || item.content?.substring(0, 120)}
                     </p>
                   </div>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-slate-700/50 text-xs font-semibold text-sky-400 group-hover:text-sky-300">
+                  <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs font-semibold text-blue-600 group-hover:text-blue-700">
                     <span>
                       {language === "th" ? "อ่านรายละเอียด" : "Read Full Story"}
                     </span>
@@ -472,7 +465,7 @@ export default function News() {
       {/* Regular News Grid */}
       {!loading && regularItems.length > 0 && (
         <div>
-          <h2 className="text-xl font-bold text-white tracking-wide mb-6">
+          <h2 className="text-xl font-bold text-slate-900 tracking-wide mb-6">
             {language === "th"
               ? "รายการข่าวสารทั้งหมด"
               : "All Articles & Updates"}
@@ -483,21 +476,21 @@ export default function News() {
               <div
                 key={item.id}
                 onClick={() => handleOpenDetail(item)}
-                className="group cursor-pointer overflow-hidden rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-sky-500/50 hover:bg-slate-800/80 transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-sky-500/10"
+                className="group cursor-pointer overflow-hidden bg-white border border-slate-100 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-300 flex flex-col justify-between shadow-sm hover:-translate-y-0.5"
               >
                 {/* Image Cover */}
-                <div className="h-44 relative overflow-hidden bg-slate-950">
+                <div className="h-44 relative overflow-hidden bg-slate-100">
                   <img
                     src={
                       item.image_url ||
                       "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=600&q=80"
                     }
                     alt={item.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute top-3 left-3">
                     <span
-                      className={`text-xs px-2.5 py-1 rounded-full font-semibold border backdrop-blur-md ${getCategoryColor(
+                      className={`text-xs px-2.5 py-1 font-semibold border backdrop-blur-md shadow-sm ${getCategoryColor(
                         item.category,
                       )}`}
                     >
@@ -514,15 +507,15 @@ export default function News() {
                       <span>{formatDate(item.created_at)}</span>
                     </div>
 
-                    <h3 className="text-base font-bold text-white group-hover:text-sky-400 transition-colors line-clamp-2 mb-2">
+                    <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2 mb-2">
                       {item.title}
                     </h3>
-                    <p className="text-slate-400 text-sm line-clamp-3 leading-relaxed mb-4">
+                    <p className="text-slate-500 text-sm line-clamp-3 leading-relaxed mb-4">
                       {item.summary || item.content?.substring(0, 100)}
                     </p>
                   </div>
 
-                  <div className="flex items-center justify-between pt-3 border-t border-slate-800 text-xs font-semibold text-sky-400 group-hover:text-sky-300">
+                  <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs font-semibold text-blue-600 group-hover:text-blue-700">
                     <span>
                       {language === "th" ? "รายละเอียด" : "Read details"}
                     </span>
@@ -537,10 +530,10 @@ export default function News() {
 
       {/* Announcement Detail Modal */}
       {showDetailModal && selectedAnnouncement && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in">
-          <div className="relative w-full max-w-3xl max-h-[90vh] bg-slate-900 border border-slate-700/80 rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-fade-in">
+          <div className="relative w-full max-w-3xl max-h-[90vh] bg-white border border-slate-200 shadow-2xl overflow-hidden flex flex-col">
             {/* Modal Header Image */}
-            <div className="relative h-56 sm:h-72 w-full bg-slate-950 flex-shrink-0">
+            <div className="relative h-56 sm:h-72 w-full bg-slate-100 flex-shrink-0">
               <img
                 src={
                   selectedAnnouncement.image_url ||
@@ -549,12 +542,12 @@ export default function News() {
                 alt={selectedAnnouncement.title}
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent" />
 
               {/* Close Button */}
               <button
                 onClick={() => setShowDetailModal(false)}
-                className="absolute top-4 right-4 p-2 rounded-full bg-slate-900/80 text-slate-300 hover:text-white hover:bg-slate-800 border border-slate-700/60 transition shadow-lg"
+                className="absolute top-4 right-4 p-2 bg-white/90 text-slate-600 hover:text-slate-900 hover:bg-white border border-slate-200 transition shadow-lg cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -562,20 +555,20 @@ export default function News() {
               <div className="absolute bottom-4 left-6 right-6">
                 <div className="flex items-center gap-2 mb-2">
                   <span
-                    className={`text-xs px-3 py-1 rounded-full font-bold uppercase border ${getCategoryColor(
+                    className={`text-xs px-3 py-1 font-bold uppercase border shadow-sm ${getCategoryColor(
                       selectedAnnouncement.category,
                     )}`}
                   >
                     {selectedAnnouncement.category}
                   </span>
                   {selectedAnnouncement.is_pinned && (
-                    <span className="bg-amber-500 text-slate-950 font-bold text-xs px-2.5 py-1 rounded-full flex items-center gap-1">
-                      <Pin className="w-3 h-3 fill-slate-950" />
+                    <span className="bg-amber-500 text-white font-bold text-xs px-2.5 py-1 flex items-center gap-1 shadow-sm">
+                      <Pin className="w-3 h-3 fill-white" />
                       {language === "th" ? "ปักหมุด" : "Pinned"}
                     </span>
                   )}
                 </div>
-                <h2 className="text-xl sm:text-2xl font-extrabold text-white leading-tight">
+                <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 leading-tight">
                   {selectedAnnouncement.title}
                 </h2>
               </div>
@@ -583,14 +576,14 @@ export default function News() {
 
             {/* Modal Meta & Content */}
             <div className="p-6 sm:p-8 overflow-y-auto flex-1 space-y-6">
-              <div className="flex items-center justify-between text-xs text-slate-400 pb-4 border-b border-slate-800">
+              <div className="flex items-center justify-between text-xs text-slate-500 pb-4 border-b border-slate-100">
                 <div className="flex items-center gap-4">
                   <span className="flex items-center gap-1.5">
-                    <Calendar className="w-4 h-4 text-sky-400" />
+                    <Calendar className="w-4 h-4 text-sky-600" />
                     {formatDate(selectedAnnouncement.created_at)}
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <Eye className="w-4 h-4 text-purple-400" />
+                    <Eye className="w-4 h-4 text-purple-600" />
                     {language === "th"
                       ? "ประกาศอย่างเป็นทางการ"
                       : "Official Notice"}
@@ -600,25 +593,25 @@ export default function News() {
 
               {/* Summary Callout */}
               {selectedAnnouncement.summary && (
-                <div className="p-4 rounded-xl bg-sky-950/40 border border-sky-800/40 text-sky-200 text-sm leading-relaxed italic">
+                <div className="p-4 bg-sky-50 border border-sky-100 text-sky-900 text-sm leading-relaxed italic">
                   "{selectedAnnouncement.summary}"
                 </div>
               )}
 
               {/* Main Content Body */}
-              <div className="text-slate-300 text-base leading-relaxed whitespace-pre-line font-sans space-y-4">
+              <div className="text-slate-700 text-base leading-relaxed whitespace-pre-line font-sans space-y-4">
                 {selectedAnnouncement.content}
               </div>
             </div>
 
             {/* Modal Footer */}
-            <div className="p-4 sm:p-6 bg-slate-950 border-t border-slate-800 flex items-center justify-between">
-              <span className="text-xs text-slate-400">
+            <div className="p-4 sm:p-6 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+              <span className="text-xs text-slate-500">
                 SuraZense News System • ID #{selectedAnnouncement.id}
               </span>
               <button
                 onClick={() => setShowDetailModal(false)}
-                className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-sm font-semibold transition"
+                className="px-5 py-2.5 bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 text-sm font-semibold transition cursor-pointer shadow-sm"
               >
                 {language === "th" ? "ปิดหน้าต่าง" : "Close"}
               </button>

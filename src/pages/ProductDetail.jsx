@@ -94,7 +94,7 @@ export default function ProductDetail() {
             opacity: 0.2,
           }}
           transition={{ duration: 1.0, ease: [0.32, 0.72, 0, 1] }}
-          className="fixed z-[100] w-[60px] h-[60px] rounded-full border-2 border-slate-200 shadow-2xl overflow-hidden bg-white pointer-events-none flex items-center justify-center"
+          className="fixed z-[100] w-[60px] h-[60px] border-2 border-slate-200 shadow-2xl overflow-hidden bg-white pointer-events-none flex items-center justify-center"
           style={{ top: 0, left: 0 }}
         >
           {flyingItem.image ? (
@@ -231,7 +231,7 @@ export default function ProductDetail() {
             {/* Price and Add to Cart */}
             {product.id === 1 ? (
               <div className="mt-16 pt-8 border-t border-slate-100">
-                <div className="bg-amber-50 border border-amber-200/60 rounded-2xl p-5 text-[13px] md:text-sm text-amber-800 leading-relaxed flex items-start gap-3.5 shadow-sm">
+                <div className="bg-amber-50 border border-amber-200/60 p-5 text-[13px] md:text-sm text-amber-800 leading-relaxed flex items-start gap-3.5 shadow-sm">
                   <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
                   <span>
                     Currently under development for research and training
@@ -247,12 +247,16 @@ export default function ProductDetail() {
                     {t("products.priceLabel")}
                   </span>
                   <span className="text-4xl font-black text-slate-900">
-                    ${product.price.toFixed(2)}
+                    ฿
+                    {Number(product.price).toLocaleString("th-TH", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
                   </span>
                 </div>
                 <button
                   onClick={handleAddToCart}
-                  className="px-8 py-4 bg-gradient-to-r from-blue-600 to-sky-500 text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-1 transition-all flex items-center gap-3 cursor-pointer border-none outline-none"
+                  className="px-8 py-4 bg-gradient-to-r from-blue-600 to-sky-500 text-white font-bold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-1 transition-all flex items-center gap-3 cursor-pointer border-none outline-none"
                 >
                   <ShoppingCart className="w-5 h-5" />
                   {t("products.addToCart")}
