@@ -11,6 +11,9 @@ import {
   GraduationCap,
   Wrench,
   AlertCircle,
+  ArrowRight,
+  Clock,
+  MapPin,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
@@ -30,6 +33,7 @@ export default function Products() {
   const location = useLocation();
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [courseFilter, setCourseFilter] = useState("all");
   const [flyingItem, setFlyingItem] = useState(null);
   const { addToCart } = useCart();
   const { t, language } = useLanguage();
@@ -54,36 +58,51 @@ export default function Products() {
   const categoryGridItems = [
     {
       id: "Biosensors",
+      image:
+        "https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=600&q=80",
       icon: <Cpu className="w-8 h-8 text-blue-600" />,
       bgIcon: "bg-blue-50 border border-blue-100",
+      badgeColor: "bg-blue-50 text-blue-700 border-blue-200/80",
       titleKey: "products.categoryGrids.biosensorsTitle",
       descKey: "products.categoryGrids.biosensorsDesc",
     },
     {
       id: "Modules",
+      image:
+        "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80",
       icon: <Layers className="w-8 h-8 text-sky-600" />,
       bgIcon: "bg-sky-50 border border-sky-100",
+      badgeColor: "bg-sky-50 text-sky-700 border-sky-200/80",
       titleKey: "products.categoryGrids.modulesTitle",
       descKey: "products.categoryGrids.modulesDesc",
     },
     {
       id: "Chemicals",
+      image:
+        "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=600&q=80",
       icon: <FlaskConical className="w-8 h-8 text-emerald-600" />,
       bgIcon: "bg-emerald-50 border border-emerald-100",
+      badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200/80",
       titleKey: "products.categoryGrids.chemicalsTitle",
       descKey: "products.categoryGrids.chemicalsDesc",
     },
     {
       id: "Courses",
+      image:
+        "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&q=80",
       icon: <GraduationCap className="w-8 h-8 text-purple-600" />,
       bgIcon: "bg-purple-50 border border-purple-100",
+      badgeColor: "bg-purple-50 text-purple-700 border-purple-200/80",
       titleKey: "products.categoryGrids.coursesTitle",
       descKey: "products.categoryGrids.coursesDesc",
     },
     {
       id: "Accessories",
+      image:
+        "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80",
       icon: <Wrench className="w-8 h-8 text-slate-600" />,
       bgIcon: "bg-slate-50 border border-slate-100",
+      badgeColor: "bg-slate-50 text-slate-700 border-slate-200/80",
       titleKey: "products.categoryGrids.accessoriesTitle",
       descKey: "products.categoryGrids.accessoriesDesc",
     },
@@ -132,11 +151,17 @@ export default function Products() {
   const filteredProducts = productsList.filter((product) => {
     const matchesCategory =
       activeCategory === "All" || product.category === activeCategory;
+    const matchesCourseFilter =
+      activeCategory !== "Courses" ||
+      courseFilter === "all" ||
+      (courseFilter === "labs" &&
+        product.subType === "Hands-on Experimental Laboratories") ||
+      (courseFilter === "courses" && product.subType === "Academic Courses");
     const productName = product.name[language] || product.name.en || "";
     const matchesSearch = productName
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+    return matchesCategory && matchesCourseFilter && matchesSearch;
   });
 
   const handleAddToCart = (product, e) => {
@@ -224,45 +249,46 @@ export default function Products() {
               <div className="w-20 h-1 bg-gradient-to-r from-blue-600 to-sky-500 mx-auto mt-4"></div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {categoryGridItems.map((item) => (
-                <motion.div
+                <div
                   key={item.id}
-                  whileHover={{
-                    y: -6,
-                    boxShadow:
-                      "0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-                  }}
                   onClick={() => handleCategoryClick(item.id)}
-                  className="bg-white p-8 border border-sky-200/90 hover:border-sky-400/90 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-sky-500/10 flex flex-col justify-between items-center text-center cursor-pointer relative overflow-hidden group hover:-translate-y-1"
+                  className="group cursor-pointer overflow-hidden bg-white border border-slate-100 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-300 flex flex-col justify-between shadow-sm hover:-translate-y-0.5"
                 >
-                  {/* Subtle top indicator bar */}
-                  <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-blue-600 to-sky-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-                  <div className="flex flex-col items-center">
-                    {/* Icon Box */}
-                    <div
-                      className={`w-16 h-16 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 ${item.bgIcon}`}
-                    >
-                      {item.icon}
+                  {/* Image Cover */}
+                  <div className="h-48 sm:h-52 relative overflow-hidden bg-slate-100">
+                    <img
+                      src={item.image}
+                      alt={t(item.titleKey)}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute top-3.5 left-3.5">
+                      <span
+                        className={`text-xs px-2.5 py-1 font-bold border backdrop-blur-md shadow-sm ${item.badgeColor}`}
+                      >
+                        {item.id.toUpperCase()}
+                      </span>
                     </div>
-
-                    <h3 className="text-lg font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
-                      {t(item.titleKey)}
-                    </h3>
-
-                    <p className="text-xs text-slate-400 font-medium leading-relaxed max-w-[200px]">
-                      {t(item.descKey)}
-                    </p>
                   </div>
 
-                  <button className="mt-6 text-xs font-bold text-sky-600 bg-transparent border-none cursor-pointer flex items-center gap-1 group-hover:text-blue-600 select-none uppercase tracking-widest">
-                    {t("products.categoryGrids.exploreMore")}
-                    <span className="group-hover:translate-x-0.5 transition-transform">
-                      →
-                    </span>
-                  </button>
-                </motion.div>
+                  {/* Body */}
+                  <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                      <h3 className="text-lg md:text-xl font-black text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-1 mb-2.5">
+                        {t(item.titleKey)}
+                      </h3>
+                      <p className="text-slate-500 text-sm line-clamp-3 leading-relaxed mb-5">
+                        {t(item.descKey)}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-3.5 border-t border-slate-100 text-xs md:text-sm font-bold text-blue-600 group-hover:text-blue-700">
+                      <span>{t("products.categoryGrids.exploreMore")}</span>
+                      <ArrowRight className="w-4.5 h-4.5 group-hover:translate-x-1.5 transition-transform" />
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
           </motion.div>
@@ -331,6 +357,89 @@ export default function Products() {
             </div>
           </div>
 
+          {/* Sub-filters and Descriptions for Academic & Lab Training */}
+          {activeCategory === "Courses" && (
+            <div className="max-w-7xl mx-auto px-6 mb-8 animate-fade-in">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setCourseFilter(courseFilter === "labs" ? "all" : "labs")
+                  }
+                  className={`text-left p-6 rounded-none border transition-all cursor-pointer ${
+                    courseFilter === "labs"
+                      ? "bg-blue-50/90 border-blue-500 shadow-md shadow-blue-500/10 ring-1 ring-blue-500"
+                      : "bg-white border-slate-200 hover:border-blue-300 shadow-sm hover:shadow-md"
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs font-black uppercase tracking-wider text-blue-700 bg-blue-100/70 px-2.5 py-1 rounded-none">
+                      13 Laboratories
+                    </span>
+                    <span className="text-xs font-bold text-blue-600">
+                      {courseFilter === "labs"
+                        ? language === "th"
+                          ? "✓ กำลังแสดงเฉพาะหมวดนี้"
+                          : "✓ Active Filter"
+                        : language === "th"
+                          ? "คลิกเพื่อกรองเฉพาะแล็บ"
+                          : "Click to Filter"}
+                    </span>
+                  </div>
+                  <h3 className="text-lg font-extrabold text-slate-900 mb-2">
+                    {language === "th"
+                      ? "ห้องปฏิบัติการทดลองภาคปฏิบัติ"
+                      : "Hands-on Experimental Laboratories"}
+                  </h3>
+                  <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                    {language === "th"
+                      ? "นักเรียนทำงานที่โต๊ะทดลองจริง ด้วยเครื่องมือจริง บนแพลตฟอร์มเซนเซอร์ชุดเดียวกับที่ Surazense ใช้ในงานวิจัยของตนเอง ทุกแล็บจบด้วยข้อมูลที่นักเรียนเก็บเอง"
+                      : "Students work at a real bench with real instruments, on the same sensor platforms Surazense uses for its own research. Every lab ends with data the student acquired themselves."}
+                  </p>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setCourseFilter(
+                      courseFilter === "courses" ? "all" : "courses",
+                    )
+                  }
+                  className={`text-left p-6 rounded-none border transition-all cursor-pointer ${
+                    courseFilter === "courses"
+                      ? "bg-indigo-50/90 border-indigo-500 shadow-md shadow-indigo-500/10 ring-1 ring-indigo-500"
+                      : "bg-white border-slate-200 hover:border-indigo-300 shadow-sm hover:shadow-md"
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs font-black uppercase tracking-wider text-indigo-700 bg-indigo-100/70 px-2.5 py-1 rounded-none">
+                      9 Courses
+                    </span>
+                    <span className="text-xs font-bold text-indigo-600">
+                      {courseFilter === "courses"
+                        ? language === "th"
+                          ? "✓ กำลังแสดงเฉพาะหมวดนี้"
+                          : "✓ Active Filter"
+                        : language === "th"
+                          ? "คลิกเพื่อกรองเฉพาะวิชาการ"
+                          : "Click to Filter"}
+                    </span>
+                  </div>
+                  <h3 className="text-lg font-extrabold text-slate-900 mb-2">
+                    {language === "th"
+                      ? "รายวิชาวิชาการ"
+                      : "Academic Courses"}
+                  </h3>
+                  <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                    {language === "th"
+                      ? "สัมมนาและเซสชันบนคอมพิวเตอร์ที่ให้ทฤษฎี บริบทคลินิก และระเบียบวิธีวิจัย ซึ่งผลจากโต๊ะทดลองต้องมีเพื่อกลายเป็นผลงานวิจัย ไม่จำเป็นต้องมีห้องปฏิบัติการ"
+                      : "Seminar and computer-based sessions that supply the theory, clinical context and research methodology a bench result needs in order to become a research output. No laboratory facilities required."}
+                  </p>
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Product Grid */}
           <div className="max-w-7xl mx-auto px-6">
             {filteredProducts.length === 0 ? (
@@ -353,7 +462,7 @@ export default function Products() {
             ) : (
               <motion.div
                 layout
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+                className="grid grid-cols-1 gap-6"
               >
                 <AnimatePresence>
                   {filteredProducts.map((product) => (
@@ -364,14 +473,14 @@ export default function Products() {
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.2 }}
                       key={product.id}
-                      className="bg-white border border-slate-100 overflow-hidden group hover:shadow-2xl hover:shadow-blue-900/10 hover:-translate-y-1 transition-all duration-300 flex flex-col"
+                      className="group relative cursor-pointer overflow-hidden bg-white border border-amber-200/90 hover:border-amber-400/90 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-amber-500/10 flex flex-col sm:flex-row hover:-translate-y-0.5"
                     >
                       {/* Clickable Area for Detail Page */}
                       <Link
                         to={`/products/${product.id}`}
-                        className="block overflow-hidden relative"
+                        className="sm:w-72 md:w-80 h-52 sm:h-auto relative overflow-hidden bg-slate-50 shrink-0 block border-b sm:border-b-0 sm:border-r border-amber-200/60"
                       >
-                        <div className="aspect-[4/3] bg-slate-50 relative overflow-hidden flex items-center justify-center border-b border-slate-100">
+                        <div className="w-full h-full relative overflow-hidden flex items-center justify-center">
                           {product.image ? (
                             <img
                               src={product.image}
@@ -379,21 +488,21 @@ export default function Products() {
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             />
                           ) : (
-                            <div className="flex flex-col items-center justify-center text-slate-400 group-hover:scale-105 transition-transform duration-500">
-                              <ImageIcon className="w-12 h-12 mb-3 opacity-50 stroke-[1.5px]" />
-                              <span className="text-[10px] font-bold uppercase tracking-widest bg-slate-200/50 px-3 py-1">
+                            <div className="flex flex-col items-center justify-center text-slate-400 group-hover:scale-105 transition-transform duration-500 p-4">
+                              <ImageIcon className="w-10 h-10 mb-2 opacity-50 stroke-[1.5px]" />
+                              <span className="text-[10px] font-bold uppercase tracking-widest bg-slate-200/50 px-2.5 py-0.5">
                                 Add Image Later
                               </span>
                             </div>
                           )}
 
                           {/* Status Badge */}
-                          <div className="absolute top-4 left-4 z-10">
+                          <div className="absolute top-3 left-3 z-10">
                             <span
-                              className={`px-3 py-1 text-xs font-bold backdrop-blur-md ${
+                              className={`px-2.5 py-0.5 text-xs font-bold backdrop-blur-md shadow-sm ${
                                 product.status === "In Stock"
-                                  ? "bg-green-100/80 text-green-700 border border-green-200/50"
-                                  : "bg-orange-100/80 text-orange-700 border border-orange-200/50"
+                                  ? "bg-green-100/90 text-green-700 border border-green-200/60"
+                                  : "bg-orange-100/90 text-orange-700 border border-orange-200/60"
                               }`}
                             >
                               {getStatusTranslation(product.status)}
@@ -403,67 +512,73 @@ export default function Products() {
                       </Link>
 
                       {/* Content */}
-                      <div className="p-8 flex flex-col flex-1">
-                        <div className="mb-3 flex flex-wrap gap-2 items-center animate-fade-in">
-                          <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">
-                            {getCategoryTranslation(product.category)}
-                          </span>
+                      <div className="flex-1 p-6 md:p-7 flex flex-col justify-between min-w-0">
+                        <div>
+                          <div className="mb-2.5 flex flex-wrap gap-2 items-center animate-fade-in">
+                            <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">
+                              {getCategoryTranslation(product.category)}
+                            </span>
+                            {product.category === "Chemicals" &&
+                              product.chemicalSpecs?.purity && (
+                                <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 border border-emerald-100">
+                                  {product.chemicalSpecs.purity}
+                                </span>
+                              )}
+                            {product.category === "Courses" &&
+                              product.courseSpecs?.level && (
+                                <span className="text-[10px] font-semibold text-purple-600 bg-purple-50 px-2 py-0.5 border border-purple-100">
+                                  {product.courseSpecs.level[language] ||
+                                    product.courseSpecs.level.en}
+                                </span>
+                              )}
+                          </div>
+                          <Link
+                            to={`/products/${product.id}`}
+                            className="no-underline group-hover:text-blue-600 transition-colors"
+                          >
+                            <h3 className="text-lg font-bold text-slate-900 mb-2 leading-tight group-hover:text-blue-600 transition-colors line-clamp-2">
+                              {product.name[language] || product.name.en}
+                            </h3>
+                          </Link>
+
+                          {/* Specialized visual metadata */}
                           {product.category === "Chemicals" &&
-                            product.chemicalSpecs?.purity && (
-                              <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 border border-emerald-100">
-                                {product.chemicalSpecs.purity}
-                              </span>
+                            product.chemicalSpecs?.formula && (
+                              <div className="mb-2.5 font-mono text-[11px] bg-slate-50 text-slate-600 px-2.5 py-1 border border-slate-200/60 inline-block w-fit">
+                                {product.chemicalSpecs.formula}
+                              </div>
                             )}
                           {product.category === "Courses" &&
-                            product.courseSpecs?.level && (
-                              <span className="text-[10px] font-semibold text-purple-600 bg-purple-50 px-2 py-0.5 border border-purple-100">
-                                {product.courseSpecs.level[language] ||
-                                  product.courseSpecs.level.en}
-                              </span>
+                            product.courseSpecs?.duration && (
+                              <div className="mb-2.5 text-[11px] font-semibold text-slate-500 flex items-center gap-2 flex-wrap">
+                                <span className="flex items-center gap-1">
+                                  <Clock className="w-3.5 h-3.5 text-slate-400" />
+                                  {product.courseSpecs.duration[language] ||
+                                    product.courseSpecs.duration.en}
+                                </span>
+                                {product.courseSpecs.location && (
+                                  <>
+                                    <span className="text-slate-300">•</span>
+                                    <span className="flex items-center gap-1">
+                                      <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                                      {product.courseSpecs.location[language] ||
+                                        product.courseSpecs.location.en}
+                                    </span>
+                                  </>
+                                )}
+                              </div>
                             )}
+
+                          <p className="text-sm text-slate-500 mb-4 line-clamp-2 leading-relaxed">
+                            {product.description[language] ||
+                              product.description.en}
+                          </p>
                         </div>
-                        <Link
-                          to={`/products/${product.id}`}
-                          className="no-underline group-hover:text-blue-600 transition-colors"
-                        >
-                          <h3 className="text-xl font-extrabold text-slate-900 mb-2 leading-tight group-hover:text-blue-600 transition-colors">
-                            {product.name[language] || product.name.en}
-                          </h3>
-                        </Link>
-
-                        {/* Specialized visual metadata */}
-                        {product.category === "Chemicals" &&
-                          product.chemicalSpecs?.formula && (
-                            <div className="mb-3 font-mono text-[11px] bg-slate-50 text-slate-600 px-2.5 py-1 border border-slate-200/60 inline-block w-fit">
-                              {product.chemicalSpecs.formula}
-                            </div>
-                          )}
-                        {product.category === "Courses" &&
-                          product.courseSpecs?.duration && (
-                            <div className="mb-3 text-[11px] font-semibold text-slate-500 flex items-center gap-1.5 flex-wrap">
-                              <span>
-                                ⏱️{" "}
-                                {product.courseSpecs.duration[language] ||
-                                  product.courseSpecs.duration.en}
-                              </span>
-                              <span className="text-slate-300">•</span>
-                              <span>
-                                📍{" "}
-                                {product.courseSpecs.location[language] ||
-                                  product.courseSpecs.location.en}
-                              </span>
-                            </div>
-                          )}
-
-                        <p className="text-sm text-slate-500 mb-8 line-clamp-2 flex-1 leading-relaxed">
-                          {product.description[language] ||
-                            product.description.en}
-                        </p>
 
                         {/* Price & Action */}
                         {product.id === 1 ? (
-                          <div className="mt-auto bg-amber-50 border border-amber-200/60 p-4 text-[12px] text-amber-800 leading-relaxed flex items-start gap-2.5 shadow-sm">
-                            <AlertCircle className="w-4.5 h-4.5 text-amber-600 shrink-0 mt-0.5" />
+                          <div className="mt-auto bg-amber-50 border border-amber-200/60 p-3 text-[11px] text-amber-800 leading-relaxed flex items-start gap-2 shadow-sm">
+                            <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                             <span>
                               Currently under development for research and
                               training purposes only. Not intended for use as a
@@ -472,12 +587,12 @@ export default function Products() {
                             </span>
                           </div>
                         ) : (
-                          <div className="flex items-center justify-between mt-auto">
+                          <div className="flex items-center justify-between mt-auto pt-3 border-t border-slate-100">
                             <div className="flex flex-col">
                               <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
                                 {t("products.priceLabel")}
                               </span>
-                              <span className="text-2xl font-black text-slate-900">
+                              <span className="text-xl font-black text-slate-900">
                                 ฿
                                 {Number(product.price).toLocaleString("th-TH", {
                                   minimumFractionDigits: 2,
@@ -487,10 +602,10 @@ export default function Products() {
                             </div>
                             <button
                               onClick={(e) => handleAddToCart(product, e)}
-                              className="w-14 h-14 bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center hover:bg-gradient-to-r hover:from-blue-600 hover:to-sky-500 hover:border-transparent hover:text-white hover:shadow-lg hover:shadow-blue-500/30 transition-all group/btn"
+                              className="w-12 h-12 bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center hover:bg-gradient-to-r hover:from-blue-600 hover:to-sky-500 hover:border-transparent hover:text-white hover:shadow-lg hover:shadow-blue-500/30 transition-all group/btn"
                               title={t("products.addToCart")}
                             >
-                              <ShoppingCart className="w-6 h-6 stroke-[2px] group-hover/btn:scale-110 group-hover/btn:-rotate-6 transition-all duration-300" />
+                              <ShoppingCart className="w-5 h-5 stroke-[2px] group-hover/btn:scale-110 group-hover/btn:-rotate-6 transition-all duration-300" />
                             </button>
                           </div>
                         )}

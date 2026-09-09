@@ -1,3 +1,5 @@
+import { KTS_LABS, KTS_COURSES } from "./ktsProgramme";
+
 const MOCK_PRODUCTS_RAW = [
   {
     id: 1,
@@ -481,14 +483,88 @@ const MOCK_PRODUCTS_RAW = [
       },
     },
   },
+  ...KTS_LABS.map((lab, idx) => ({
+    id: `lab-${idx + 1}`,
+    name: {
+      en: `${lab.code}: ${lab.title.en}`,
+      th: `${lab.code}: ${lab.title.th}`,
+    },
+    category: "Courses",
+    subType: "Hands-on Experimental Laboratories",
+    subTypeTh: "ห้องปฏิบัติการทดลองภาคปฏิบัติ",
+    price: 8500.0,
+    description: {
+      en: lab.desc.en,
+      th: lab.desc.th,
+    },
+    image:
+      idx === 0
+        ? "/lab1.JPEG"
+        : idx === 1
+        ? "/lab2.JPEG"
+        : idx === 2
+        ? "/lab3.JPEG"
+        : idx === 3
+        ? "/lab4.JPEG"
+        : "/biotech-course.png",
+    status: "In Stock",
+    courseSpecs: {
+      duration: { en: lab.hours, th: lab.hoursTh },
+      level: { en: "Hands-on Lab Practice", th: "ห้องปฏิบัติการทดลองภาคปฏิบัติ" },
+      location: { en: "Surazense Laboratory", th: "ห้องปฏิบัติการ Surazense" },
+      deliveryMode: {
+        en: "Real Bench & Real Instruments",
+        th: "ปฏิบัติการบนโต๊ะทดลองจริงด้วยเครื่องมือจริง",
+      },
+      curriculum: {
+        en: lab.skills.en,
+        th: lab.skills.th,
+      },
+    },
+  })),
+  ...KTS_COURSES.map((course, idx) => ({
+    id: `course-${idx + 1}`,
+    name: {
+      en: `${course.code}: ${course.title.en}`,
+      th: `${course.code}: ${course.title.th}`,
+    },
+    category: "Courses",
+    subType: "Academic Courses",
+    subTypeTh: "รายวิชาวิชาการ",
+    price: 6500.0,
+    description: {
+      en: course.desc.en,
+      th: course.desc.th,
+    },
+    image: "/biotech-course.png",
+    status: "In Stock",
+    courseSpecs: {
+      duration: { en: course.hours, th: course.hoursTh },
+      level: { en: "Academic Seminar / Lecture", th: "สัมมนาและทฤษฎีวิชาการ" },
+      location: {
+        en: "Seminar / Online / School Tour",
+        th: "สัมมนา / ออนไลน์ / นอกสถานที่",
+      },
+      deliveryMode: {
+        en: "Seminar & Computer-based Session",
+        th: "เซสชันคอมพิวเตอร์และการสัมมนาทฤษฎี",
+      },
+      curriculum: {
+        en: course.skills.en,
+        th: course.skills.th,
+      },
+    },
+  })),
 ];
 
-const STORAGE_KEY = "surazense_products_v2";
+const STORAGE_KEY = "surazense_products_v4";
 
 // Initialize local storage if not exists
 if (typeof window !== "undefined") {
   if (!localStorage.getItem(STORAGE_KEY)) {
     localStorage.removeItem("surazense_products");
+    localStorage.removeItem("surazense_products_v2");
+    localStorage.removeItem("surazense_products_v3");
     localStorage.setItem(STORAGE_KEY, JSON.stringify(MOCK_PRODUCTS_RAW));
   }
 }

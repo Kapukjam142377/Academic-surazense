@@ -35,8 +35,9 @@ import {
   Search,
   FileText,
   Code,
+  ArrowRight,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "../context/LanguageContext";
 import { useUser } from "../context/UserContext";
 import { useCart } from "../context/CartContext";
@@ -159,7 +160,7 @@ const LAB_GALLERY_IMAGES = [
     titleKey: "academic.gallery1Title",
     descKey: "academic.gallery1Desc",
     categoryKey: "academic.gallery1Category",
-    image: "/lab-gallery-1.jpg",
+    image: "/lab1.JPEG",
     fallbackColor: "from-blue-600/20 to-sky-500/20",
     gridClass: "md:col-span-2 md:row-span-2 min-h-[320px] md:min-h-[460px]",
   },
@@ -168,9 +169,9 @@ const LAB_GALLERY_IMAGES = [
     titleKey: "academic.gallery2Title",
     descKey: "academic.gallery2Desc",
     categoryKey: "academic.gallery2Category",
-    image: "/lab-gallery-2.jpg",
+    image: "/lab2.JPEG",
     fallbackColor: "from-indigo-600/20 to-purple-500/20",
-    gridClass: "md:col-span-1 md:row-span-1 min-h-[220px]",
+    gridClass: "md:col-span-1 md:row-span-2 min-h-[320px] md:min-h-[460px]",
   },
   {
     id: 3,
@@ -182,20 +183,11 @@ const LAB_GALLERY_IMAGES = [
     gridClass: "md:col-span-1 md:row-span-1 min-h-[220px]",
   },
   {
-    id: 4,
-    titleKey: "academic.gallery4Title",
-    descKey: "academic.gallery4Desc",
-    categoryKey: "academic.gallery4Category",
-    image: "/lab-gallery-4.jpg",
-    fallbackColor: "from-violet-600/20 to-pink-500/20",
-    gridClass: "md:col-span-2 md:row-span-1 min-h-[220px]",
-  },
-  {
     id: 5,
     titleKey: "academic.gallery5Title",
     descKey: "academic.gallery5Desc",
     categoryKey: "academic.gallery5Category",
-    image: "/lab-gallery-5.jpg",
+    image: "/lab3.JPEG",
     fallbackColor: "from-emerald-600/20 to-teal-500/20",
     gridClass: "md:col-span-1 md:row-span-2 min-h-[320px] md:min-h-[460px]",
   },
@@ -204,7 +196,7 @@ const LAB_GALLERY_IMAGES = [
     titleKey: "academic.gallery6Title",
     descKey: "academic.gallery6Desc",
     categoryKey: "academic.gallery6Category",
-    image: "/lab-gallery-6.jpg",
+    image: "/lab4.JPEG",
     fallbackColor: "from-cyan-600/20 to-blue-500/20",
     gridClass: "md:col-span-1 md:row-span-1 min-h-[220px]",
   },
@@ -276,7 +268,7 @@ function GalleryCard({ item }) {
           src={item.image}
           alt={t(item.titleKey)}
           onError={() => setImgErr(true)}
-          className="w-full h-full object-cover absolute inset-0 z-0 transition-transform duration-700 ease-out group-hover:scale-105"
+          className={`w-full h-full absolute inset-0 z-0 transition-transform duration-700 ease-out group-hover:scale-105 ${item.imgClass || "object-cover"}`}
         />
       )}
 
@@ -915,6 +907,12 @@ export default function AcademicTraining() {
   const { user } = useUser();
   const { addToCart } = useCart();
   const navigate = useNavigate();
+  const location = useLocation();
+  const isLandingPage = location.pathname === "/" || location.pathname === "";
+
+  const displayedLabs = isLandingPage ? LABS.slice(0, 3) : LABS;
+  const displayedCourses = isLandingPage ? COURSES.slice(0, 3) : COURSES;
+
   const [selectedBackground, setSelectedBackground] = useState("biology");
   const [registrations, setRegistrations] = useState([]);
   const [toast, setToast] = useState({ message: "", type: null });
@@ -922,36 +920,51 @@ export default function AcademicTraining() {
   const categoryGridItems = [
     {
       id: "Biosensors",
+      image:
+        "https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=600&q=80",
       icon: <Cpu className="w-8 h-8 text-blue-600" />,
       bgIcon: "bg-blue-50 border border-blue-100",
+      badgeColor: "bg-blue-50 text-blue-700 border-blue-200/80",
       titleKey: "products.categoryGrids.biosensorsTitle",
       descKey: "products.categoryGrids.biosensorsDesc",
     },
     {
       id: "Modules",
+      image:
+        "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80",
       icon: <Layers className="w-8 h-8 text-sky-600" />,
       bgIcon: "bg-sky-50 border border-sky-100",
+      badgeColor: "bg-sky-50 text-sky-700 border-sky-200/80",
       titleKey: "products.categoryGrids.modulesTitle",
       descKey: "products.categoryGrids.modulesDesc",
     },
     {
       id: "Chemicals",
+      image:
+        "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=600&q=80",
       icon: <FlaskConical className="w-8 h-8 text-emerald-600" />,
       bgIcon: "bg-emerald-50 border border-emerald-100",
+      badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200/80",
       titleKey: "products.categoryGrids.chemicalsTitle",
       descKey: "products.categoryGrids.chemicalsDesc",
     },
     {
       id: "Courses",
+      image:
+        "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&q=80",
       icon: <GraduationCap className="w-8 h-8 text-purple-600" />,
       bgIcon: "bg-purple-50 border border-purple-100",
+      badgeColor: "bg-purple-50 text-purple-700 border-purple-200/80",
       titleKey: "products.categoryGrids.coursesTitle",
       descKey: "products.categoryGrids.coursesDesc",
     },
     {
       id: "Accessories",
+      image:
+        "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80",
       icon: <Wrench className="w-8 h-8 text-slate-600" />,
       bgIcon: "bg-slate-50 border border-slate-100",
+      badgeColor: "bg-slate-50 text-slate-700 border-slate-200/80",
       titleKey: "products.categoryGrids.accessoriesTitle",
       descKey: "products.categoryGrids.accessoriesDesc",
     },
@@ -1300,7 +1313,7 @@ export default function AcademicTraining() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 grid-flow-dense"
         >
           {LAB_GALLERY_IMAGES.map((item) => (
             <GalleryCard key={item.id} item={item} />
@@ -1338,48 +1351,49 @@ export default function AcademicTraining() {
           <h2 className="text-2xl md:text-3xl font-black text-slate-800 tracking-tight leading-snug">
             {t("products.categoryGrids.title")}
           </h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-blue-600 to-sky-500 mx-auto mt-4 rounded-full"></div>
+          <div className="w-20 h-1 bg-gradient-to-r from-blue-600 to-sky-500 mx-auto mt-4"></div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {categoryGridItems.map((item) => (
-            <motion.div
+            <div
               key={item.id}
-              whileHover={{
-                y: -6,
-                boxShadow:
-                  "0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
-              }}
               onClick={() => handleCategoryClick(item.id)}
-              className="bg-white p-8 border border-sky-200/90 hover:border-sky-400/90 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-sky-500/10 flex flex-col justify-between items-center text-center cursor-pointer relative overflow-hidden group hover:-translate-y-1"
+              className="group cursor-pointer overflow-hidden bg-white border border-slate-100 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-300 flex flex-col justify-between shadow-sm hover:-translate-y-0.5"
             >
-              {/* Subtle top indicator bar */}
-              <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-blue-600 to-sky-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-              <div className="flex flex-col items-center">
-                {/* Icon Box */}
-                <div
-                  className={`w-16 h-16 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 ${item.bgIcon}`}
-                >
-                  {item.icon}
+              {/* Image Cover */}
+              <div className="h-48 sm:h-52 relative overflow-hidden bg-slate-100">
+                <img
+                  src={item.image}
+                  alt={t(item.titleKey)}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute top-3.5 left-3.5">
+                  <span
+                    className={`text-xs px-2.5 py-1 font-bold border backdrop-blur-md shadow-sm ${item.badgeColor}`}
+                  >
+                    {item.id.toUpperCase()}
+                  </span>
                 </div>
-
-                <h3 className="text-lg font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
-                  {t(item.titleKey)}
-                </h3>
-
-                <p className="text-xs text-slate-400 font-medium leading-relaxed max-w-[200px]">
-                  {t(item.descKey)}
-                </p>
               </div>
 
-              <button className="mt-6 text-xs font-bold text-sky-600 bg-transparent border-none cursor-pointer flex items-center gap-1 group-hover:text-blue-600 select-none uppercase tracking-widest">
-                {t("products.categoryGrids.exploreMore")}
-                <span className="group-hover:translate-x-0.5 transition-transform">
-                  →
-                </span>
-              </button>
-            </motion.div>
+              {/* Body */}
+              <div className="p-6 flex-1 flex flex-col justify-between">
+                <div>
+                  <h3 className="text-lg md:text-xl font-black text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-1 mb-2.5">
+                    {t(item.titleKey)}
+                  </h3>
+                  <p className="text-slate-500 text-sm line-clamp-3 leading-relaxed mb-5">
+                    {t(item.descKey)}
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between pt-3.5 border-t border-slate-100 text-xs md:text-sm font-bold text-blue-600 group-hover:text-blue-700">
+                  <span>{t("products.categoryGrids.exploreMore")}</span>
+                  <ArrowRight className="w-4.5 h-4.5 group-hover:translate-x-1.5 transition-transform" />
+                </div>
+              </div>
+            </div>
           ))}
         </div>
       </div>
@@ -1390,6 +1404,16 @@ export default function AcademicTraining() {
         className="max-w-7xl mx-auto px-6 mb-32 relative z-10 scroll-mt-24"
       >
         <div className="text-center mb-16">
+          {!isLandingPage && (
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-bold mb-4 border border-blue-200/60 shadow-sm">
+              <Beaker className="w-3.5 h-3.5" />
+              <span>
+                {language === "th"
+                  ? `หลักสูตรเต็มทั้งหมด ${LABS.length} ห้องปฏิบัติการ`
+                  : `Full Programme: ${LABS.length} Laboratories`}
+              </span>
+            </div>
+          )}
           <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
             {t("academic.handsOnLabs")}
           </h2>
@@ -1405,7 +1429,7 @@ export default function AcademicTraining() {
           viewport={{ once: true, amount: 0.15 }}
           className="grid grid-cols-1 lg:grid-cols-3 gap-8"
         >
-          {LABS.map((lab) => {
+          {displayedLabs.map((lab) => {
             const LabIcon = KTS_ICONS[lab.icon] || Beaker;
             return (
               <motion.div
@@ -1496,6 +1520,26 @@ export default function AcademicTraining() {
             );
           })}
         </motion.div>
+
+        {isLandingPage && (
+          <div className="mt-12 text-center flex justify-center">
+            <button
+              onClick={() =>
+                navigate("/products", { state: { category: "Courses" } })
+              }
+              className="inline-flex items-center gap-2 bg-white border border-slate-200/90 hover:border-blue-400 py-3 px-8 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer group"
+            >
+              <span className="text-sm font-bold text-blue-600 group-hover:text-blue-700 flex items-center gap-1.5">
+                <span>
+                  {language === "th"
+                    ? "ดูห้องปฏิบัติการทั้งหมดในหน้า Products"
+                    : "View All Laboratories in Products"}
+                </span>
+                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </button>
+          </div>
+        )}
       </section>
 
       {/* Courses Curriculum Section */}
@@ -1504,6 +1548,16 @@ export default function AcademicTraining() {
         className="max-w-7xl mx-auto px-6 mb-32 relative z-10 scroll-mt-24"
       >
         <div className="text-center mb-16">
+          {!isLandingPage && (
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold mb-4 border border-indigo-200/60 shadow-sm">
+              <GraduationCap className="w-3.5 h-3.5" />
+              <span>
+                {language === "th"
+                  ? `หลักสูตรเต็มทั้งหมด ${COURSES.length} รายวิชาวิชาการ`
+                  : `Full Programme: ${COURSES.length} Academic Courses`}
+              </span>
+            </div>
+          )}
           <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
             {t("academic.academicCourses")}
           </h2>
@@ -1519,7 +1573,7 @@ export default function AcademicTraining() {
           viewport={{ once: true, amount: 0.15 }}
           className="grid grid-cols-1 lg:grid-cols-3 gap-8"
         >
-          {COURSES.map((course) => (
+          {displayedCourses.map((course) => (
             <motion.div
               key={course.id}
               variants={itemVariants}
@@ -1595,6 +1649,26 @@ export default function AcademicTraining() {
             </motion.div>
           ))}
         </motion.div>
+
+        {isLandingPage && (
+          <div className="mt-12 text-center flex justify-center">
+            <button
+              onClick={() =>
+                navigate("/products", { state: { category: "Courses" } })
+              }
+              className="inline-flex items-center gap-2 bg-white border border-slate-200/90 hover:border-indigo-400 py-3 px-8 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer group"
+            >
+              <span className="text-sm font-bold text-indigo-600 group-hover:text-indigo-700 flex items-center gap-1.5">
+                <span>
+                  {language === "th"
+                    ? "ดูรายวิชาทั้งหมดในหน้า Products"
+                    : "View All Academic Courses in Products"}
+                </span>
+                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </span>
+            </button>
+          </div>
+        )}
       </section>
 
       {/* Interactive Selector Widget */}

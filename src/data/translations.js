@@ -5,7 +5,7 @@ export const translations = {
       about: "About us",
       products: "Products",
       researchSolution: "Research solution",
-      academicTraining: "Academic training",
+      academicTraining: "Academic & Lab Training",
       others: "Others",
       services: "Services",
       event: "Event",
@@ -294,10 +294,10 @@ export const translations = {
       gallery5Desc:
         "Inspiring the next generation of researchers with hands-on biosensing laboratory practices.",
       gallery5Category: "Workshop",
-      gallery6Title: "HARDWARE PROGRAMMING",
+      gallery6Title: "BIOSENSING EXPERIMENT LAB",
       gallery6Desc:
-        "Students assembling microchip modules, programming firmware, and debugging UART connections.",
-      gallery6Category: "Engineering",
+        "Researchers and students operating biosensing instruments, recording real-time experimental data, and analyzing diagnostic results in the laboratory.",
+      gallery6Category: "Laboratory",
       gallery7Title: "X-ZENSE HARDWARE",
       gallery7Desc:
         "Deploying our flagship biosensor analyzer in clean-room diagnostic research environments.",
@@ -599,7 +599,7 @@ export const translations = {
         biosensors: "Biosensors",
         modules: "Modules",
         chemicals: "Chemicals & Reagents",
-        courses: "Courses & Training",
+        courses: "Academic & Lab Training",
         accessories: "Accessories",
       },
       chemicalSpecs: {
@@ -713,7 +713,7 @@ export const translations = {
       about: "เกี่ยวกับเรา",
       products: "ผลิตภัณฑ์",
       researchSolution: "โซลูชันเพื่อการวิจัย",
-      academicTraining: "การฝึกอบรมทางวิชาการ",
+      academicTraining: "Academic & Lab Training",
       others: "อื่น ๆ",
       services: "บริการ",
       event: "กิจกรรม",
@@ -1004,10 +1004,10 @@ export const translations = {
       gallery5Desc:
         "สร้างแรงบันดาลใจให้นักวิจัยรุ่นเยาว์ผ่านการฝึกอบรมและทดลองไบโอเซนเซอร์ในห้องปฏิบัติการจริง",
       gallery5Category: "การอบรม",
-      gallery6Title: "การโปรแกรมฮาร์ดแวร์",
+      gallery6Title: "การทดลองปฏิบัติการในห้องแล็บ",
       gallery6Desc:
-        "นักเรียนทดลองต่อวงจรไมโครคอนโทรลเลอร์ เขียนเฟิร์มแวร์ และตรวจสอบการเชื่อมต่ออนุกรม UART",
-      gallery6Category: "วิศวกรรม",
+        "นักศึกษาและทีมวิจัยปฏิบัติการทดสอบด้วยเครื่องมือชีวเซนเซอร์ บันทึกข้อมูลและประมวลผลการวินิจฉัยจริงในห้องปฏิบัติการ",
+      gallery6Category: "ห้องปฏิบัติการ",
       gallery7Title: "ระบบเครื่องวัด X-ZENSE",
       gallery7Desc:
         "การทดสอบและใช้งานเครื่องวิเคราะห์ตัวบ่งชี้มะเร็งในห้องวิจัยปลอดเชื้อที่ได้มาตรฐาน",
@@ -1311,7 +1311,7 @@ export const translations = {
         biosensors: "ไบโอเซนเซอร์",
         modules: "โมดูล",
         chemicals: "สารเคมีและน้ำยา",
-        courses: "หลักสูตรและการอบรม",
+        courses: "Academic & Lab Training",
         accessories: "อุปกรณ์เสริม",
       },
       chemicalSpecs: {
