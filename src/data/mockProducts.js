@@ -501,16 +501,19 @@ const MOCK_PRODUCTS_RAW = [
       idx === 0
         ? "/lab1.JPEG"
         : idx === 1
-        ? "/lab2.JPEG"
-        : idx === 2
-        ? "/lab3.JPEG"
-        : idx === 3
-        ? "/lab4.JPEG"
-        : "/biotech-course.png",
+          ? "/lab2.JPEG"
+          : idx === 2
+            ? "/lab3.JPEG"
+            : idx === 3
+              ? "/lab4.JPEG"
+              : "/biotech-course.png",
     status: "In Stock",
     courseSpecs: {
       duration: { en: lab.hours, th: lab.hoursTh },
-      level: { en: "Hands-on Lab Practice", th: "ห้องปฏิบัติการทดลองภาคปฏิบัติ" },
+      level: {
+        en: "Hands-on Lab Practice",
+        th: "ห้องปฏิบัติการทดลองภาคปฏิบัติ",
+      },
       location: { en: "Surazense Laboratory", th: "ห้องปฏิบัติการ Surazense" },
       deliveryMode: {
         en: "Real Bench & Real Instruments",

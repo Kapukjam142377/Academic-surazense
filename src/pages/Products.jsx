@@ -426,9 +426,7 @@ export default function Products() {
                     </span>
                   </div>
                   <h3 className="text-lg font-extrabold text-slate-900 mb-2">
-                    {language === "th"
-                      ? "รายวิชาวิชาการ"
-                      : "Academic Courses"}
+                    {language === "th" ? "รายวิชาวิชาการ" : "Academic Courses"}
                   </h3>
                   <p className="text-xs text-slate-600 leading-relaxed font-medium">
                     {language === "th"
@@ -460,10 +458,7 @@ export default function Products() {
                 </button>
               </div>
             ) : (
-              <motion.div
-                layout
-                className="grid grid-cols-1 gap-6"
-              >
+              <motion.div layout className="grid grid-cols-1 gap-6">
                 <AnimatePresence>
                   {filteredProducts.map((product) => (
                     <motion.div
