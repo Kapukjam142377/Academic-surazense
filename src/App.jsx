@@ -26,6 +26,7 @@ import InvoicePrintPage from "./pages/InvoicePrintPage";
 import ResetPassword from "./pages/ResetPassword";
 import VerifyEmail from "./pages/VerifyEmail";
 import OAuthCallback from "./pages/OAuthCallback";
+import NotFound from "./pages/NotFound";
 import { CartProvider } from "./context/CartContext";
 import { LanguageProvider } from "./context/LanguageContext";
 import { UserProvider } from "./context/UserContext";
@@ -164,6 +165,9 @@ function App() {
                   path="/cancer-report"
                   element={<ExternalRedirect pathPattern="/cancer-report" />}
                 />
+
+                {/* 404 Catch-All Route */}
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </Layout>
           </BrowserRouter>

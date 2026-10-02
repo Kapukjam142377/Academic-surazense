@@ -210,15 +210,6 @@ const LAB_GALLERY_IMAGES = [
     gridClass: "md:col-span-1 md:row-span-1 min-h-[220px]",
   },
   {
-    id: 8,
-    titleKey: "academic.gallery8Title",
-    descKey: "academic.gallery8Desc",
-    categoryKey: "academic.gallery8Category",
-    image: "/lab-gallery-8.jpg",
-    fallbackColor: "from-amber-600/20 to-yellow-500/20",
-    gridClass: "md:col-span-2 md:row-span-1 min-h-[220px]",
-  },
-  {
     id: 9,
     titleKey: "academic.gallery9Title",
     descKey: "academic.gallery9Desc",

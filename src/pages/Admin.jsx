@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useUser } from "../context/UserContext";
 import { useLanguage } from "../context/LanguageContext";
 import { useNavigate } from "react-router-dom";
@@ -39,6 +39,9 @@ import {
   Bell,
   Send,
   CheckCheck,
+  AlertCircle,
+  Upload,
+  Image as ImageIcon,
 } from "lucide-react";
 
 import { MOCK_PRODUCTS, saveProducts } from "../data/mockProducts";
@@ -93,6 +96,7 @@ export default function Admin() {
   // Product Management states
   const [productList, setProductList] = useState([]);
   const [showAddProductModal, setShowAddProductModal] = useState(false);
+  const [showEditProductModal, setShowEditProductModal] = useState(null);
   const [newProdNameEn, setNewProdNameEn] = useState("");
   const [newProdNameTh, setNewProdNameTh] = useState("");
   const [newProdCategory, setNewProdCategory] = useState("Biosensors");
@@ -101,6 +105,19 @@ export default function Admin() {
   const [newProdDescTh, setNewProdDescTh] = useState("");
   const [newProdImage, setNewProdImage] = useState("");
   const [newProdStatus, setNewProdStatus] = useState("In Stock");
+
+  // Edit Product Form states
+  const [editProdNameEn, setEditProdNameEn] = useState("");
+  const [editProdNameTh, setEditProdNameTh] = useState("");
+  const [editProdCategory, setEditProdCategory] = useState("Biosensors");
+  const [editProdPrice, setEditProdPrice] = useState("");
+  const [editProdDescEn, setEditProdDescEn] = useState("");
+  const [editProdDescTh, setEditProdDescTh] = useState("");
+  const [editProdImage, setEditProdImage] = useState("");
+  const [editProdStatus, setEditProdStatus] = useState("In Stock");
+
+  const addProdFileInputRef = useRef(null);
+  const editProdFileInputRef = useRef(null);
 
   // Announcement Management states
   const [announcementsList, setAnnouncementsList] = useState([]);
@@ -122,6 +139,8 @@ export default function Admin() {
   const [annImageUrl, setAnnImageUrl] = useState("");
   const [annIsPublished, setAnnIsPublished] = useState(true);
   const [annIsPinned, setAnnIsPinned] = useState(false);
+  const createAnnFileInputRef = useRef(null);
+  const editAnnFileInputRef = useRef(null);
 
   // Notifications Management states
   const [notificationsList, setNotificationsList] = useState([]);
@@ -136,6 +155,82 @@ export default function Admin() {
   const [createNotifTargetUserId, setCreateNotifTargetUserId] =
     useState("broadcast"); // 'broadcast' or user_id
   const [createNotifRefId, setCreateNotifRefId] = useState("");
+
+  // ── Inquiries (Contact Form submissions) ───────────────────────────────────────
+  const INQUIRIES_STORAGE_KEY = "surazense_inquiries";
+  const [inquiriesList, setInquiriesList] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem(INQUIRIES_STORAGE_KEY) || "[]");
+    } catch {
+      return [];
+    }
+  });
+  const [inquirySearch, setInquirySearch] = useState("");
+  const [inquiryTypeFilter, setInquiryTypeFilter] = useState("all");
+  const [inquiryStatusFilter, setInquiryStatusFilter] = useState("all");
+  const [selectedInquiry, setSelectedInquiry] = useState(null);
+
+  const updateInquiryStatus = (id, newStatus) => {
+    const updated = inquiriesList.map((inq) =>
+      inq.id === id ? { ...inq, status: newStatus } : inq,
+    );
+    setInquiriesList(updated);
+    localStorage.setItem(INQUIRIES_STORAGE_KEY, JSON.stringify(updated));
+    if (selectedInquiry?.id === id) {
+      setSelectedInquiry((prev) => ({ ...prev, status: newStatus }));
+    }
+  };
+
+  const deleteInquiry = (id) => {
+    const ok = window.confirm(
+      language === "th"
+        ? "คุณแน่ใจหรือไม่ว่าต้องการลบข้อความนี้?"
+        : "Are you sure you want to delete this inquiry?",
+    );
+    if (!ok) return;
+    const updated = inquiriesList.filter((inq) => inq.id !== id);
+    setInquiriesList(updated);
+    localStorage.setItem(INQUIRIES_STORAGE_KEY, JSON.stringify(updated));
+    if (selectedInquiry?.id === id) setSelectedInquiry(null);
+  };
+
+  const filteredInquiries = inquiriesList.filter((inq) => {
+    const term = inquirySearch.toLowerCase();
+    const matchSearch =
+      (inq.firstName + " " + inq.lastName).toLowerCase().includes(term) ||
+      (inq.email || "").toLowerCase().includes(term) ||
+      (inq.company || "").toLowerCase().includes(term) ||
+      (inq.title || "").toLowerCase().includes(term);
+    const matchType =
+      inquiryTypeFilter === "all" || inq.inquiryType === inquiryTypeFilter;
+    const matchStatus =
+      inquiryStatusFilter === "all" || inq.status === inquiryStatusFilter;
+    return matchSearch && matchType && matchStatus;
+  });
+
+  const INQUIRY_TYPE_COLORS = {
+    "Product inquiry": "bg-sky-50 text-sky-700 border-sky-200",
+    "Request Quotation": "bg-orange-50 text-orange-700 border-orange-200",
+    "Lab Visit / Demonstration":
+      "bg-violet-50 text-violet-700 border-violet-200",
+    "Join / Collaboration": "bg-teal-50 text-teal-700 border-teal-200",
+    "General Question": "bg-slate-100 text-slate-600 border-slate-200",
+  };
+
+  const INQUIRY_STATUS_CONFIG = {
+    new: {
+      label: { th: "ใหม่", en: "New" },
+      color: "bg-rose-50 text-rose-600 border border-rose-200",
+    },
+    in_progress: {
+      label: { th: "กำลังดำเนินการ", en: "In Progress" },
+      color: "bg-amber-50 text-amber-600 border border-amber-200",
+    },
+    resolved: {
+      label: { th: "เสร็จแล้ว", en: "Resolved" },
+      color: "bg-emerald-50 text-emerald-600 border border-emerald-200",
+    },
+  };
 
   const handleAdminLoginSubmit = async (e) => {
     e.preventDefault();
@@ -171,13 +266,15 @@ export default function Admin() {
       setCheckingApi(true);
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
-        const res = await fetch(`${API_URL}/`, {
+        const timeoutId = setTimeout(() => controller.abort(), 3500);
+        // Ping actual API endpoint through reverse proxy
+        const res = await fetch(`${API_URL}/api/users`, {
           method: "GET",
           signal: controller.signal,
         });
         clearTimeout(timeoutId);
-        setIsApiOnline(true);
+        // Server responded (200 OK or 401/403 means backend is alive)
+        setIsApiOnline(Boolean(res && res.status < 500));
       } catch (e) {
         console.warn(
           "Backend API offline, running in Demo Mode (Local Storage).",
@@ -191,29 +288,26 @@ export default function Admin() {
   }, [API_URL]);
 
   const fetchDataFromApi = async () => {
+    let usersData = [];
+    // 1. Fetch users
     try {
-      // 1. Fetch users
       const usersRes = await fetch(`${API_URL}/api/users`);
-      if (!usersRes.ok) throw new Error("Failed to fetch users");
-      const usersData = await usersRes.json();
-      setUsersList(usersData);
+      if (usersRes.ok) {
+        usersData = await usersRes.json();
+        setUsersList(usersData);
+      }
+    } catch (e) {
+      console.warn("Could not fetch users:", e);
+    }
 
-      // 2. Fetch orders
+    // 2. Fetch orders & registrations
+    try {
       const ordersRes = await fetch(`${API_URL}/api/orders`);
-      if (!ordersRes.ok) throw new Error("Failed to fetch orders");
-      const ordersData = await ordersRes.json();
+      const ordersData = ordersRes.ok ? await ordersRes.json() : [];
 
-      // 3. Fetch registrations
       const regsRes = await fetch(`${API_URL}/api/registrations`);
-      if (!regsRes.ok) throw new Error("Failed to fetch registrations");
-      const regsData = await regsRes.json();
+      const regsData = regsRes.ok ? await regsRes.json() : [];
 
-      // 4. Fetch QCM analyses
-      const analysesRes = await fetch(`${API_URL}/api/analyses`);
-      if (!analysesRes.ok) throw new Error("Failed to fetch analyses");
-      const analysesData = await analysesRes.json();
-
-      // Map registrations/orders together
       const mappedOrders = ordersData.map((o) => ({
         id: `order-${o.id}`,
         db_id: o.id,
@@ -291,342 +385,70 @@ export default function Admin() {
       });
 
       setRegistrationsList([...mappedOrders, ...mappedRegs]);
+    } catch (e) {
+      console.warn("Could not fetch orders/registrations:", e);
+    }
 
-      // Map runs
-      const mappedRuns = analysesData.map((r) => {
-        const user = usersData.find((u) => u.id === r.user_id);
-        return {
-          id: r.id,
-          user_id: r.user_id,
-          user_email: user ? user.email : `user-${r.user_id}`,
-          title: r.title,
-          measurement_type: r.measurement_type,
-          delta_f: r.delta_f,
-          created_at: r.created_at,
-          file1_name: r.file1_name,
-        };
-      });
-      setRunsList(mappedRuns);
-
-      // 5. Fetch Announcements
-      try {
-        const annRes = await fetch(`${API_URL}/api/announcements`);
-        if (annRes.ok) {
-          const annData = await annRes.json();
-          setAnnouncementsList(annData);
-        }
-      } catch (annErr) {
-        console.warn("Could not fetch announcements from API:", annErr);
+    // 3. Fetch QCM analyses
+    try {
+      const analysesRes = await fetch(`${API_URL}/api/analyses`);
+      if (analysesRes.ok) {
+        const analysesData = await analysesRes.json();
+        const mappedRuns = analysesData.map((r) => {
+          const user = usersData.find((u) => u.id === r.user_id);
+          return {
+            id: r.id,
+            user_id: r.user_id,
+            user_email: user ? user.email : `user-${r.user_id}`,
+            title: r.title,
+            measurement_type: r.measurement_type,
+            delta_f: r.delta_f,
+            created_at: r.created_at,
+            file1_name: r.file1_name,
+          };
+        });
+        setRunsList(mappedRuns);
       }
+    } catch (e) {
+      console.warn("Could not fetch analyses:", e);
+    }
 
-      // 6. Fetch Notifications
-      try {
-        const notifRes = await fetch(`${API_URL}/api/notifications`);
-        if (notifRes.ok) {
-          const notifData = await notifRes.json();
-          setNotificationsList(notifData);
-        }
-      } catch (notifErr) {
-        console.warn("Could not fetch notifications from API:", notifErr);
+    // 4. Fetch Announcements
+    try {
+      const annRes = await fetch(`${API_URL}/api/announcements`);
+      if (annRes.ok) {
+        const annData = await annRes.json();
+        setAnnouncementsList(annData);
       }
-    } catch (err) {
-      console.error("Error fetching admin data:", err);
+    } catch (annErr) {
+      console.warn("Could not fetch announcements from API:", annErr);
+    }
+
+    // 5. Fetch Notifications
+    try {
+      const notifRes = await fetch(`${API_URL}/api/notifications`);
+      if (notifRes.ok) {
+        const notifData = await notifRes.json();
+        setNotificationsList(notifData);
+      }
+    } catch (notifErr) {
+      console.warn("Could not fetch notifications from API:", notifErr);
     }
   };
 
   useEffect(() => {
-    if (isApiOnline) {
-      fetchDataFromApi();
-    }
+    fetchDataFromApi();
   }, [isApiOnline]);
 
-  // Load and pre-populate mock data in LocalStorage if not exists
+  // Clean up legacy mock data from LocalStorage and load products catalog
   useEffect(() => {
-    // 1. Load/Mock Users
-    const localUsers = localStorage.getItem("surazense_mock_users");
-    let initialUsers = [];
-    if (localUsers) {
-      initialUsers = JSON.parse(localUsers);
-    } else {
-      initialUsers = [
-        {
-          id: "mock-admin-1",
-          email: "admin@surazense.com",
-          username: "admin",
-          first_name: "System",
-          last_name: "Administrator",
-          phone: "081-234-5678",
-          role: "admin",
-          created_at: new Date(
-            Date.now() - 30 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-        },
-        {
-          id: "mock-user-2",
-          email: "thita.d@surazense.com",
-          username: "thita_director",
-          first_name: "Dr. Thita",
-          last_name: "Siriphan",
-          phone: "089-111-2222",
-          role: "staff",
-          created_at: new Date(
-            Date.now() - 25 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-        },
-        {
-          id: "mock-user-3",
-          email: "adisak.e@surazense.com",
-          username: "adisak_eng",
-          first_name: "Adisak",
-          last_name: "Wong",
-          phone: "082-333-4444",
-          role: "staff",
-          created_at: new Date(
-            Date.now() - 20 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-        },
-        {
-          id: "mock-user-4",
-          email: "somchai.k@gmail.com",
-          username: "somchai_k",
-          first_name: "Somchai",
-          last_name: "Korn",
-          phone: "085-555-6666",
-          role: "customer",
-          qcm_balance: 8,
-          qcm_quota: 10,
-          created_at: new Date(
-            Date.now() - 15 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-        },
-        {
-          id: "mock-user-5",
-          email: "natthaporn.s@gmail.com",
-          username: "nattha_s",
-          first_name: "Natthaporn",
-          last_name: "Suk",
-          phone: "086-777-8888",
-          role: "customer",
-          qcm_balance: 3,
-          qcm_quota: 10,
-          created_at: new Date(
-            Date.now() - 10 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-        },
-        {
-          id: "mock-user-6",
-          email: "jane.doe@example.com",
-          username: "janedoe",
-          first_name: "Jane",
-          last_name: "Smith",
-          phone: "084-999-0000",
-          role: "customer",
-          qcm_balance: 0,
-          qcm_quota: 5,
-          created_at: new Date(
-            Date.now() - 5 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-        },
-      ];
-      localStorage.setItem(
-        "surazense_mock_users",
-        JSON.stringify(initialUsers),
-      );
-    }
-    setUsersList(initialUsers);
-
-    // 2. Load/Mock Orders & Payments
-    // Reset to reload mock data with new shipping_address fields
+    localStorage.removeItem("surazense_mock_users");
     localStorage.removeItem("surazense_mock_registrations");
-    const localRegs = localStorage.getItem("surazense_mock_registrations");
-    let initialRegs = [];
-    if (localRegs) {
-      initialRegs = JSON.parse(localRegs);
-    } else {
-      initialRegs = [
-        {
-          id: "mock-ord-1",
-          user_id: "mock-user-4",
-          user_email: "somchai.k@gmail.com",
-          user_name: "Somchai Korn",
-          customer_phone: "085-555-6666",
-          item_type: "course",
-          item_id: "lab-qcm",
-          item_title: "Lab 1: QCM Sensor Calibration",
-          amount: 1500,
-          currency: "THB",
-          payment_method: "promptpay",
-          payment_status: "paid",
-          paid_at: new Date(
-            Date.now() - 12 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-          created_at: new Date(
-            Date.now() - 12 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-        },
-        {
-          id: "mock-ord-2",
-          user_id: "mock-user-5",
-          user_email: "natthaporn.s@gmail.com",
-          user_name: "Natthaporn Suk",
-          customer_phone: "086-777-8888",
-          item_type: "course",
-          item_id: "lab-biomarker",
-          item_title: "Lab 2: Biomarker Binding Kinetics",
-          amount: 1500,
-          currency: "THB",
-          payment_method: "bank_transfer",
-          payment_status: "paid",
-          paid_at: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
-          created_at: new Date(
-            Date.now() - 8 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-        },
-        {
-          id: "mock-ord-3",
-          user_id: "mock-user-6",
-          user_email: "jane.doe@example.com",
-          user_name: "Jane Smith",
-          customer_phone: "084-999-0000",
-          item_type: "course",
-          item_id: "course-intro",
-          item_title: "Introduction to Biosensors & Surface Science",
-          amount: 990,
-          currency: "THB",
-          payment_method: "credit_card",
-          payment_status: "paid",
-          paid_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-          created_at: new Date(
-            Date.now() - 3 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-        },
-        {
-          id: "mock-ord-4",
-          user_id: "mock-user-4",
-          user_email: "somchai.k@gmail.com",
-          user_name: "Somchai Korn",
-          customer_phone: "085-555-6666",
-          shipping_address:
-            "123 ถ.พหลโยธิน แขวงจตุจักร เขตจตุจักร กรุงเทพมหานคร 10900",
-          item_type: "product",
-          item_id: "prod-qcm-chip",
-          item_title: "QCM Gold Sensor Chip (10 pcs)",
-          amount: 3200,
-          currency: "THB",
-          payment_method: "promptpay",
-          payment_status: "paid",
-          paid_at: new Date(
-            Date.now() - 14 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-          created_at: new Date(
-            Date.now() - 14 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-        },
-        {
-          id: "mock-ord-5",
-          user_id: "mock-user-5",
-          user_email: "natthaporn.s@gmail.com",
-          user_name: "Natthaporn Suk",
-          customer_phone: "086-777-8888",
-          shipping_address:
-            "456 ถ.สุขุมวิท แขวงคลองเตย เขตคลองเตย กรุงเทพมหานคร 10110",
-          item_type: "product",
-          item_id: "prod-buffer-kit",
-          item_title: "PBS Buffer Solution Kit (500 mL)",
-          amount: 850,
-          currency: "THB",
-          payment_method: "credit_card",
-          payment_status: "paid",
-          paid_at: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
-          created_at: new Date(
-            Date.now() - 6 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-        },
-        {
-          id: "mock-ord-6",
-          user_id: "mock-user-6",
-          user_email: "jane.doe@example.com",
-          user_name: "Jane Smith",
-          customer_phone: "084-999-0000",
-          shipping_address:
-            "789 ถ.รัชดาภิเษก แขวงลาดยาว เขตจตุจักร กรุงเทพมหานคร 10900",
-          item_type: "product",
-          item_id: "prod-cleaning-kit",
-          item_title: "Electrode Cleaning & Polishing Kit",
-          amount: 650,
-          currency: "THB",
-          payment_method: "bank_transfer",
-          payment_status: "refunded",
-          paid_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-          created_at: new Date(
-            Date.now() - 1 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-        },
-      ];
-      localStorage.setItem(
-        "surazense_mock_registrations",
-        JSON.stringify(initialRegs),
-      );
-    }
-    setRegistrationsList(initialRegs);
+    localStorage.removeItem("surazense_mock_runs");
+    localStorage.removeItem("surazense_mock_announcements");
+    localStorage.removeItem("surazense_mock_notifications");
 
-    // 3. Load/Mock QCM runs & diagnostic reports
-    const localRuns = localStorage.getItem("surazense_mock_runs");
-    let initialRuns = [];
-    if (localRuns) {
-      initialRuns = JSON.parse(localRuns);
-    } else {
-      initialRuns = [
-        {
-          id: "mock-run-1",
-          user_email: "somchai.k@gmail.com",
-          title: "Lung Cancer Marker EGFR Run 1",
-          measurement_type: "measurement",
-          delta_f: 145,
-          created_at: new Date(
-            Date.now() - 11 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-          file1_name: "somchai_run1_EGFR.json",
-        },
-        {
-          id: "mock-run-2",
-          user_email: "natthaporn.s@gmail.com",
-          title: "Breast Cancer HER2 Run A",
-          measurement_type: "measurement",
-          delta_f: 8,
-          created_at: new Date(
-            Date.now() - 7 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-          file1_name: "nattha_runA_HER2.json",
-        },
-        {
-          id: "mock-run-3",
-          user_email: "thita.d@surazense.com",
-          title: "ESP32 Sweep Sweep QCM-101",
-          measurement_type: "single",
-          delta_f: null,
-          created_at: new Date(
-            Date.now() - 19 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-          file1_name: "director_sweep_calibration.json",
-        },
-        {
-          id: "mock-run-4",
-          user_email: "jane.doe@example.com",
-          title: "Diagnostic Report #3829",
-          measurement_type: "report",
-          delta_f: 28,
-          created_at: new Date(
-            Date.now() - 2 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-          file1_name: "jane_diagnostic_report.pdf",
-        },
-      ];
-      localStorage.setItem("surazense_mock_runs", JSON.stringify(initialRuns));
-    }
-    setRunsList(initialRuns);
-
-    // Load Products
+    // Load Products Catalog
     const localProds = localStorage.getItem("surazense_products");
     if (localProds) {
       try {
@@ -637,102 +459,6 @@ export default function Admin() {
       }
     } else {
       setProductList(MOCK_PRODUCTS);
-    }
-
-    // Load Announcements (Mock Local Storage)
-    const localAnn = localStorage.getItem("surazense_mock_announcements");
-    if (localAnn) {
-      try {
-        setAnnouncementsList(JSON.parse(localAnn));
-      } catch (err) {
-        console.error("Failed to parse mock announcements:", err);
-      }
-    } else {
-      const initialAnn = [
-        {
-          id: 1,
-          title: "SuraZense Launches Xzense-101 Next-Gen Biosensor System",
-          summary: "Revolutionary QCM system offering sub-nanogram resolution.",
-          content:
-            "We are thrilled to announce the official launch of Xzense-101...",
-          category: "news",
-          image_url:
-            "https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=1000&q=80",
-          is_published: true,
-          is_pinned: true,
-          author_id: 1,
-          created_at: new Date(
-            Date.now() - 5 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-          updated_at: new Date(
-            Date.now() - 5 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-        },
-        {
-          id: 2,
-          title: "SuraZense Wins National MedTech Innovation Award 2026",
-          summary:
-            "Recognized for groundbreaking contributions to liquid biopsy diagnostics.",
-          content:
-            "SuraZense Co., Ltd. has been awarded the National MedTech Award...",
-          category: "news",
-          image_url:
-            "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?auto=format&fit=crop&w=1000&q=80",
-          is_published: true,
-          is_pinned: true,
-          author_id: 1,
-          created_at: new Date(
-            Date.now() - 10 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-          updated_at: new Date(
-            Date.now() - 10 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-        },
-      ];
-      setAnnouncementsList(initialAnn);
-      localStorage.setItem(
-        "surazense_mock_announcements",
-        JSON.stringify(initialAnn),
-      );
-    }
-
-    // Load Notifications (Mock Local Storage)
-    const localNotif = localStorage.getItem("surazense_mock_notifications");
-    if (localNotif) {
-      try {
-        setNotificationsList(JSON.parse(localNotif));
-      } catch (err) {
-        console.error("Failed to parse mock notifications:", err);
-      }
-    } else {
-      const initialNotif = [
-        {
-          id: 1,
-          user_id: null,
-          title: "System Update: SuraZense V2 API Released",
-          message:
-            "All endpoints have been updated to support high-throughput streaming.",
-          type: "system",
-          reference_id: null,
-          is_read: false,
-          created_at: new Date(Date.now() - 2 * 3600000).toISOString(),
-        },
-        {
-          id: 2,
-          user_id: 1,
-          title: "Order Processed #ORD-9821",
-          message: "Payment confirmed for QCM Gold Sensor Crystal.",
-          type: "order",
-          reference_id: 9821,
-          is_read: true,
-          created_at: new Date(Date.now() - 24 * 3600000).toISOString(),
-        },
-      ];
-      setNotificationsList(initialNotif);
-      localStorage.setItem(
-        "surazense_mock_notifications",
-        JSON.stringify(initialNotif),
-      );
     }
   }, []);
 
@@ -871,6 +597,92 @@ export default function Admin() {
     saveProducts(updatedList);
   };
 
+  const handleOpenEditProduct = (prod) => {
+    setShowEditProductModal(prod);
+    setEditProdNameEn(
+      typeof prod.name === "object" ? prod.name.en || "" : prod.name || "",
+    );
+    setEditProdNameTh(
+      typeof prod.name === "object"
+        ? prod.name.th || prod.name.en || ""
+        : prod.name || "",
+    );
+    setEditProdCategory(prod.category || "Biosensors");
+    setEditProdPrice(
+      prod.price !== undefined && prod.price !== null ? String(prod.price) : "",
+    );
+    setEditProdDescEn(
+      typeof prod.description === "object"
+        ? prod.description.en || ""
+        : prod.description || "",
+    );
+    setEditProdDescTh(
+      typeof prod.description === "object"
+        ? prod.description.th || prod.description.en || ""
+        : prod.description || "",
+    );
+    setEditProdImage(prod.image || "");
+    setEditProdStatus(prod.status || "In Stock");
+  };
+
+  const handleUpdateProductSubmit = (e) => {
+    e.preventDefault();
+    if (!showEditProductModal || !editProdNameEn || !editProdPrice) return;
+
+    const updatedProduct = {
+      ...showEditProductModal,
+      name: {
+        en: editProdNameEn,
+        th: editProdNameTh || editProdNameEn,
+      },
+      category: editProdCategory,
+      price: parseFloat(editProdPrice),
+      description: {
+        en: editProdDescEn,
+        th: editProdDescTh || editProdDescEn,
+      },
+      image: editProdImage || null,
+      status: editProdStatus,
+    };
+
+    const updatedList = productList.map((p) =>
+      p.id === showEditProductModal.id ? updatedProduct : p,
+    );
+    setProductList(updatedList);
+    saveProducts(updatedList);
+    setShowEditProductModal(null);
+  };
+
+  const handleProductImageFileChange = (e, isEdit = false) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      alert(
+        language === "th"
+          ? "กรุณาเลือกไฟล์รูปภาพเท่านั้น (JPG, PNG, WebP)"
+          : "Please select an image file (JPG, PNG, WebP).",
+      );
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      alert(
+        language === "th"
+          ? "ขนาดไฟล์ภาพต้องไม่เกิน 5 MB"
+          : "Image size must be under 5 MB.",
+      );
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (isEdit) {
+        setEditProdImage(reader.result);
+      } else {
+        setNewProdImage(reader.result);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
   // Order / Payment actions
   const handleDeleteEnrollment = async (orderId) => {
     const check = window.confirm(
@@ -997,6 +809,34 @@ export default function Admin() {
     setAnnImageUrl("");
     setAnnIsPublished(true);
     setAnnIsPinned(false);
+    if (createAnnFileInputRef.current) createAnnFileInputRef.current.value = "";
+    if (editAnnFileInputRef.current) editAnnFileInputRef.current.value = "";
+  };
+
+  const handleAnnouncementImageFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      alert(
+        language === "th"
+          ? "กรุณาเลือกไฟล์รูปภาพเท่านั้น (JPG, PNG, WebP)"
+          : "Please select an image file (JPG, PNG, WebP).",
+      );
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      alert(
+        language === "th"
+          ? "ขนาดไฟล์ภาพต้องไม่เกิน 5 MB"
+          : "Image size must be under 5 MB.",
+      );
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setAnnImageUrl(reader.result);
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleCreateAnnouncementSubmit = async (e) => {
@@ -1361,12 +1201,14 @@ export default function Admin() {
 
   // Filtered Users List
   const filteredUsers = usersList.filter((u) => {
-    const term = userSearch.toLowerCase();
+    const term = (userSearch || "").toLowerCase();
     const matchSearch =
-      u.email.toLowerCase().includes(term) ||
-      u.username.toLowerCase().includes(term) ||
-      `${u.first_name} ${u.last_name}`.toLowerCase().includes(term);
-    const matchRole = userRoleFilter === "all" || u.role === userRoleFilter;
+      (u?.email || "").toLowerCase().includes(term) ||
+      (u?.username || "").toLowerCase().includes(term) ||
+      `${u?.first_name || ""} ${u?.last_name || ""}`
+        .toLowerCase()
+        .includes(term);
+    const matchRole = userRoleFilter === "all" || u?.role === userRoleFilter;
     return matchSearch && matchRole;
   });
 
@@ -1379,16 +1221,16 @@ export default function Admin() {
 
   // Filtered Orders List
   const filteredEnrollments = registrationsList.filter((r) => {
-    const term = enrollmentSearch.toLowerCase();
+    const term = (enrollmentSearch || "").toLowerCase();
     const matchSearch =
-      r.user_email.toLowerCase().includes(term) ||
-      r.user_name.toLowerCase().includes(term) ||
-      (r.item_title || "").toLowerCase().includes(term);
+      (r?.user_email || "").toLowerCase().includes(term) ||
+      (r?.user_name || "").toLowerCase().includes(term) ||
+      (r?.item_title || "").toLowerCase().includes(term);
     const matchPayStatus =
-      enrollmentFilter === "all" || r.payment_status === enrollmentFilter;
+      enrollmentFilter === "all" || r?.payment_status === enrollmentFilter;
     const matchType = (() => {
       if (orderTypeFilter === "all") return true;
-      const t = (r.item_type || "").toLowerCase();
+      const t = (r?.item_type || "").toLowerCase();
       return ORDER_TYPE_ITEMS[orderTypeFilter]?.includes(t) ?? false;
     })();
     return matchSearch && matchPayStatus && matchType;
@@ -1396,13 +1238,82 @@ export default function Admin() {
 
   // Filtered QCM Scans
   const filteredRuns = runsList.filter((r) => {
-    const term = qcmSearch.toLowerCase();
+    const term = (qcmSearch || "").toLowerCase();
     return (
-      r.title.toLowerCase().includes(term) ||
-      r.user_email.toLowerCase().includes(term) ||
-      (r.file1_name && r.file1_name.toLowerCase().includes(term))
+      (r?.title || "").toLowerCase().includes(term) ||
+      (r?.user_email || "").toLowerCase().includes(term) ||
+      (r?.file1_name && r.file1_name.toLowerCase().includes(term))
     );
   });
+
+  // ── CSV Export Utility ────────────────────────────────────────────────────
+  const exportToCSV = (rows, filename) => {
+    if (!rows || rows.length === 0) {
+      alert(language === "th" ? "ไม่มีข้อมูลให้ Export" : "No data to export.");
+      return;
+    }
+    const headers = Object.keys(rows[0]);
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((row) =>
+        headers
+          .map((h) => {
+            const val =
+              row[h] === null || row[h] === undefined ? "" : String(row[h]);
+            return `"${val.replace(/"/g, '""')}"`;
+          })
+          .join(","),
+      ),
+    ].join("\n");
+    const blob = new Blob(["\uFEFF" + csvContent], {
+      type: "text/csv;charset=utf-8;",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleExportUsersCSV = () => {
+    const rows = filteredUsers.map((u) => ({
+      ID: u.id,
+      First_Name: u.first_name || "",
+      Last_Name: u.last_name || "",
+      Username: u.username || "",
+      Email: u.email || "",
+      Phone: u.phone || "",
+      Role: u.role || "",
+      QCM_Balance: u.qcm_balance ?? "",
+      Joined_Date: u.created_at
+        ? new Date(u.created_at).toLocaleDateString("en-GB")
+        : "",
+    }));
+    const dateStr = new Date().toISOString().slice(0, 10);
+    exportToCSV(rows, `surazense_users_${dateStr}.csv`);
+  };
+
+  const handleExportOrdersCSV = () => {
+    const rows = filteredEnrollments.map((r) => ({
+      Order_ID: r.id,
+      Customer_Name: r.user_name || "",
+      Customer_Email: r.user_email || "",
+      Customer_Phone: r.customer_phone || "",
+      Item_Type: r.item_type || "",
+      Item_Title: r.item_title || "",
+      Amount_THB: r.amount || 0,
+      Payment_Method: r.payment_method || "",
+      Payment_Status: r.payment_status || "",
+      Shipping_Address: r.shipping_address || "",
+      Paid_At: r.paid_at ? new Date(r.paid_at).toLocaleDateString("en-GB") : "",
+      Created_At: r.created_at
+        ? new Date(r.created_at).toLocaleDateString("en-GB")
+        : "",
+    }));
+    const dateStr = new Date().toISOString().slice(0, 10);
+    exportToCSV(rows, `surazense_orders_${dateStr}.csv`);
+  };
 
   // Dynamically computed Recent Activities — MUST be before any early return (Rules of Hooks)
   const recentActivities = React.useMemo(() => {
@@ -1496,8 +1407,12 @@ export default function Admin() {
                 onChange={(e) => setPasscode(e.target.value)}
                 placeholder={
                   language === "th"
-                    ? "รหัสผ่านผู้ดูแลระบบ (admin123)"
-                    : "Admin Passcode (admin123)"
+                    ? import.meta.env.DEV
+                      ? "รหัสผ่านผู้ดูแลระบบ (admin123)"
+                      : "รหัสผ่านผู้ดูแลระบบ"
+                    : import.meta.env.DEV
+                      ? "Admin Passcode (admin123)"
+                      : "Admin Passcode"
                 }
                 className="w-full px-5 py-4 rounded-2xl border border-slate-200 bg-white text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-sky-100 focus:border-accent transition-all text-center text-sm font-semibold tracking-wide"
               />
@@ -1778,6 +1693,25 @@ export default function Admin() {
           </button>
 
           <button
+            onClick={() => setActiveTab("inquiries")}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all border-none cursor-pointer outline-none ${
+              activeTab === "inquiries"
+                ? "bg-sky-50 text-accent font-bold shadow-sm shadow-sky-500/5"
+                : "text-slate-655 hover:bg-slate-50 hover:text-accent"
+            }`}
+          >
+            <Send className="w-4 h-4" />
+            <span className="flex-1 text-left">
+              {language === "th" ? "ข้อความติดต่อ" : "Inquiries"}
+            </span>
+            {inquiriesList.filter((i) => i.status === "new").length > 0 && (
+              <span className="ml-auto bg-rose-500 text-white text-[10px] font-black rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1 shrink-0">
+                {inquiriesList.filter((i) => i.status === "new").length}
+              </span>
+            )}
+          </button>
+
+          <button
             onClick={() => setActiveTab("settings")}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all border-none cursor-pointer outline-none ${
               activeTab === "settings"
@@ -1983,6 +1917,8 @@ export default function Admin() {
                     <p className="text-[10px] text-slate-500 mt-1 font-semibold">
                       {usersList.filter((u) => u.role === "admin").length}{" "}
                       Admins •{" "}
+                      {usersList.filter((u) => u.role === "doctor").length}{" "}
+                      Doctors •{" "}
                       {usersList.filter((u) => u.role === "staff").length} Staff
                     </p>
                   </div>
@@ -2182,25 +2118,58 @@ export default function Admin() {
                   <span className="text-xs font-bold text-slate-400 uppercase mr-2">
                     {language === "th" ? "บทบาท:" : "Role:"}
                   </span>
-                  {["all", "customer", "staff", "admin"].map((role) => (
-                    <button
-                      key={role}
-                      onClick={() => setUserRoleFilter(role)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-medium uppercase border transition-all cursor-pointer ${
-                        userRoleFilter === role
-                          ? "bg-accent text-white border-accent shadow-sm"
-                          : "bg-white text-slate-500 border-slate-200 hover:bg-slate-50"
-                      }`}
-                    >
-                      {role}
-                    </button>
-                  ))}
+                  {["all", "customer", "doctor", "staff", "admin"].map(
+                    (role) => (
+                      <button
+                        key={role}
+                        onClick={() => setUserRoleFilter(role)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold uppercase border transition-all cursor-pointer ${
+                          userRoleFilter === role
+                            ? "bg-accent text-white border-accent shadow-sm"
+                            : "bg-white text-slate-500 border-slate-200 hover:bg-slate-50"
+                        }`}
+                      >
+                        {role === "all"
+                          ? language === "th"
+                            ? "ทั้งหมด"
+                            : "All"
+                          : role === "doctor"
+                            ? language === "th"
+                              ? "แพทย์ (Doctor)"
+                              : "Doctor"
+                            : role === "customer"
+                              ? language === "th"
+                                ? "ลูกค้า (Customer)"
+                                : "Customer"
+                              : role === "staff"
+                                ? language === "th"
+                                  ? "เจ้าหน้าที่ (Staff)"
+                                  : "Staff"
+                                : language === "th"
+                                  ? "แอดมิน (Admin)"
+                                  : "Admin"}
+                      </button>
+                    ),
+                  )}
                   <div className="w-[1px] h-4 bg-slate-200 mx-2 hidden sm:block"></div>
                   <div className="text-xs text-slate-400 font-semibold shrink-0">
                     {language === "th"
                       ? `พบผู้ใช้ทั้งหมด ${filteredUsers.length} รายการ`
                       : `Found ${filteredUsers.length} users`}
                   </div>
+                  <div className="w-[1px] h-4 bg-slate-200 mx-2 hidden sm:block"></div>
+                  <button
+                    onClick={handleExportUsersCSV}
+                    title={
+                      language === "th"
+                        ? "ดาวน์โหลดรายชื่อผู้ใช้เป็น Excel/CSV"
+                        : "Download user list as CSV"
+                    }
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-all cursor-pointer"
+                  >
+                    <FileSpreadsheet className="w-3.5 h-3.5" />
+                    {language === "th" ? "Export CSV" : "Export CSV"}
+                  </button>
                 </div>
               </div>
 
@@ -2276,9 +2245,11 @@ export default function Admin() {
                                 className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wide inline-block ${
                                   userObj.role === "admin"
                                     ? "bg-rose-50 text-rose-600 border border-rose-100"
-                                    : userObj.role === "staff"
-                                      ? "bg-indigo-50 text-indigo-600 border border-indigo-100"
-                                      : "bg-emerald-50 text-emerald-600 border border-emerald-100"
+                                    : userObj.role === "doctor"
+                                      ? "bg-teal-50 text-teal-700 border border-teal-200"
+                                      : userObj.role === "staff"
+                                        ? "bg-indigo-50 text-indigo-600 border border-indigo-100"
+                                        : "bg-emerald-50 text-emerald-600 border border-emerald-100"
                                 }`}
                               >
                                 {userObj.role}
@@ -2334,11 +2305,18 @@ export default function Admin() {
                                       e.target.value,
                                     )
                                   }
-                                  className="text-xs bg-slate-100 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-sky-100"
+                                  className="text-xs bg-slate-100 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-sky-100 cursor-pointer"
                                 >
-                                  <option value="customer">customer</option>
-                                  <option value="staff">staff</option>
-                                  <option value="admin">admin</option>
+                                  <option value="customer">
+                                    customer (ลูกค้า)
+                                  </option>
+                                  <option value="doctor">doctor (แพทย์)</option>
+                                  <option value="staff">
+                                    staff (เจ้าหน้าที่)
+                                  </option>
+                                  <option value="admin">
+                                    admin (ผู้ดูแลระบบ)
+                                  </option>
                                 </select>
 
                                 <button
@@ -2528,6 +2506,19 @@ export default function Admin() {
                       {f.label[language]}
                     </button>
                   ))}
+                  <div className="w-[1px] h-4 bg-slate-200 mx-1"></div>
+                  <button
+                    onClick={handleExportOrdersCSV}
+                    title={
+                      language === "th"
+                        ? "ดาวน์โหลดรายการคำสั่งซื้อเป็น Excel/CSV"
+                        : "Download orders as CSV"
+                    }
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-all cursor-pointer"
+                  >
+                    <FileSpreadsheet className="w-3.5 h-3.5" />
+                    {language === "th" ? "Export CSV" : "Export CSV"}
+                  </button>
                 </div>
               </div>
 
@@ -3024,13 +3015,24 @@ export default function Admin() {
                               </span>
                             </td>
                             <td className="py-4 px-6 text-center">
-                              <button
-                                onClick={() => handleDeleteProduct(product.id)}
-                                className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer flex items-center justify-center mx-auto"
-                                title="Delete Product"
-                              >
-                                <Trash2 className="w-4.5 h-4.5" />
-                              </button>
+                              <div className="flex items-center justify-center gap-1.5">
+                                <button
+                                  onClick={() => handleOpenEditProduct(product)}
+                                  className="p-1.5 text-slate-500 hover:text-accent hover:bg-sky-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer flex items-center justify-center"
+                                  title="Edit Product"
+                                >
+                                  <Edit3 className="w-4 h-4" />
+                                </button>
+                                <button
+                                  onClick={() =>
+                                    handleDeleteProduct(product.id)
+                                  }
+                                  className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors border-none bg-transparent cursor-pointer flex items-center justify-center"
+                                  title="Delete Product"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         ))
@@ -3151,45 +3153,432 @@ export default function Admin() {
                         />
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-                            Image Path (e.g. /qcmgroupe.jpg)
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                          Status *
+                        </label>
+                        <select
+                          value={newProdStatus}
+                          onChange={(e) => setNewProdStatus(e.target.value)}
+                          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm bg-white"
+                        >
+                          <option value="In Stock">
+                            In Stock (พร้อมจำหน่าย)
+                          </option>
+                          <option value="Low Stock">
+                            Low Stock (สินค้าใกล้หมด)
+                          </option>
+                          <option value="Out of Stock">
+                            Out of Stock (สินค้าหมด)
+                          </option>
+                        </select>
+                      </div>
+
+                      {/* Product Image section */}
+                      <div>
+                        <div className="flex items-center justify-between mb-2">
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider">
+                            {language === "th"
+                              ? "รูปภาพสินค้า"
+                              : "Product Image"}
                           </label>
-                          <input
-                            type="text"
-                            value={newProdImage}
-                            onChange={(e) => setNewProdImage(e.target.value)}
-                            placeholder="e.g. /product-drawing-2.jpg"
-                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm"
-                          />
+                          {newProdImage && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setNewProdImage("");
+                                if (addProdFileInputRef.current)
+                                  addProdFileInputRef.current.value = "";
+                              }}
+                              className="text-xs font-semibold text-rose-500 hover:text-rose-600 bg-transparent border-none cursor-pointer flex items-center gap-1"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                              <span>
+                                {language === "th" ? "ลบรูปภาพ" : "Remove"}
+                              </span>
+                            </button>
+                          )}
                         </div>
-                        <div>
-                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-                            Status *
-                          </label>
-                          <select
-                            value={newProdStatus}
-                            onChange={(e) => setNewProdStatus(e.target.value)}
-                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm bg-white"
-                          >
-                            <option value="In Stock">In Stock</option>
-                            <option value="Out of Stock">Out of Stock</option>
-                          </select>
-                        </div>
+
+                        {newProdImage ? (
+                          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 flex items-center gap-4">
+                            <div className="w-20 h-20 rounded-xl overflow-hidden bg-white shrink-0 border border-slate-200 shadow-inner flex items-center justify-center">
+                              <img
+                                src={newProdImage}
+                                alt="Product preview"
+                                className="w-full h-full object-contain"
+                              />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-1.5 text-emerald-600 font-bold text-xs">
+                                <Check className="w-4 h-4 stroke-[2.5]" />
+                                <span>
+                                  {language === "th"
+                                    ? "เลือกรูปภาพแล้ว"
+                                    : "Image selected"}
+                                </span>
+                              </div>
+                              <p className="text-[11px] text-slate-400 truncate mt-0.5 max-w-[260px]">
+                                {newProdImage.startsWith("data:")
+                                  ? language === "th"
+                                    ? "ไฟล์รูปภาพจากเครื่อง"
+                                    : "Local image file"
+                                  : newProdImage}
+                              </p>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  addProdFileInputRef.current?.click()
+                                }
+                                className="mt-1.5 inline-flex items-center gap-1 text-xs font-bold text-accent hover:underline bg-transparent border-none cursor-pointer p-0"
+                              >
+                                <Upload className="w-3.5 h-3.5" />
+                                <span>
+                                  {language === "th"
+                                    ? "เปลี่ยนรูปจากเครื่อง"
+                                    : "Change local image"}
+                                </span>
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="space-y-2">
+                            <div
+                              onClick={() =>
+                                addProdFileInputRef.current?.click()
+                              }
+                              className="border-2 border-dashed border-slate-200 hover:border-accent hover:bg-sky-50/40 rounded-2xl p-4 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-1.5 group bg-slate-50/50"
+                            >
+                              <div className="w-10 h-10 rounded-xl bg-white shadow-xs border border-slate-200 flex items-center justify-center text-accent group-hover:scale-110 transition-transform">
+                                <Upload className="w-5 h-5" />
+                              </div>
+                              <div>
+                                <p className="text-xs font-bold text-slate-700">
+                                  {language === "th"
+                                    ? "คลิกเพื่อเรียกดูรูปภาพจากเครื่องคอมพิวเตอร์"
+                                    : "Click to browse image from computer"}
+                                </p>
+                                <p className="text-[10px] text-slate-400 mt-0.5">
+                                  PNG, JPG, WebP, GIF (สูงสุด 5 MB)
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="relative flex items-center pt-1">
+                              <div className="flex-grow border-t border-slate-200"></div>
+                              <span className="flex-shrink mx-2 text-[10px] font-bold text-slate-400 uppercase">
+                                {language === "th"
+                                  ? "หรือใส่ลิงก์รูปภาพ (Path / URL)"
+                                  : "or enter Path / URL"}
+                              </span>
+                              <div className="flex-grow border-t border-slate-200"></div>
+                            </div>
+
+                            <input
+                              type="text"
+                              value={newProdImage}
+                              onChange={(e) => setNewProdImage(e.target.value)}
+                              placeholder="e.g. /product-drawing-2.jpg or https://..."
+                              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-xs"
+                            />
+                          </div>
+                        )}
+                        <input
+                          ref={addProdFileInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) =>
+                            handleProductImageFileChange(e, false)
+                          }
+                          className="hidden"
+                        />
                       </div>
 
                       <div className="pt-4 flex gap-3">
                         <button
                           type="submit"
-                          className="flex-1 bg-accent hover:bg-accent-hover text-white font-bold py-3 rounded-xl transition-all cursor-pointer border-none shadow-sm"
+                          className="flex-1 bg-accent hover:bg-accent-hover text-white font-bold py-3 rounded-xl transition-all cursor-pointer border-none shadow-sm text-xs"
                         >
-                          {language === "th" ? "บันทึก" : "Save"}
+                          {language === "th" ? "บันทึกสินค้า" : "Save Product"}
                         </button>
                         <button
                           type="button"
                           onClick={() => setShowAddProductModal(false)}
-                          className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl transition-all cursor-pointer border-none"
+                          className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl transition-all cursor-pointer border-none text-xs"
+                        >
+                          {language === "th" ? "ยกเลิก" : "Cancel"}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
+
+              {/* Edit Product Modal */}
+              {showEditProductModal && (
+                <div className="fixed inset-0 z-[100] bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+                  <div className="bg-white rounded-[2.5rem] border border-slate-200/80 shadow-2xl p-8 w-full max-w-xl max-h-[90vh] overflow-y-auto">
+                    <div className="flex justify-between items-center mb-6">
+                      <h2 className="text-xl font-black text-slate-800 tracking-tight">
+                        {language === "th"
+                          ? "แก้ไขข้อมูลสินค้า"
+                          : "Edit Product"}{" "}
+                        #{showEditProductModal.id}
+                      </h2>
+                      <button
+                        onClick={() => setShowEditProductModal(null)}
+                        className="p-2 text-slate-400 hover:text-slate-800 hover:bg-slate-100 rounded-full transition-colors bg-transparent border-none cursor-pointer outline-none"
+                      >
+                        <X className="w-5 h-5 stroke-[2.5]" />
+                      </button>
+                    </div>
+
+                    <form
+                      onSubmit={handleUpdateProductSubmit}
+                      className="space-y-4"
+                    >
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                            Product Name (EN) *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={editProdNameEn}
+                            onChange={(e) => setEditProdNameEn(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                            ชื่อสินค้า (ภาษาไทย)
+                          </label>
+                          <input
+                            type="text"
+                            value={editProdNameTh}
+                            onChange={(e) => setEditProdNameTh(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                            Category *
+                          </label>
+                          <select
+                            value={editProdCategory}
+                            onChange={(e) =>
+                              setEditProdCategory(e.target.value)
+                            }
+                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm bg-white"
+                          >
+                            <option value="Biosensors">Biosensors</option>
+                            <option value="Modules">Modules</option>
+                            <option value="Chemicals">Chemicals</option>
+                            <option value="Courses">Courses</option>
+                            <option value="Accessories">Accessories</option>
+                            <option value="Hardware">Hardware</option>
+                            <option value="Consumables">Consumables</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                            {language === "th"
+                              ? "ราคา (บาท / THB) *"
+                              : "Price (฿ THB) *"}
+                          </label>
+                          <input
+                            type="number"
+                            step="0.01"
+                            required
+                            value={editProdPrice}
+                            onChange={(e) => setEditProdPrice(e.target.value)}
+                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                          Description (EN)
+                        </label>
+                        <textarea
+                          rows="3"
+                          value={editProdDescEn}
+                          onChange={(e) => setEditProdDescEn(e.target.value)}
+                          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm resize-none"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                          คำอธิบายสินค้า (ภาษาไทย)
+                        </label>
+                        <textarea
+                          rows="3"
+                          value={editProdDescTh}
+                          onChange={(e) => setEditProdDescTh(e.target.value)}
+                          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm resize-none"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                          Status *
+                        </label>
+                        <select
+                          value={editProdStatus}
+                          onChange={(e) => setEditProdStatus(e.target.value)}
+                          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm bg-white"
+                        >
+                          <option value="In Stock">
+                            In Stock (พร้อมจำหน่าย)
+                          </option>
+                          <option value="Low Stock">
+                            Low Stock (สินค้าใกล้หมด)
+                          </option>
+                          <option value="Out of Stock">
+                            Out of Stock (สินค้าหมด)
+                          </option>
+                        </select>
+                      </div>
+
+                      {/* Product Image section */}
+                      <div>
+                        <div className="flex items-center justify-between mb-2">
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider">
+                            {language === "th"
+                              ? "รูปภาพสินค้า"
+                              : "Product Image"}
+                          </label>
+                          {editProdImage && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setEditProdImage("");
+                                if (editProdFileInputRef.current)
+                                  editProdFileInputRef.current.value = "";
+                              }}
+                              className="text-xs font-semibold text-rose-500 hover:text-rose-600 bg-transparent border-none cursor-pointer flex items-center gap-1"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                              <span>
+                                {language === "th" ? "ลบรูปภาพ" : "Remove"}
+                              </span>
+                            </button>
+                          )}
+                        </div>
+
+                        {editProdImage ? (
+                          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 flex items-center gap-4">
+                            <div className="w-20 h-20 rounded-xl overflow-hidden bg-white shrink-0 border border-slate-200 shadow-inner flex items-center justify-center">
+                              <img
+                                src={editProdImage}
+                                alt="Product preview"
+                                className="w-full h-full object-contain"
+                              />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-1.5 text-emerald-600 font-bold text-xs">
+                                <Check className="w-4 h-4 stroke-[2.5]" />
+                                <span>
+                                  {language === "th"
+                                    ? "เลือกรูปภาพแล้ว"
+                                    : "Image selected"}
+                                </span>
+                              </div>
+                              <p className="text-[11px] text-slate-400 truncate mt-0.5 max-w-[260px]">
+                                {editProdImage.startsWith("data:")
+                                  ? language === "th"
+                                    ? "ไฟล์รูปภาพจากเครื่อง"
+                                    : "Local image file"
+                                  : editProdImage}
+                              </p>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  editProdFileInputRef.current?.click()
+                                }
+                                className="mt-1.5 inline-flex items-center gap-1 text-xs font-bold text-accent hover:underline bg-transparent border-none cursor-pointer p-0"
+                              >
+                                <Upload className="w-3.5 h-3.5" />
+                                <span>
+                                  {language === "th"
+                                    ? "เปลี่ยนรูปจากเครื่อง"
+                                    : "Change local image"}
+                                </span>
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="space-y-2">
+                            <div
+                              onClick={() =>
+                                editProdFileInputRef.current?.click()
+                              }
+                              className="border-2 border-dashed border-slate-200 hover:border-accent hover:bg-sky-50/40 rounded-2xl p-4 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-1.5 group bg-slate-50/50"
+                            >
+                              <div className="w-10 h-10 rounded-xl bg-white shadow-xs border border-slate-200 flex items-center justify-center text-accent group-hover:scale-110 transition-transform">
+                                <Upload className="w-5 h-5" />
+                              </div>
+                              <div>
+                                <p className="text-xs font-bold text-slate-700">
+                                  {language === "th"
+                                    ? "คลิกเพื่อเรียกดูรูปภาพจากเครื่องคอมพิวเตอร์"
+                                    : "Click to browse image from computer"}
+                                </p>
+                                <p className="text-[10px] text-slate-400 mt-0.5">
+                                  PNG, JPG, WebP, GIF (สูงสุด 5 MB)
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="relative flex items-center pt-1">
+                              <div className="flex-grow border-t border-slate-200"></div>
+                              <span className="flex-shrink mx-2 text-[10px] font-bold text-slate-400 uppercase">
+                                {language === "th"
+                                  ? "หรือใส่ลิงก์รูปภาพ (Path / URL)"
+                                  : "or enter Path / URL"}
+                              </span>
+                              <div className="flex-grow border-t border-slate-200"></div>
+                            </div>
+
+                            <input
+                              type="text"
+                              value={editProdImage}
+                              onChange={(e) => setEditProdImage(e.target.value)}
+                              placeholder="e.g. /product-drawing-2.jpg or https://..."
+                              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-xs"
+                            />
+                          </div>
+                        )}
+                        <input
+                          ref={editProdFileInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) =>
+                            handleProductImageFileChange(e, true)
+                          }
+                          className="hidden"
+                        />
+                      </div>
+
+                      <div className="pt-4 flex gap-3">
+                        <button
+                          type="submit"
+                          className="flex-1 bg-accent hover:bg-accent-hover text-white font-bold py-3 rounded-xl transition-all cursor-pointer border-none shadow-sm text-xs"
+                        >
+                          {language === "th"
+                            ? "บันทึกการแก้ไข"
+                            : "Update Product"}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setShowEditProductModal(null)}
+                          className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl transition-all cursor-pointer border-none text-xs"
                         >
                           {language === "th" ? "ยกเลิก" : "Cancel"}
                         </button>
@@ -3543,28 +3932,133 @@ export default function Admin() {
 
                         <div>
                           <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-                            Cover Image URL (รูปภาพปก)
+                            Short Summary (สรุปสั้นๆ สำหรับแสดงการ์ด)
                           </label>
                           <input
                             type="text"
-                            value={annImageUrl}
-                            onChange={(e) => setAnnImageUrl(e.target.value)}
-                            placeholder="https://images.unsplash.com/..."
+                            value={annSummary}
+                            onChange={(e) => setAnnSummary(e.target.value)}
+                            placeholder="Brief snippet for preview cards..."
                             className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm"
                           />
                         </div>
                       </div>
 
+                      {/* Cover Image Upload & Browse from Computer */}
                       <div>
-                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-                          Short Summary (สรุปสั้นๆ สำหรับแสดงการ์ด)
-                        </label>
+                        <div className="flex items-center justify-between mb-2">
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider">
+                            {language === "th"
+                              ? "รูปภาพหน้าปก (Cover Image)"
+                              : "Cover Image"}
+                          </label>
+                          {annImageUrl && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setAnnImageUrl("");
+                                if (createAnnFileInputRef.current)
+                                  createAnnFileInputRef.current.value = "";
+                              }}
+                              className="text-xs font-semibold text-rose-500 hover:text-rose-600 bg-transparent border-none cursor-pointer flex items-center gap-1"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                              <span>
+                                {language === "th" ? "ลบรูปภาพ" : "Remove"}
+                              </span>
+                            </button>
+                          )}
+                        </div>
+
+                        {annImageUrl ? (
+                          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 flex items-center gap-4">
+                            <div className="w-24 h-20 rounded-xl overflow-hidden bg-slate-200 shrink-0 border border-slate-200 shadow-inner">
+                              <img
+                                src={annImageUrl}
+                                alt="Cover preview"
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-1.5 text-emerald-600 font-bold text-xs">
+                                <Check className="w-4 h-4 stroke-[2.5]" />
+                                <span>
+                                  {language === "th"
+                                    ? "เลือกรูปภาพแล้ว"
+                                    : "Image selected"}
+                                </span>
+                              </div>
+                              <p className="text-[11px] text-slate-400 truncate mt-0.5 max-w-[260px]">
+                                {annImageUrl.startsWith("data:")
+                                  ? language === "th"
+                                    ? "ไฟล์รูปภาพจากเครื่องคอมพิวเตอร์"
+                                    : "Local image file"
+                                  : annImageUrl}
+                              </p>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  createAnnFileInputRef.current?.click()
+                                }
+                                className="mt-1.5 inline-flex items-center gap-1 text-xs font-bold text-accent hover:underline bg-transparent border-none cursor-pointer p-0"
+                              >
+                                <Upload className="w-3.5 h-3.5" />
+                                <span>
+                                  {language === "th"
+                                    ? "เปลี่ยนรูปจากเครื่อง"
+                                    : "Change local image"}
+                                </span>
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="space-y-2">
+                            <div
+                              onClick={() =>
+                                createAnnFileInputRef.current?.click()
+                              }
+                              className="border-2 border-dashed border-slate-200 hover:border-accent hover:bg-sky-50/40 rounded-2xl p-4 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-1.5 group bg-slate-50/50"
+                            >
+                              <div className="w-10 h-10 rounded-xl bg-white shadow-xs border border-slate-200 flex items-center justify-center text-accent group-hover:scale-110 transition-transform">
+                                <Upload className="w-5 h-5" />
+                              </div>
+                              <div>
+                                <p className="text-xs font-bold text-slate-700">
+                                  {language === "th"
+                                    ? "คลิกเพื่อเรียกดูรูปภาพจากเครื่องคอมพิวเตอร์"
+                                    : "Click to browse image from computer"}
+                                </p>
+                                <p className="text-[10px] text-slate-400 mt-0.5">
+                                  PNG, JPG, WebP, GIF (สูงสุด 5 MB)
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="relative flex items-center pt-1">
+                              <div className="flex-grow border-t border-slate-200"></div>
+                              <span className="flex-shrink mx-2 text-[10px] font-bold text-slate-400 uppercase">
+                                {language === "th"
+                                  ? "หรือใส่ลิงก์รูปภาพ (URL)"
+                                  : "or paste image URL"}
+                              </span>
+                              <div className="flex-grow border-t border-slate-200"></div>
+                            </div>
+
+                            <input
+                              type="text"
+                              value={annImageUrl}
+                              onChange={(e) => setAnnImageUrl(e.target.value)}
+                              placeholder="https://images.unsplash.com/..."
+                              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-xs"
+                            />
+                          </div>
+                        )}
                         <input
-                          type="text"
-                          value={annSummary}
-                          onChange={(e) => setAnnSummary(e.target.value)}
-                          placeholder="Brief snippet for preview cards..."
-                          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm"
+                          ref={createAnnFileInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={handleAnnouncementImageFileChange}
+                          className="hidden"
                         />
                       </div>
 
@@ -3694,26 +4188,132 @@ export default function Admin() {
 
                         <div>
                           <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-                            Cover Image URL (รูปภาพปก)
+                            Short Summary (สรุปสั้นๆ)
                           </label>
                           <input
                             type="text"
-                            value={annImageUrl}
-                            onChange={(e) => setAnnImageUrl(e.target.value)}
+                            value={annSummary}
+                            onChange={(e) => setAnnSummary(e.target.value)}
                             className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm"
                           />
                         </div>
                       </div>
 
+                      {/* Cover Image Upload & Browse from Computer */}
                       <div>
-                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-                          Short Summary (สรุปสั้นๆ)
-                        </label>
+                        <div className="flex items-center justify-between mb-2">
+                          <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider">
+                            {language === "th"
+                              ? "รูปภาพหน้าปก (Cover Image)"
+                              : "Cover Image"}
+                          </label>
+                          {annImageUrl && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setAnnImageUrl("");
+                                if (editAnnFileInputRef.current)
+                                  editAnnFileInputRef.current.value = "";
+                              }}
+                              className="text-xs font-semibold text-rose-500 hover:text-rose-600 bg-transparent border-none cursor-pointer flex items-center gap-1"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                              <span>
+                                {language === "th" ? "ลบรูปภาพ" : "Remove"}
+                              </span>
+                            </button>
+                          )}
+                        </div>
+
+                        {annImageUrl ? (
+                          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-3 flex items-center gap-4">
+                            <div className="w-24 h-20 rounded-xl overflow-hidden bg-slate-200 shrink-0 border border-slate-200 shadow-inner">
+                              <img
+                                src={annImageUrl}
+                                alt="Cover preview"
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-1.5 text-emerald-600 font-bold text-xs">
+                                <Check className="w-4 h-4 stroke-[2.5]" />
+                                <span>
+                                  {language === "th"
+                                    ? "เลือกรูปภาพแล้ว"
+                                    : "Image selected"}
+                                </span>
+                              </div>
+                              <p className="text-[11px] text-slate-400 truncate mt-0.5 max-w-[260px]">
+                                {annImageUrl.startsWith("data:")
+                                  ? language === "th"
+                                    ? "ไฟล์รูปภาพจากเครื่องคอมพิวเตอร์"
+                                    : "Local image file"
+                                  : annImageUrl}
+                              </p>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  editAnnFileInputRef.current?.click()
+                                }
+                                className="mt-1.5 inline-flex items-center gap-1 text-xs font-bold text-accent hover:underline bg-transparent border-none cursor-pointer p-0"
+                              >
+                                <Upload className="w-3.5 h-3.5" />
+                                <span>
+                                  {language === "th"
+                                    ? "เปลี่ยนรูปจากเครื่อง"
+                                    : "Change local image"}
+                                </span>
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="space-y-2">
+                            <div
+                              onClick={() =>
+                                editAnnFileInputRef.current?.click()
+                              }
+                              className="border-2 border-dashed border-slate-200 hover:border-accent hover:bg-sky-50/40 rounded-2xl p-4 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-1.5 group bg-slate-50/50"
+                            >
+                              <div className="w-10 h-10 rounded-xl bg-white shadow-xs border border-slate-200 flex items-center justify-center text-accent group-hover:scale-110 transition-transform">
+                                <Upload className="w-5 h-5" />
+                              </div>
+                              <div>
+                                <p className="text-xs font-bold text-slate-700">
+                                  {language === "th"
+                                    ? "คลิกเพื่อเรียกดูรูปภาพจากเครื่องคอมพิวเตอร์"
+                                    : "Click to browse image from computer"}
+                                </p>
+                                <p className="text-[10px] text-slate-400 mt-0.5">
+                                  PNG, JPG, WebP, GIF (สูงสุด 5 MB)
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="relative flex items-center pt-1">
+                              <div className="flex-grow border-t border-slate-200"></div>
+                              <span className="flex-shrink mx-2 text-[10px] font-bold text-slate-400 uppercase">
+                                {language === "th"
+                                  ? "หรือใส่ลิงก์รูปภาพ (URL)"
+                                  : "or paste image URL"}
+                              </span>
+                              <div className="flex-grow border-t border-slate-200"></div>
+                            </div>
+
+                            <input
+                              type="text"
+                              value={annImageUrl}
+                              onChange={(e) => setAnnImageUrl(e.target.value)}
+                              placeholder="https://images.unsplash.com/..."
+                              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-xs"
+                            />
+                          </div>
+                        )}
                         <input
-                          type="text"
-                          value={annSummary}
-                          onChange={(e) => setAnnSummary(e.target.value)}
-                          className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-accent text-sm"
+                          ref={editAnnFileInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={handleAnnouncementImageFileChange}
+                          className="hidden"
                         />
                       </div>
 
@@ -4156,6 +4756,344 @@ export default function Admin() {
                   </div>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* TAB: INQUIRIES */}
+          {activeTab === "inquiries" && (
+            <div className="space-y-6">
+              {/* Header */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-base font-bold text-slate-800">
+                    {language === "th"
+                      ? "ข้อความติดต่อ & คำขอใบเสนอราคา"
+                      : "Inquiries & Quotations"}
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-1">
+                    {language === "th"
+                      ? "รายการข้อความทั้งหมดที่ลูกค้าส่งเข้ามาผ่านหน้า Contacts"
+                      : "All messages submitted through the Contacts page."}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <span
+                    className={`px-3 py-1.5 rounded-full text-xs font-extrabold border ${
+                      inquiriesList.filter((i) => i.status === "new").length > 0
+                        ? "bg-rose-50 text-rose-600 border-rose-200"
+                        : "bg-slate-100 text-slate-500 border-slate-200"
+                    }`}
+                  >
+                    {inquiriesList.filter((i) => i.status === "new").length}{" "}
+                    {language === "th" ? "รายการใหม่" : "New"}
+                  </span>
+                  <span className="px-3 py-1.5 rounded-full text-xs font-extrabold border bg-slate-100 text-slate-500 border-slate-200">
+                    {inquiriesList.length}{" "}
+                    {language === "th" ? "รายการทั้งหมด" : "Total"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Filters */}
+              <div className="bg-white border border-slate-200/60 rounded-2xl p-4 flex flex-col lg:flex-row gap-4 items-center justify-between shadow-sm">
+                <div className="relative w-full lg:max-w-sm">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                    <Search className="w-4 h-4" />
+                  </span>
+                  <input
+                    type="text"
+                    value={inquirySearch}
+                    onChange={(e) => setInquirySearch(e.target.value)}
+                    placeholder={
+                      language === "th"
+                        ? "ค้นหาชื่อ, อีเมล, บริษัท..."
+                        : "Search name, email, company..."
+                    }
+                    className="w-full pl-11 pr-5 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-sky-100 focus:border-accent text-sm transition-all"
+                  />
+                </div>
+                <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto justify-end">
+                  <span className="text-xs font-bold text-slate-400 uppercase">
+                    {language === "th" ? "สถานะ:" : "Status:"}
+                  </span>
+                  {["all", "new", "in_progress", "resolved"].map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => setInquiryStatusFilter(s)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
+                        inquiryStatusFilter === s
+                          ? "bg-accent text-white border-accent"
+                          : "bg-white text-slate-500 border-slate-200 hover:bg-slate-50"
+                      }`}
+                    >
+                      {s === "all"
+                        ? language === "th"
+                          ? "ทั้งหมด"
+                          : "All"
+                        : s === "new"
+                          ? language === "th"
+                            ? "ใหม่"
+                            : "New"
+                          : s === "in_progress"
+                            ? language === "th"
+                              ? "กำลังดำเนินการ"
+                              : "In Progress"
+                            : language === "th"
+                              ? "เสร็จแล้ว"
+                              : "Resolved"}
+                    </button>
+                  ))}
+                  <div className="w-[1px] h-4 bg-slate-200 mx-1"></div>
+                  <span className="text-xs font-bold text-slate-400 uppercase">
+                    {language === "th" ? "ประเภท:" : "Type:"}
+                  </span>
+                  <select
+                    value={inquiryTypeFilter}
+                    onChange={(e) => setInquiryTypeFilter(e.target.value)}
+                    className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-200 bg-white text-slate-600 focus:outline-none focus:border-accent cursor-pointer"
+                  >
+                    <option value="all">
+                      {language === "th" ? "ทุกประเภท" : "All Types"}
+                    </option>
+                    <option value="Product inquiry">
+                      {language === "th" ? "สอบถามสินค้า" : "Product Inquiry"}
+                    </option>
+                    <option value="Request Quotation">
+                      {language === "th" ? "ขอใบเสนอราคา" : "Quotation"}
+                    </option>
+                    <option value="Lab Visit / Demonstration">
+                      {language === "th" ? "ดูงานแล็บ" : "Lab Visit"}
+                    </option>
+                    <option value="Join / Collaboration">
+                      {language === "th" ? "ร่วมงาน" : "Collaboration"}
+                    </option>
+                    <option value="General Question">
+                      {language === "th" ? "ถามทั่วไป" : "General"}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Main 2-col layout */}
+              <div
+                className={`grid gap-6 ${selectedInquiry ? "lg:grid-cols-[1fr_400px]" : "grid-cols-1"}`}
+              >
+                {/* List */}
+                <div className="bg-white border border-slate-200/60 rounded-3xl overflow-hidden shadow-sm">
+                  {filteredInquiries.length === 0 ? (
+                    <div className="py-16 text-center">
+                      <p className="text-2xl mb-2">📥</p>
+                      <p className="text-slate-400 font-semibold text-sm">
+                        {language === "th"
+                          ? "ไม่พบข้อความ"
+                          : "No inquiries found."}
+                      </p>
+                      <p className="text-slate-300 text-xs mt-1">
+                        {language === "th"
+                          ? "เมื่อลูกค้ากรอกฟอร์มในหน้า Contacts ข้อความจะปรากฏที่นี่"
+                          : "When customers submit the Contacts form, messages appear here."}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="divide-y divide-slate-100">
+                      {filteredInquiries.map((inq) => {
+                        const statusCfg =
+                          INQUIRY_STATUS_CONFIG[inq.status] ||
+                          INQUIRY_STATUS_CONFIG.new;
+                        const typeCls =
+                          INQUIRY_TYPE_COLORS[inq.inquiryType] ||
+                          "bg-slate-100 text-slate-600 border-slate-200";
+                        const isSelected = selectedInquiry?.id === inq.id;
+                        return (
+                          <div
+                            key={inq.id}
+                            onClick={() =>
+                              setSelectedInquiry(isSelected ? null : inq)
+                            }
+                            className={`p-5 cursor-pointer transition-colors ${
+                              isSelected
+                                ? "bg-sky-50/70"
+                                : "hover:bg-slate-50/60"
+                            }`}
+                          >
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 flex-wrap mb-1">
+                                  <span
+                                    className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase border ${typeCls}`}
+                                  >
+                                    {inq.inquiryType}
+                                  </span>
+                                  <span
+                                    className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase ${statusCfg.color}`}
+                                  >
+                                    {statusCfg.label[language]}
+                                  </span>
+                                  {inq.status === "new" && (
+                                    <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+                                  )}
+                                </div>
+                                <p className="font-bold text-slate-800 text-sm truncate">
+                                  {inq.title ||
+                                    (language === "th"
+                                      ? "ไม่มีหัวข้อ"
+                                      : "(No subject)")}
+                                </p>
+                                <p className="text-xs text-slate-500 mt-0.5">
+                                  {inq.firstName} {inq.lastName} &bull;{" "}
+                                  {inq.company || "-"}
+                                </p>
+                              </div>
+                              <div className="text-right shrink-0">
+                                <p className="text-[10px] text-slate-400 font-mono">
+                                  {new Date(inq.created_at).toLocaleDateString(
+                                    language === "th" ? "th-TH" : "en-GB",
+                                    {
+                                      day: "numeric",
+                                      month: "short",
+                                      year: "numeric",
+                                    },
+                                  )}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                {/* Detail Panel */}
+                {selectedInquiry && (
+                  <div className="bg-white border border-slate-200/60 rounded-3xl shadow-sm overflow-hidden flex flex-col">
+                    {/* Detail header */}
+                    <div className="p-5 border-b border-slate-100 flex items-start justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <p className="font-black text-slate-800 text-base leading-snug">
+                          {selectedInquiry.title}
+                        </p>
+                        <p className="text-xs text-slate-400 mt-1">
+                          {selectedInquiry.inquiryType} &bull;{" "}
+                          {new Date(selectedInquiry.created_at).toLocaleString(
+                            language === "th" ? "th-TH" : "en-GB",
+                            { dateStyle: "medium", timeStyle: "short" },
+                          )}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => setSelectedInquiry(null)}
+                        className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors bg-transparent border-none cursor-pointer"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                    {/* Contact info */}
+                    <div className="p-5 border-b border-slate-100 space-y-3">
+                      <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-wider">
+                        {language === "th"
+                          ? "ข้อมูลผู้ติดต่อ"
+                          : "Contact Details"}
+                      </h4>
+                      <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
+                        <div>
+                          <p className="text-slate-400 font-semibold">
+                            {language === "th" ? "ชื่อ" : "Name"}
+                          </p>
+                          <p className="text-slate-800 font-bold">
+                            {selectedInquiry.firstName}{" "}
+                            {selectedInquiry.lastName}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-slate-400 font-semibold">
+                            {language === "th" ? "เบอร์โทร" : "Phone"}
+                          </p>
+                          <p className="text-slate-800 font-bold">
+                            {selectedInquiry.phone || "-"}
+                          </p>
+                        </div>
+                        <div className="col-span-2">
+                          <p className="text-slate-400 font-semibold">Email</p>
+                          <p className="text-slate-800 font-bold break-all">
+                            {selectedInquiry.email}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-slate-400 font-semibold">
+                            {language === "th" ? "บริษัท/สถาบัน" : "Company"}
+                          </p>
+                          <p className="text-slate-800 font-bold">
+                            {selectedInquiry.company || "-"}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-slate-400 font-semibold">
+                            {language === "th" ? "ตำแหน่ง" : "Position"}
+                          </p>
+                          <p className="text-slate-800 font-bold">
+                            {selectedInquiry.jobPosition || "-"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Message body */}
+                    <div className="p-5 border-b border-slate-100 flex-1">
+                      <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-wider mb-2">
+                        {language === "th" ? "ข้อความ" : "Message"}
+                      </h4>
+                      <p className="text-slate-700 text-sm leading-relaxed whitespace-pre-wrap">
+                        {selectedInquiry.message}
+                      </p>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="p-5 space-y-3">
+                      <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-wider">
+                        {language === "th" ? "เปลี่ยนสถานะ" : "Update Status"}
+                      </h4>
+                      <div className="flex gap-2 flex-wrap">
+                        {["new", "in_progress", "resolved"].map((s) => (
+                          <button
+                            key={s}
+                            onClick={() =>
+                              updateInquiryStatus(selectedInquiry.id, s)
+                            }
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all cursor-pointer ${
+                              selectedInquiry.status === s
+                                ? "bg-accent text-white border-accent shadow-sm"
+                                : "bg-white text-slate-500 border-slate-200 hover:bg-slate-50"
+                            }`}
+                          >
+                            {INQUIRY_STATUS_CONFIG[s].label[language]}
+                          </button>
+                        ))}
+                      </div>
+                      <a
+                        href={`mailto:${selectedInquiry.email}?subject=Re: ${encodeURIComponent(selectedInquiry.title || "Your inquiry to SuraZense")}&body=${encodeURIComponent("Dear " + selectedInquiry.firstName + ",\n\nThank you for contacting SuraZense.\n\n")}`}
+                        onClick={() =>
+                          updateInquiryStatus(selectedInquiry.id, "in_progress")
+                        }
+                        className="flex items-center justify-center gap-2 w-full py-2.5 bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-700 hover:to-sky-600 text-white font-bold rounded-xl text-xs transition-all no-underline shadow-md shadow-blue-500/20"
+                      >
+                        <Send className="w-3.5 h-3.5" />
+                        {language === "th"
+                          ? "ตอบกลับทางอีเมล"
+                          : "Reply via Email"}
+                      </a>
+                      <button
+                        onClick={() => deleteInquiry(selectedInquiry.id)}
+                        className="flex items-center justify-center gap-2 w-full py-2 bg-transparent hover:bg-rose-50 text-rose-500 hover:text-rose-600 font-semibold rounded-xl text-xs transition-all border border-transparent hover:border-rose-100 cursor-pointer"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        {language === "th" ? "ลบข้อความนี้" : "Delete Inquiry"}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           )}
 

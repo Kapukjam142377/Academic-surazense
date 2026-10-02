@@ -37,6 +37,7 @@ export default function Checkout() {
   });
 
   const [error, setError] = useState("");
+  const [cancelNotice, setCancelNotice] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [completedOrder, setCompletedOrder] = useState(null);
 
@@ -55,44 +56,95 @@ export default function Checkout() {
     }
   }, [user]);
 
+  // ── Stripe Return Handler ─────────────────────────────────────────────────────
+  // Strategy: When returning from Stripe with ?status=success&session_id=xxx,
+  // (1) Poll backend to check if the Webhook already created the Order.
+  // (2) If not found after polling, fall back to creating it from sessionStorage.
+  // When returning with ?status=cancelled, show cancellation notice.
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const statusParam = searchParams.get("status");
     const sessionId = searchParams.get("session_id");
 
-    if (statusParam === "success") {
-      const savedOrder = sessionStorage.getItem("pendingStripeOrder");
-      if (savedOrder) {
-        // Remove immediately to prevent concurrent duplicate submissions due to React StrictMode
-        sessionStorage.removeItem("pendingStripeOrder");
+    if (statusParam === "cancelled") {
+      setCancelNotice(true);
+      return;
+    }
+
+    if (statusParam !== "success" || !sessionId) return;
+
+    let cancelled = false;
+    const MAX_POLLS = 8; // poll up to 8 times
+    const POLL_INTERVAL = 1500; // every 1.5 seconds
+
+    const handleStripeReturn = async () => {
+      // Step 1: Poll backend — check if Webhook already created the order
+      for (let attempt = 0; attempt < MAX_POLLS; attempt++) {
+        if (cancelled) return;
         try {
-          const parsedOrder = JSON.parse(savedOrder);
-          fetch(`${API_URL}/api/orders`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              ...parsedOrder,
-              payment_status: "paid",
-              stripe_session_id: sessionId,
-            }),
-          })
-            .then(async (res) => {
-              if (res.ok) return res.json();
-              const errData = await res.json().catch(() => ({}));
-              throw new Error(errData.detail || "Failed to save order");
-            })
-            .then((completed) => {
-              setCompletedOrder(completed);
-              clearCart();
-            })
-            .catch((err) => {
-              console.error("Error saving Stripe order:", err);
-            });
-        } catch (e) {
-          console.error("Error parsing saved order:", e);
+          const res = await fetch(
+            `${API_URL}/api/orders/by-session/${sessionId}`,
+          );
+          if (res.ok) {
+            const existingOrder = await res.json();
+            if (existingOrder && existingOrder.id) {
+              // ✅ Webhook handled it — just display the completed order
+              sessionStorage.removeItem("pendingStripeOrder");
+              if (!cancelled) {
+                setCompletedOrder(existingOrder);
+                clearCart();
+              }
+              return;
+            }
+          }
+        } catch {
+          // endpoint not yet available — keep polling
+        }
+        if (attempt < MAX_POLLS - 1) {
+          await new Promise((r) => setTimeout(r, POLL_INTERVAL));
         }
       }
-    }
+
+      // Step 2: Webhook not received — create order from sessionStorage (fallback)
+      if (cancelled) return;
+      const savedOrder = sessionStorage.getItem("pendingStripeOrder");
+      if (!savedOrder) return; // already processed or page was refreshed
+
+      // Remove immediately to prevent duplicate submissions (React StrictMode)
+      sessionStorage.removeItem("pendingStripeOrder");
+      try {
+        const parsedOrder = JSON.parse(savedOrder);
+        const res = await fetch(`${API_URL}/api/orders`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...parsedOrder,
+            payment_status: "paid",
+            stripe_session_id: sessionId,
+          }),
+        });
+        if (res.ok) {
+          const completed = await res.json();
+          if (!cancelled) {
+            setCompletedOrder(completed);
+            clearCart();
+          }
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          console.error(
+            "[Checkout] Fallback order creation failed:",
+            errData.detail,
+          );
+        }
+      } catch (e) {
+        console.error("[Checkout] Error in Stripe fallback:", e);
+      }
+    };
+
+    handleStripeReturn();
+    return () => {
+      cancelled = true;
+    };
   }, [API_URL, clearCart]);
 
   useEffect(() => {
@@ -124,6 +176,7 @@ export default function Checkout() {
       return;
     }
     setError("");
+    setCancelNotice(false);
     setIsSubmitting(true);
 
     try {
@@ -145,40 +198,42 @@ export default function Checkout() {
         })),
       };
 
-      // If Credit Card / Stripe is selected, attempt to create Stripe Checkout Session
+      // If Credit Card / Stripe is selected, create Stripe Checkout Session
       if (
         form.paymentMethod === "Credit Card" ||
         form.paymentMethod === "Stripe"
       ) {
-        try {
-          const stripeRes = await fetch(
-            `${API_URL}/api/checkout/create-session`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(orderData),
-            },
-          );
+        const stripeRes = await fetch(
+          `${API_URL}/api/checkout/create-session`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(orderData),
+          },
+        );
 
-          if (stripeRes.ok) {
-            const session = await stripeRes.json();
-            if (session.checkout_url) {
-              sessionStorage.setItem(
-                "pendingStripeOrder",
-                JSON.stringify(orderData),
-              );
-              window.location.href = session.checkout_url;
-              return;
-            }
+        if (stripeRes.ok) {
+          const session = await stripeRes.json();
+          if (session.checkout_url) {
+            sessionStorage.setItem(
+              "pendingStripeOrder",
+              JSON.stringify(orderData),
+            );
+            window.location.href = session.checkout_url;
+            return;
           }
-        } catch (stripeErr) {
-          console.warn(
-            "Stripe endpoint unreachable, continuing to standard order placement:",
-            stripeErr,
+        } else {
+          const errData = await stripeRes.json().catch(() => ({}));
+          throw new Error(
+            errData.detail ||
+              (language === "th"
+                ? "ไม่สามารถเชื่อมต่อ Stripe Payment Gateway ได้ กรุณาตรวจสอบการตั้งค่าเซิร์ฟเวอร์"
+                : "Unable to initialize Stripe Checkout session. Please check server configuration."),
           );
         }
       }
 
+      // Standard order creation for Bank Transfer / Cash on Delivery
       const res = await fetch(`${API_URL}/api/orders`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -186,7 +241,7 @@ export default function Checkout() {
       });
 
       if (!res.ok) {
-        const errData = await res.json();
+        const errData = await res.json().catch(() => ({}));
         throw new Error(errData.detail || "Failed to place order.");
       }
 
@@ -324,6 +379,26 @@ export default function Checkout() {
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
+              {cancelNotice && (
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-amber-800 text-sm flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="w-5 h-5 shrink-0 text-amber-600" />
+                    <span>
+                      {language === "th"
+                        ? "การชำระเงินผ่าน Stripe ถูกยกเลิก ท่านสามารถเลือกวิธีการชำระเงินหรือทำรายการใหม่อีกครั้ง"
+                        : "Stripe checkout was cancelled. You can retry or choose another payment method."}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setCancelNotice(false)}
+                    className="text-amber-600 hover:text-amber-800 text-xs font-bold px-2 py-1"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
+
               {error && (
                 <div className="bg-rose-50 border border-rose-100 rounded-xl p-4 text-rose-600 text-sm flex items-center gap-3">
                   <AlertCircle className="w-5 h-5 shrink-0" />
@@ -404,17 +479,38 @@ export default function Checkout() {
                   {[
                     {
                       id: "Credit Card",
-                      label: "Credit Card",
+                      label:
+                        language === "th"
+                          ? "บัตรเครดิต / Stripe"
+                          : "Credit Card / Stripe",
+                      sublabel:
+                        language === "th"
+                          ? "รองรับ PromptPay, บัตรเดบิต/เครดิต"
+                          : "Cards & PromptPay",
                       icon: <CreditCard className="w-5 h-5" />,
                     },
                     {
                       id: "Bank Transfer",
-                      label: "Bank Transfer",
+                      label:
+                        language === "th"
+                          ? "โอนเงินผ่านธนาคาร"
+                          : "Bank Transfer",
+                      sublabel:
+                        language === "th"
+                          ? "แนบหลักฐานการโอน"
+                          : "Manual wire transfer",
                       icon: <Landmark className="w-5 h-5" />,
                     },
                     {
                       id: "Cash on Delivery",
-                      label: "Cash on Delivery",
+                      label:
+                        language === "th"
+                          ? "เก็บเงินปลายทาง"
+                          : "Cash on Delivery",
+                      sublabel:
+                        language === "th"
+                          ? "ชำระเงินเมื่อได้รับสินค้า"
+                          : "Pay upon delivery",
                       icon: <Truck className="w-5 h-5" />,
                     },
                   ].map((method) => (
@@ -423,14 +519,21 @@ export default function Checkout() {
                       onClick={() =>
                         handleInputChange("paymentMethod", method.id)
                       }
-                      className={`border rounded-xl p-4 flex flex-col items-center justify-center gap-3 cursor-pointer transition-all ${
+                      className={`border rounded-2xl p-4 flex flex-col items-center text-center justify-center gap-2 cursor-pointer transition-all ${
                         form.paymentMethod === method.id
-                          ? "border-blue-500 bg-blue-50/40 text-blue-600 font-bold"
-                          : "border-slate-200 text-slate-500 hover:border-slate-300"
+                          ? "border-blue-500 bg-blue-50/50 text-blue-600 font-bold shadow-sm shadow-blue-500/10 ring-2 ring-blue-500/20"
+                          : "border-slate-200 text-slate-600 hover:border-slate-300 bg-white"
                       }`}
                     >
-                      {method.icon}
-                      <span className="text-xs">{method.label}</span>
+                      <div
+                        className={`p-2 rounded-xl ${form.paymentMethod === method.id ? "bg-blue-100 text-blue-600" : "bg-slate-100 text-slate-500"}`}
+                      >
+                        {method.icon}
+                      </div>
+                      <span className="text-xs font-bold">{method.label}</span>
+                      <span className="text-[11px] text-slate-400 font-normal leading-tight">
+                        {method.sublabel}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -439,15 +542,32 @@ export default function Checkout() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/20 transition-all text-center border-none cursor-pointer mt-6"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-500/20 transition-all text-center border-none cursor-pointer mt-6 flex items-center justify-center gap-2"
               >
-                {isSubmitting
-                  ? language === "th"
-                    ? "กำลังดำเนินการ..."
-                    : "Processing..."
-                  : language === "th"
-                    ? "ยืนยันการสั่งซื้อ"
-                    : "Confirm & Place Order"}
+                {isSubmitting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span>
+                      {form.paymentMethod === "Credit Card"
+                        ? language === "th"
+                          ? "กำลังเชื่อมต่อไปยัง Stripe..."
+                          : "Connecting to Stripe..."
+                        : language === "th"
+                          ? "กำลังบันทึกคำสั่งซื้อ..."
+                          : "Processing order..."}
+                    </span>
+                  </>
+                ) : (
+                  <span>
+                    {form.paymentMethod === "Credit Card"
+                      ? language === "th"
+                        ? "ไปหน้าชำระเงิน Stripe"
+                        : "Proceed to Stripe Payment"
+                      : language === "th"
+                        ? "ยืนยันการสั่งซื้อ"
+                        : "Confirm & Place Order"}
+                  </span>
+                )}
               </button>
             </form>
           </div>

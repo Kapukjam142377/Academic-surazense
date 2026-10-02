@@ -157,10 +157,13 @@ export default function Products() {
       (courseFilter === "labs" &&
         product.subType === "Hands-on Experimental Laboratories") ||
       (courseFilter === "courses" && product.subType === "Academic Courses");
-    const productName = product.name[language] || product.name.en || "";
-    const matchesSearch = productName
+    const productName =
+      typeof product?.name === "object" && product.name !== null
+        ? product.name[language] || product.name.en || ""
+        : product?.name || "";
+    const matchesSearch = (productName || "")
       .toLowerCase()
-      .includes(searchQuery.toLowerCase());
+      .includes((searchQuery || "").toLowerCase());
     return matchesCategory && matchesCourseFilter && matchesSearch;
   });
 

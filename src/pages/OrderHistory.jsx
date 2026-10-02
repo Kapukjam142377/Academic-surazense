@@ -86,7 +86,12 @@ export default function OrderHistory() {
 
     fetchOrdersFromAPI(user.id)
       .then((data) => {
-        setOrders(Array.isArray(data) ? data : (data.orders ?? []));
+        const list = Array.isArray(data) ? data : (data.orders ?? []);
+        // Safety filter to ensure user only sees their own orders
+        const userOrders = list.filter(
+          (o) => !o.user_id || String(o.user_id) === String(user.id),
+        );
+        setOrders(userOrders);
         setFetchState("done");
       })
       .catch(() => {

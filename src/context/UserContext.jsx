@@ -68,7 +68,13 @@ export function UserProvider({ children }) {
     if (sessionToken && !localToken) setStorageType("session");
 
     if (savedToken) {
-      if (isTokenExpired(savedToken)) {
+      // In production, reject any fake/mock tokens
+      if (import.meta.env.PROD && savedToken.startsWith("mock.")) {
+        localStorage.removeItem("surazense_token");
+        localStorage.removeItem("surazense_user");
+        sessionStorage.removeItem("surazense_token");
+        sessionStorage.removeItem("surazense_user");
+      } else if (isTokenExpired(savedToken)) {
         // Token is expired — clear both storages
         localStorage.removeItem("surazense_token");
         localStorage.removeItem("surazense_user");
@@ -148,8 +154,12 @@ export function UserProvider({ children }) {
   // LOGIN
   // ─────────────────────────────────────────────────────────────────────────
   const login = async (email, password, rememberMe = true) => {
-    // ── Special mock admin shortcut ──
-    if (email === "admin@surazense.com" && password === "admin123") {
+    // ── Special mock admin shortcut (Development Only) ──
+    if (
+      import.meta.env.DEV &&
+      email === "admin@surazense.com" &&
+      password === "admin123"
+    ) {
       const adminUser = {
         id: "mock-admin-1",
         email: "admin@surazense.com",
@@ -238,20 +248,22 @@ export function UserProvider({ children }) {
     } catch (err) {
       console.warn("API login failed, attempting local mock login:", err);
 
-      // ── Local mock fallback ──
-      const mockUsersStr = localStorage.getItem("surazense_mock_users");
-      const mockUsers = mockUsersStr ? JSON.parse(mockUsersStr) : [];
-      const localUser = mockUsers.find((u) => u.email === email);
+      // ── Local mock fallback (Development Only) ──
+      if (import.meta.env.DEV) {
+        const mockUsersStr = localStorage.getItem("surazense_mock_users");
+        const mockUsers = mockUsersStr ? JSON.parse(mockUsersStr) : [];
+        const localUser = mockUsers.find((u) => u.email === email);
 
-      if (
-        localUser &&
-        (password === "admin123" || password === localUser.password)
-      ) {
-        setStorageType(rememberMe ? "local" : "session");
-        setUser(localUser);
-        const fakeToken = `mock.${btoa(JSON.stringify({ sub: localUser.id, exp: Math.floor(Date.now() / 1000) + 86400 }))}.sig`;
-        setToken(fakeToken);
-        return { success: true };
+        if (
+          localUser &&
+          (password === "admin123" || password === localUser.password)
+        ) {
+          setStorageType(rememberMe ? "local" : "session");
+          setUser(localUser);
+          const fakeToken = `mock.${btoa(JSON.stringify({ sub: localUser.id, exp: Math.floor(Date.now() / 1000) + 86400 }))}.sig`;
+          setToken(fakeToken);
+          return { success: true };
+        }
       }
 
       return {
@@ -326,33 +338,41 @@ export function UserProvider({ children }) {
       // Otherwise auto-login after register
       return await login(email, password);
     } catch (err) {
-      console.warn("API registration failed, saving user locally:", err);
+      console.warn("API registration failed:", err);
 
-      const mockUsersStr = localStorage.getItem("surazense_mock_users");
-      const mockUsers = mockUsersStr ? JSON.parse(mockUsersStr) : [];
+      // ── Local mock fallback (Development Only) ──
+      if (import.meta.env.DEV) {
+        const mockUsersStr = localStorage.getItem("surazense_mock_users");
+        const mockUsers = mockUsersStr ? JSON.parse(mockUsersStr) : [];
 
-      if (mockUsers.some((u) => u.email === email)) {
-        return { success: false, message: "อีเมลนี้ถูกใช้งานแล้ว" };
+        if (mockUsers.some((u) => u.email === email)) {
+          return { success: false, message: "อีเมลนี้ถูกใช้งานแล้ว" };
+        }
+
+        const newUser = {
+          id: `mock-user-${Date.now()}`,
+          email,
+          username,
+          first_name,
+          last_name,
+          phone,
+          role,
+          password, // stored for local mock login
+          created_at: new Date().toISOString(),
+        };
+
+        mockUsers.push(newUser);
+        localStorage.setItem("surazense_mock_users", JSON.stringify(mockUsers));
+        setUser(newUser);
+        const fakeToken = `mock.${btoa(JSON.stringify({ sub: newUser.id, exp: Math.floor(Date.now() / 1000) + 86400 }))}.sig`;
+        setToken(fakeToken);
+        return { success: true };
       }
 
-      const newUser = {
-        id: `mock-user-${Date.now()}`,
-        email,
-        username,
-        first_name,
-        last_name,
-        phone,
-        role,
-        password, // stored for local mock login
-        created_at: new Date().toISOString(),
+      return {
+        success: false,
+        message: err.message || "เชื่อมต่อ Server ไม่ได้ กรุณาลองใหม่อีกครั้ง",
       };
-
-      mockUsers.push(newUser);
-      localStorage.setItem("surazense_mock_users", JSON.stringify(mockUsers));
-      setUser(newUser);
-      const fakeToken = `mock.${btoa(JSON.stringify({ sub: newUser.id, exp: Math.floor(Date.now() / 1000) + 86400 }))}.sig`;
-      setToken(fakeToken);
-      return { success: true };
     }
   };
 

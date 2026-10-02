@@ -26,6 +26,7 @@ import {
   AlertCircle,
   FileText,
   Sparkles,
+  Shield,
 } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useLanguage } from "../context/LanguageContext";
@@ -136,6 +137,11 @@ export default function Layout({ children }) {
       setNotifications([]);
       return;
     }
+    // If mock user, use local mock notifications to avoid 422 Unprocessable Entity
+    if (String(user.id).startsWith("mock") || isNaN(Number(user.id))) {
+      setNotifications(MOCK_NOTIFICATIONS);
+      return;
+    }
     try {
       const res = await fetch(`${API_URL}/api/users/${user.id}/notifications`);
       if (res.ok) {
@@ -152,6 +158,11 @@ export default function Layout({ children }) {
   const fetchUnreadCount = async () => {
     if (!user) {
       setUnreadCount(0);
+      return;
+    }
+    // If mock user, calculate from mock notifications
+    if (String(user.id).startsWith("mock") || isNaN(Number(user.id))) {
+      setUnreadCount(MOCK_NOTIFICATIONS.filter((n) => !n.is_read).length);
       return;
     }
     try {
@@ -197,9 +208,14 @@ export default function Layout({ children }) {
   };
 
   const handleMarkAllAsRead = async () => {
+    if (!user || String(user.id).startsWith("mock") || isNaN(Number(user.id))) {
+      setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
+      setUnreadCount(0);
+      return;
+    }
     try {
       const res = await fetch(
-        `${API_URL}/api/users/${userId}/notifications/read-all`,
+        `${API_URL}/api/users/${user.id}/notifications/read-all`,
         {
           method: "PATCH",
         },
@@ -628,6 +644,20 @@ export default function Layout({ children }) {
                       {user.email}
                     </p>
                   </div>
+                  {user.role === "admin" && (
+                    <Link
+                      to="/admin"
+                      onClick={() => setIsUserDropdownOpen(false)}
+                      className="w-full text-left px-4 py-2.5 text-sm text-sky-600 hover:bg-sky-50 font-bold transition-colors flex items-center gap-2 no-underline border-b border-slate-100"
+                    >
+                      <Shield className="w-4 h-4 text-sky-600" />
+                      <span>
+                        {language === "th"
+                          ? "จัดการระบบ (Admin)"
+                          : "Admin Panel"}
+                      </span>
+                    </Link>
+                  )}
                   <Link
                     to="/profile"
                     onClick={() => setIsUserDropdownOpen(false)}
@@ -880,6 +910,18 @@ export default function Layout({ children }) {
                   </p>
                 </div>
               </div>
+              {user.role === "admin" && (
+                <Link
+                  to="/admin"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-full text-center py-2.5 bg-sky-50 hover:bg-sky-100 text-sky-700 font-bold rounded-xl transition-colors no-underline text-[14px] flex items-center justify-center gap-2"
+                >
+                  <Shield className="w-4 h-4 text-sky-600" />
+                  <span>
+                    {language === "th" ? "จัดการระบบ (Admin)" : "Admin Panel"}
+                  </span>
+                </Link>
+              )}
               <Link
                 to="/profile"
                 onClick={() => setIsMobileMenuOpen(false)}

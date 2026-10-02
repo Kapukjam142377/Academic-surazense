@@ -1,10 +1,15 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { MapPin, Phone } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { MapPin, Phone, CheckCircle2, X, Loader2 } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
+import { useUser } from "../context/UserContext";
+
+const STORAGE_KEY = "surazense_inquiries";
 
 export default function Contacts() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const { user } = useUser();
+
   const [formData, setFormData] = useState({
     inquiryType: "",
     firstName: "",
@@ -18,16 +23,32 @@ export default function Contacts() {
   });
 
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  // Auto-fill from UserContext when logged in
+  useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({
+        ...prev,
+        firstName: prev.firstName || user.first_name || "",
+        lastName: prev.lastName || user.last_name || "",
+        email: prev.email || user.email || "",
+        phone: prev.phone || user.phone || "",
+        company: prev.company || user.company || "",
+        jobPosition: prev.jobPosition || user.jobPosition || "",
+      }));
+    }
+  }, [user]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    // Clear error for this field when user starts typing
     if (errors[e.target.name]) {
       setErrors({ ...errors, [e.target.name]: "" });
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Validation
@@ -54,19 +75,53 @@ export default function Contacts() {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      return; // Stop submission
+      return;
     }
 
-    console.log("Form submitted", formData);
-    alert(t("contacts.submitSuccess"));
+    setIsSubmitting(true);
 
-    // Reset form on success
+    const newInquiry = {
+      id: `inq-${Date.now()}`,
+      ...formData,
+      status: "new", // 'new' | 'in_progress' | 'resolved'
+      created_at: new Date().toISOString(),
+      user_id: user?.id || null,
+    };
+
+    // Try API first, then fallback to localStorage
+    const API_URL = import.meta.env.PROD
+      ? ""
+      : import.meta.env.VITE_API_URL || "http://34.87.78.35:8000";
+
+    let savedToApi = false;
+    try {
+      const res = await fetch(`${API_URL}/api/contacts`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newInquiry),
+      });
+      if (res.ok) savedToApi = true;
+    } catch {
+      // API not available — fallback to localStorage
+    }
+
+    if (!savedToApi) {
+      // Save to localStorage as fallback (Admin reads from here)
+      const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      existing.unshift(newInquiry);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+    }
+
+    setIsSubmitting(false);
+    setShowSuccessModal(true);
+
+    // Reset form
     setFormData({
       inquiryType: "",
-      firstName: "",
-      lastName: "",
-      email: "",
-      phone: "",
+      firstName: user?.first_name || "",
+      lastName: user?.last_name || "",
+      email: user?.email || "",
+      phone: user?.phone || "",
       jobPosition: "",
       company: "",
       title: "",
@@ -196,6 +251,18 @@ export default function Contacts() {
           >
             {/* Subtle card glow */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-full blur-3xl opacity-50 -z-10"></div>
+
+            {/* Auto-fill notice */}
+            {user && (
+              <div className="mb-6 px-4 py-2.5 bg-sky-50 border border-sky-100 rounded-xl flex items-center gap-2.5 text-sky-700 text-xs font-semibold">
+                <CheckCircle2 className="w-4 h-4 text-sky-500 shrink-0" />
+                <span>
+                  {language === "th"
+                    ? `กรอกข้อมูลจากบัญชีของคุณ (${user.email}) อัตโนมัติแล้ว`
+                    : `Pre-filled from your account (${user.email})`}
+                </span>
+              </div>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-8" noValidate>
               {/* Radio Group - Pill style */}
@@ -370,15 +437,93 @@ export default function Contacts() {
               <div className="pt-4 flex justify-center">
                 <button
                   type="submit"
-                  className="w-full sm:w-auto px-12 py-4 bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-700 hover:to-sky-600 text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 hover:-translate-y-0.5 transition-all text-lg flex justify-center items-center"
+                  disabled={isSubmitting}
+                  className="w-full sm:w-auto px-12 py-4 bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-700 hover:to-sky-600 disabled:opacity-60 disabled:cursor-not-allowed text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 hover:-translate-y-0.5 active:translate-y-0 transition-all text-lg flex justify-center items-center gap-3"
                 >
-                  {t("contacts.submit")}
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <span>
+                        {language === "th" ? "กำลังส่ง..." : "Sending..."}
+                      </span>
+                    </>
+                  ) : (
+                    t("contacts.submit")
+                  )}
                 </button>
               </div>
             </form>
           </motion.div>
         </div>
       </div>
+
+      {/* ── Success Modal ────────────────────────────────────────────────────── */}
+      <AnimatePresence>
+        {showSuccessModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4"
+            onClick={() => setShowSuccessModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.85, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 10 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="bg-white rounded-[2rem] shadow-2xl shadow-blue-900/15 border border-slate-100 p-8 sm:p-10 w-full max-w-md relative text-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close button */}
+              <button
+                onClick={() => setShowSuccessModal(false)}
+                className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-colors bg-transparent border-none cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Animated checkmark icon */}
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{
+                  type: "spring",
+                  delay: 0.1,
+                  stiffness: 300,
+                  damping: 20,
+                }}
+                className="w-20 h-20 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-emerald-400/30"
+              >
+                <CheckCircle2 className="w-10 h-10 text-white stroke-[2]" />
+              </motion.div>
+
+              <h2 className="text-2xl font-black text-slate-800 mb-3">
+                {language === "th"
+                  ? "ส่งข้อความสำเร็จ! 🎉"
+                  : "Message Sent! 🎉"}
+              </h2>
+              <p className="text-slate-500 leading-relaxed mb-2">
+                {language === "th"
+                  ? "ทีมงาน SuraZense ได้รับข้อความของคุณแล้ว เราจะติดต่อกลับภายใน 1–2 วันทำการ"
+                  : "The SuraZense team has received your message. We'll get back to you within 1–2 business days."}
+              </p>
+              <p className="text-xs text-slate-400 mb-8">
+                {language === "th"
+                  ? "ตรวจสอบกล่องรับอีเมลของคุณ (รวมถึงโฟลเดอร์ Spam)"
+                  : "Please check your inbox (including spam/junk folder)."}
+              </p>
+
+              <button
+                onClick={() => setShowSuccessModal(false)}
+                className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-700 hover:to-sky-600 text-white font-bold rounded-xl shadow-md shadow-blue-500/25 transition-all hover:-translate-y-0.5 cursor-pointer border-none text-sm"
+              >
+                {language === "th" ? "รับทราบ" : "Got it, thanks!"}
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
